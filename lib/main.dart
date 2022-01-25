@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'front_end/homepage.dart';
+import 'front_end/schedulepage.dart';
 
 void main() {
   runApp(const MyApp());
