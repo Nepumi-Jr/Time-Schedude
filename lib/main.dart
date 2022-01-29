@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'front_end/addpage.dart';
 import 'front_end/homepage.dart';
 import 'front_end/schedulepage.dart';
 
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      //home: const HomePage(),
+      home: const Addpage(),
     );
   }
 }

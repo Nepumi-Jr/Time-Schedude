@@ -1,0 +1,10 @@
+[
+    {"name":"Calculas IV","time_start":"09:00","time_end":"13:00","date":"sunday","link":"www.gooogle.com","place":"online"},
+    {"name":"Calculas IV","time_start":"09:00","time_end":"13:00","date":"sunday","link":"www.gooogle.com","place":"online"},
+    {"name":"Calculas IV","time_start":"09:00","time_end":"13:00","date":"sunday","link":"www.gooogle.com","place":"online"},
+    {"name":"Calculas IV","time_start":"09:00","time_end":"13:00","date":"sunday","link":"www.gooogle.com","place":"online"}
+]
+
+read >>> list<> >>> list.add() >>> write()
+
+Addpage
