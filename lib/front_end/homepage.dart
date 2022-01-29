@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:sendlink_application/front_end/subject.dart';
 import 'colors.dart' as color;
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,6 +22,59 @@ class _HomePageState extends State<HomePage> {
   late DateTime time_with_no_format, ampm, day_month_no_format;
   String timenow = "", ampm_now = "", day_month = "";
   late Timer _timer;
+
+  late File jsonFile;
+  late Directory dir;
+  String fileName = "subject_info.json";
+  bool fileExists = false;
+  Map<String, dynamic> fileContent = {};
+
+  String class_name = "";
+
+  Map<String, dynamic> class_info = {};
+
+  get subjectClass => null;
+
+  Future<void> readTextFile() async {
+    String fileContent = 'Cheetah Coding';
+
+    jsonFile = new File(dir.path + "/" + fileName);
+    class_info.addAll(json.decode(jsonFile.readAsStringSync()));
+    print(class_info.toString());
+
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      File filePath = new File(dir.path + "/subject_info.json");
+      bool fileExists = filePath.existsSync();
+
+      if (fileExists) {
+        // read file
+        print('read json file');
+        String jsonData = filePath.readAsStringSync();
+        print(jsonData);
+        /* var parsed = jsonDecode(jsonData);
+        setState(() {
+          var jsonResult = parsed
+              .map<subjectClass>((json) => subjectClass.fromJsonFile(json))
+              .toList();
+        }); */
+      } else {
+        print('File Not Found');
+      }
+    });
+
+    /* 
+    File file = await jsonFile;
+
+    if (await file.exists()) {
+      try {
+        class_name += await file.readAsString();
+        return json.decode(fileContent);
+      } catch (e) {
+        print(e);
+      }
+    } */
+  }
 
   @override
   void initState() {
@@ -37,6 +95,53 @@ class _HomePageState extends State<HomePage> {
         day_month = "${datetime3}";
       });
     });
+
+    print("กูยังทำงานอยู่1");
+
+    /*
+     FIle MANAGER
+    */
+
+    getApplicationDocumentsDirectory().then((Directory directory) {
+      dir = directory;
+      print("กูยังทำงานอยู่2");
+      jsonFile = new File(dir.path + "/" + fileName);
+      fileExists = jsonFile.existsSync();
+      if (fileExists)
+        this.setState(
+            () => fileContent = json.decode(jsonFile.readAsStringSync()));
+    });
+
+    print("กูยังทำงานอยู่3");
+    //readTextFile();
+  }
+
+  void createFile(
+      Map<String, dynamic> content, Directory dir, String fileName) {
+    print("Creating file!");
+    File file = new File(dir.path + "/" + fileName);
+    print(dir.path + "/" + fileName);
+    file.createSync();
+    fileExists = true;
+    file.writeAsStringSync(json.encode(content));
+  }
+
+  void writeToFile(String key, dynamic value) {
+    print("Writing to file!");
+    Map<String, dynamic> content = {key: value};
+    if (fileExists) {
+      print("File exists");
+      print(dir.path + "/" + fileName);
+      Map<String, dynamic> jsonFileContent =
+          json.decode(jsonFile.readAsStringSync());
+      jsonFileContent.addAll(content);
+      jsonFile.writeAsStringSync(json.encode(jsonFileContent));
+    } else {
+      print("File does not exist!");
+      createFile(content, dir, fileName);
+    }
+    this.setState(() => fileContent = json.decode(jsonFile.readAsStringSync()));
+    print(fileContent);
   }
 
   @override
@@ -112,12 +217,20 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         width: 30,
                       ),
-                      Icon(
-                        IconData(
-                          0xf694,
-                          fontFamily: 'MaterialIcons',
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: IconButton(
+                          icon: Icon(
+                            IconData(0xf694, fontFamily: 'MaterialIcons'),
+                          ),
+                          iconSize: 20,
+                          color: Colors.white,
+                          splashColor: Colors.white.withOpacity(0.2),
+                          onPressed: () {
+                            readTextFile();
+                          },
                         ),
-                        color: Colors.white,
                       ),
                       Expanded(
                         child: Container(),
@@ -287,7 +400,7 @@ class _HomePageState extends State<HomePage> {
                                             width: 10,
                                           ),
                                           Text(
-                                            "Circuit Signal System",
+                                            fileContent.toString(),
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold),

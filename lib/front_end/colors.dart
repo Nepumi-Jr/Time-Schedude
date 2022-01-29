@@ -11,4 +11,5 @@ class AppColor {
   static Color Font_sub = const Color(0XFF737272);
   static Color box_class = const Color(0XFFE7E7E7);
   static Color offline = const Color(0XFFC4C4C4);
+  static Color background_textfield = const Color(0XFF928D8D);
 }
