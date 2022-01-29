@@ -24,25 +24,25 @@ class CounterStorage {
     return File('$path/counter.txt');
   }
 
-  Future<int> readCounter() async {
+  Future<String> readCounter() async {
     try {
       final file = await _localFile;
 
       // Read the file
       final contents = await file.readAsString();
 
-      return int.parse(contents);
+      return contents;
     } catch (e) {
       // If encountering an error, return 0
-      return 0;
+      return 'encountering an error';
     }
   }
 
-  Future<File> writeCounter(int counter) async {
+  Future<File> writeCounter(String counter) async {
     final file = await _localFile;
 
     // Write the file
-    return file.writeAsString('$counter');
+    return file.writeAsString(counter);
   }
 }
 
@@ -56,12 +56,12 @@ class FlutterDemo extends StatefulWidget {
 }
 
 class _FlutterDemoState extends State<FlutterDemo> {
-  int _counter = 0;
+  String _counter = 'Hello World';
 
   @override
   void initState() {
     super.initState();
-    widget.storage.readCounter().then((int value) {
+    widget.storage.readCounter().then((String value) {
       setState(() {
         _counter = value;
       });
@@ -70,7 +70,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
   Future<File> _incrementCounter() {
     setState(() {
-      _counter++;
+      _counter = '';
     });
 
     // Write the variable as a string to the file.

@@ -1,17 +1,33 @@
-class TimeSubject {
-  String date = 'late';
-  double timeStart = 0;
-  double timeEnd = 0;
+class Time {
+  String day = "";
+  String time_start = "";
+  String time_end = "";
+  List<String> time_learn = [];
 
-  TimeSubject(this.date, this.timeStart, this.timeEnd);
+  Time(this.day, this.time_start, this.time_end) {
+    var tmpArray = {'day': day, 'time_start': time_start, 'time_end': time_end};
+  }
 
-  List<TimeSubject> timeSubject = [];
+  String get get_day => day;
+  String get get_time_start => time_start;
+  String get get_time_end => time_end;
 
-  TimeSubject.fromJson(List<TimeSubject> json) {
-    /*date = json['date'];
-    timeStart = json['timeStart'];
-    timeEnd = json['timeEnd'];*/
+  set set_day(String day) => day;
+  set set_time_start(String time_start) => time_start;
+  set set_time_end(String time_end) => time_end;
+
+  @override
+  toString() {
+    // TODO: implement toString
+    return "day : " +
+        day +
+        "\ntime start : " +
+        time_start +
+        "\ntime end : " +
+        time_end;
   }
 }
 
-void main(List<String> args) {}
+void main(List<String> args) {
+  Time time1 = Time('monday', '18.00', '20.00');
+}

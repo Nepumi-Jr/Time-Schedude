@@ -1,12 +1,10 @@
+/* date วันที่แก้ไขล่าสุด ตารางจด เวลา*/
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:sendlink_application/back_end/storage.dart';
-
 class Subject {
   String name = 'late';
-  String link = 'late';
-  String learnAt = 'late';
+  String last_edit = 'late';
   String date = 'late';
   double timeStart = 0;
   double timeEnd = 0;
@@ -14,13 +12,11 @@ class Subject {
   List<double> timeSubject = [];
   //Map<String, String> infoSubject = {};
 
-  Subject(this.name, this.link, this.learnAt, this.date, this.timeStart,
-      this.timeEnd);
+  Subject(this.name, this.last_edit, this.date, this.timeStart, this.timeEnd);
 
   Subject.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    link = json['link'];
-    learnAt = json['learnAt'];
+    last_edit = json['learnAt'];
     date = json['date'];
     timeStart = json['timeStart'];
     timeEnd = json['timeEnd'];
@@ -28,8 +24,7 @@ class Subject {
 
   Map<String, dynamic> toJson() => {
         'name': name,
-        'link': link,
-        'learnAt': learnAt,
+        'learnAt': last_edit,
         'date': date,
         'timeStart': timeStart,
         'timeEnd': timeEnd
@@ -49,15 +44,13 @@ class Subject {
 }
 
 void main(List<String> args) {
-  var subject1 =
-      Subject('math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
+  var subject1 = Subject('math', 'www.youtube.com', 'online', 9.00, 10.30);
 
   var jsonText = jsonEncode(subject1);
   print(jsonText.runtimeType); // String
   print(jsonText);
   var user = Subject.fromJson(jsonDecode(jsonText));
   print(user.name);
-  print(user.link);
 
   File subject = File('D:\\New folder\\subject2.json');
   subject.writeAsStringSync(jsonText);
