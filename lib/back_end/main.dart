@@ -18,11 +18,11 @@ class HomeState extends State<Home> {
   TextEditingController keyInputController = new TextEditingController();
   TextEditingController valueInputController = new TextEditingController();
 
-  File jsonFile;
-  Directory dir;
+  late File jsonFile;
+  late Directory dir;
   String fileName = "myFile.json";
   bool fileExists = false;
-  Map<String, dynamic> fileContent;
+  late Map<String, dynamic> fileContent;
 
   @override
   void initState() {
