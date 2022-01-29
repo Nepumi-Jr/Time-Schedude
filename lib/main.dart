@@ -4,7 +4,9 @@ import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 
+import 'front_end/addpage.dart';
 import 'front_end/homepage.dart';
+import 'front_end/schedulepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,7 +32,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      //home: const HomePage(),
+      home: const Addpage(),
     );
   }
 }
