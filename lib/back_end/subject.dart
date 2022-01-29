@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-//import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Subject {
   late String name;
@@ -19,8 +19,8 @@ class Subject {
   Subject.forsubject(this.name, this.link, this.learnAt, this.date,
       this.timeStart, this.timeEnd) {
     minorListSubject.addAll(toJson());
-    print(minorListSubject);
-    TimeTable();
+    //print(minorListSubject);
+    //TimeTable();
     //TimeTable().listSubject.add(toJson());
     //print(TimeTable().listSubject);
   }
@@ -53,9 +53,9 @@ class TimeTable {
   Map<String, dynamic> dicSubject = {};
 
   TimeTable() {
-    print(Subject().getSubject);
+    //print(Subject().getSubject);
     listSubject.add(Subject().getSubject);
-    print(listSubject);
+    //print(listSubject);
   }
 
   /*void addSubject() {
@@ -70,40 +70,6 @@ class TimeTable {
   }*/
 }
 
-/*class FileFunctions {
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/subject.txt');
-  }
-
-  Future<String> readSubject() async {
-    try {
-      final file = await _localFile;
-
-      // Read the file
-      final contents = await file.readAsString();
-
-      return contents;
-    } catch (e) {
-      // If encountering an error, return 0
-      return 'ERROR';
-    }
-  }
-
-  Future<File> writeCounter(String subject) async {
-    final file = await _localFile;
-
-    // Write the file
-    return file.writeAsString('$subject');
-  }
-}*/
-
 void main(List<String> args) {
   var subjec1 = Subject.forsubject(
       'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
@@ -116,22 +82,16 @@ void main(List<String> args) {
   var subjec5 = Subject.forsubject(
       'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
 
-  /*var subject1 =
-      Subject('math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
+  List<Map> allSubject = [];
+  allSubject.add(subjec1.toJson());
+  allSubject.add(subjec2.toJson());
+  allSubject.add(subjec3.toJson());
+  allSubject.add(subjec4.toJson());
+  allSubject.add(subjec5.toJson());
+  print(allSubject);
+  var neww = jsonEncode(allSubject[0]);
 
-  var jsonText = jsonEncode(subject1);
-  Subject('math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30)
-      .writeSubject(jsonText);
-
-  print(jsonText.runtimeType); // String
-  print(jsonText);
-  var user = Subject.fromJson(jsonDecode(jsonText));
+  var user = Subject.fromJson(jsonDecode(neww));
   print(user.name);
   print(user.link);
-
-  File subject = File('subject2.json');
-  subject.writeAsStringSync(jsonText);
-  print(subject.readAsStringSync());
-  //subject.deleteSync();
-  print("Hello world");*/
 }
