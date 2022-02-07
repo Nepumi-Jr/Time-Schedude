@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-//import 'package:path_provider/path_provider.dart';
 
 class Subject {
   late String name;
@@ -10,20 +8,14 @@ class Subject {
   late double timeStart;
   late double timeEnd;
 
-  Map<String, dynamic> minorListSubject = {};
+  Subject.deleteSubject(this.name, this.link, this.learnAt, this.date,
+      this.timeStart, this.timeEnd);
 
-  Subject() {
-    getSubject;
-  }
+  Subject.addSubject(this.name, this.link, this.learnAt, this.date,
+      this.timeStart, this.timeEnd);
 
-  Subject.forsubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd) {
-    minorListSubject.addAll(toJson());
-    //print(minorListSubject);
-    //TimeTable();
-    //TimeTable().listSubject.add(toJson());
-    //print(TimeTable().listSubject);
-  }
+  Subject.editSubject(this.name, this.link, this.learnAt, this.date,
+      this.timeStart, this.timeEnd);
 
   Subject.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -42,56 +34,63 @@ class Subject {
         'timeStart': timeStart,
         'timeEnd': timeEnd
       };
-
-  Map get getSubject {
-    return {'minorListSubject': 'gdsgd'};
-  }
 }
 
-class TimeTable {
-  List<Map> listSubject = [];
-  Map<String, dynamic> dicSubject = {};
+List<String> allSubject = [];
+late String subjectDelete;
 
-  TimeTable() {
-    //print(Subject().getSubject);
-    listSubject.add(Subject().getSubject);
-    //print(listSubject);
+void addSubject(Subject subject) {
+  allSubject.add(jsonEncode(subject.toJson()));
+}
+
+void deleteSubject(Subject subject) {
+  subjectDelete = jsonEncode(subject.toJson());
+  for (int i = 0; i < allSubject.length; i++) {
+    if (subjectDelete == allSubject[i]) {
+      print(i);
+      allSubject.removeAt(i);
+    }
   }
-
-  /*void addSubject() {
-    listSubject.add(
-        Subject('math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30));
-  }
-
-  void deleteSubject(String name) {
-    /*for(var i = 0; i < subject.length; i++) {
-      if(subject[0])
-    }*/
-  }*/
 }
 
 void main(List<String> args) {
-  var subjec1 = Subject.forsubject(
-      'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
-  var subjec2 = Subject.forsubject(
-      'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
-  var subjec3 = Subject.forsubject(
-      'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
-  var subjec4 = Subject.forsubject(
-      'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
-  var subjec5 = Subject.forsubject(
+  var subjec1 = Subject.addSubject(
+      'mathhhhhh', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
+  var subjec2 = Subject.addSubject(
+      'mathh', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
+  var subjec3 = Subject.addSubject(
+      'mathhh', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
+  var subjec4 = Subject.addSubject(
+      'mathhhh', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
+  var subjec5 = Subject.addSubject(
       'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
 
-  List<Map> allSubject = [];
-  allSubject.add(subjec1.toJson());
-  allSubject.add(subjec2.toJson());
-  allSubject.add(subjec3.toJson());
-  allSubject.add(subjec4.toJson());
-  allSubject.add(subjec5.toJson());
+  addSubject(subjec1);
+
+  //allSubject.add(jsonEncode(subjec1.toJson()));
+  allSubject.add(jsonEncode(subjec2.toJson()));
+  allSubject.add(jsonEncode(subjec3.toJson()));
+  allSubject.add(jsonEncode(subjec4.toJson()));
+  allSubject.add(jsonEncode(subjec5.toJson()));
+
+  var deleteSubject1 = Subject.deleteSubject(
+      'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);
+  //subjectDelete = jsonEncode(deleteSubject1.toJson());
+
+  deleteSubject(deleteSubject1);
+
+  /*for (int i = 0; i < allSubject.length; i++) {
+    if (subjectDelete == allSubject[i]) {
+      print(i);
+      allSubject.removeAt(i);
+    }
+  }*/
+
   print(allSubject);
-  var neww = jsonEncode(allSubject[0]);
 
-  var user = Subject.fromJson(jsonDecode(neww));
+  print(allSubject[0]);
+  var user = Subject.fromJson(jsonDecode(allSubject[0]));
   print(user.name);
   print(user.link);
+  print(user.learnAt);
 }
