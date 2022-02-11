@@ -1,48 +1,5 @@
 import 'Timetable.dart';
-
-class Subject {
-  late String name;
-  late String link;
-  late String learnAt;
-  late String date;
-  late String timeStart;
-  late String timeEnd;
-
-  Subject.deleteSubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd);
-
-  Subject.addSubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd);
-
-  Subject.editSubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd);
-
-  Subject.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    link = json['link'];
-    learnAt = json['learnAt'];
-    date = json['date'];
-    timeStart = json['timeStart'];
-    timeEnd = json['timeEnd'];
-  }
-
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'link': link,
-        'learnAt': learnAt,
-        'date': date,
-        'timeStart': timeStart,
-        'timeEnd': timeEnd
-      };
-
-  set setname(String name) => this.name = name;
-  String get getname => name;
-  String get getlink => link;
-  String get getlearnAt => learnAt;
-  String get getdate => date;
-  String get gettimeStart => timeStart;
-  String get gettimeEnd => timeEnd;
-}
+import 'subject.dart';
 
 void main(List<String> args) {
   var subjec1 = Subject.addSubject(
@@ -100,30 +57,4 @@ void main(List<String> args) {
   print(user.name);
   print(user.link);
   print(user.learnAt);*/
-}
-
-class Time {
-  late int dayOfWeek;
-  late int hourStart;
-  late int minuteStart;
-  late int hourEnd;
-  late int minuteEnd;
-
-  late List<List<int>> timeSubject = [];
-
-  late int date;
-  late int month;
-  late int year;
-
-  Time.forSubject(this.dayOfWeek, this.hourStart, this.minuteStart,
-      this.hourEnd, this.minuteEnd) {
-    timeSubject.add([dayOfWeek, hourStart, minuteStart]);
-    timeSubject.add([dayOfWeek, hourEnd, minuteEnd]);
-  }
-
-  Time.forTodo(this.date, this.month, this.year);
-
-  int get getday => dayOfWeek;
-  int get gethour => hourStart;
-  int get getminute => dayOfWeek;
 }
