@@ -1,5 +1,10 @@
+import 'dart:developer';
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sendlink_application/back_end/subject.dart';
+import 'package:sendlink_application/front_end/checkbox_state.dart';
 import 'colors.dart' as color;
 
 class Addpage extends StatefulWidget {
@@ -10,6 +15,83 @@ class Addpage extends StatefulWidget {
 }
 
 class _AddpageState extends State<Addpage> {
+  TextEditingController _subject_name = TextEditingController();
+  TextEditingController _link = TextEditingController();
+  TextEditingController _place_name = TextEditingController();
+  TextEditingController _time_start = TextEditingController();
+  TextEditingController _time_end = TextEditingController();
+  TextEditingController _date = TextEditingController();
+
+  late TimeOfDay time_start_picker;
+  late TimeOfDay time_end_picker;
+  late TimeOfDay picked;
+
+  bool value = false;
+
+  List<CheckBoxState> dayInWeek = [];
+
+  /* final dayInWeek = {
+    CheckBoxState(title: 'Monday'),
+    CheckBoxState(title: 'Tuesday'),
+    CheckBoxState
+    
+  (title: 'Wednesday'),
+    CheckBoxState(title: 'Thursday'),
+    CheckBoxState(title: 'Friday'),
+    CheckBoxState(title: 'Saturday'),
+    CheckBoxState(title: 'Sunday')
+  }; */
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    time_start_picker = TimeOfDay.now();
+    time_end_picker = TimeOfDay.now();
+  }
+
+  Future<Null> selectTimeStart(BuildContext context) async {
+    picked = (await showTimePicker(
+        context: context, initialTime: time_start_picker))!;
+
+    if (picked != null) {
+      setState(() {
+        time_start_picker = picked;
+      });
+    }
+  }
+
+  Future<Null> selectTimeEnd(BuildContext context) async {
+    picked =
+        (await showTimePicker(context: context, initialTime: time_end_picker))!;
+
+    if (picked != null) {
+      setState(() {
+        time_end_picker = picked;
+      });
+    }
+  }
+
+  zeroMinCheck(TimeOfDay time) {
+    if (time.minute == 0) {
+      return "00";
+    } else if (time.minute < 10) {
+      return "0" + time.minute.toString();
+    } else {
+      return time.minute.toString();
+    }
+  }
+
+  zeroHourCheck(TimeOfDay time) {
+    if (time.hour == 0) {
+      return "00";
+    } else if (time.hour < 10) {
+      return "0" + time.hour.toString();
+    } else {
+      return time.hour.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,7 +178,7 @@ class _AddpageState extends State<Addpage> {
             Container(
               padding: EdgeInsets.fromLTRB(10, 20, 10, 5),
               margin: EdgeInsets.fromLTRB(25, 0, 25, 5),
-              width: double.infinity,
+              width: double.maxFinite,
               decoration: BoxDecoration(
                 color: color.AppColor.WidgetBackground.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(20), //border corner radius
@@ -106,9 +188,9 @@ class _AddpageState extends State<Addpage> {
                 children: [
                   Row(children: [
                     SizedBox(width: 10),
-                    Text("Monday",
+                    Text("Class name",
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 20,
                             color: color.AppColor.Font_sub,
                             fontWeight: FontWeight.bold)),
                   ]),
@@ -122,6 +204,7 @@ class _AddpageState extends State<Addpage> {
                     child: Container(
                       margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
                       child: TextField(
+                        controller: _subject_name,
                         style: TextStyle(
                             fontSize: 18,
                             height: 1.5,
@@ -140,7 +223,7 @@ class _AddpageState extends State<Addpage> {
                     SizedBox(width: 10),
                     Text("Link",
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 20,
                             color: color.AppColor.Font_sub,
                             fontWeight: FontWeight.bold)),
                   ]),
@@ -172,7 +255,7 @@ class _AddpageState extends State<Addpage> {
                     SizedBox(width: 10),
                     Text("On-site at",
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 20,
                             color: color.AppColor.Font_sub,
                             fontWeight: FontWeight.bold)),
                   ]),
@@ -186,6 +269,7 @@ class _AddpageState extends State<Addpage> {
                     child: Container(
                       margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
                       child: TextField(
+                        controller: _place_name,
                         style: TextStyle(
                             fontSize: 18,
                             height: 1.5,
@@ -200,10 +284,137 @@ class _AddpageState extends State<Addpage> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 2),
+                  Row(children: [
+                    SizedBox(width: 10),
+                    Text("Study hours",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: color.AppColor.Font_sub,
+                            fontWeight: FontWeight.bold)),
+                  ]),
+                  SizedBox(height: 5),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          selectTimeStart(context);
+                        }, // Handle your callback
+                        child: Ink(
+                          height: 45,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            color: color.AppColor.box_class.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(child: Container()),
+                      Container(
+                        child: Text("to"),
+                      ),
+                      Expanded(child: Container()),
+                      InkWell(
+                        onTap: () {
+                          selectTimeEnd(context);
+                        }, // Handle your callback
+                        child: Ink(
+                          height: 45,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            color: color.AppColor.box_class.withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${zeroHourCheck(time_end_picker)}:${zeroMinCheck(time_end_picker)}',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 2),
+                  Row(children: [
+                    SizedBox(width: 10),
+                    Text("Date Class:",
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: color.AppColor.Font_sub,
+                            fontWeight: FontWeight.bold)),
+                  ]),
+                  SizedBox(height: 2),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 10),
+                      Column(
+                        //crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //...dayInWeek.map(buildSingleCheckbox).toList(),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Container(
+                    child: RaisedButton(
+                      onPressed: () => {print(555)},
+                      child: Text('Submit'),
+                      //other properties
+                    ),
+                  )
                 ],
               ),
             ),
+            /* Center(
+              child: Column(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.alarm),
+                    iconSize: 40,
+                    onPressed: () {
+                      selectTime(context);
+                      print(time);
+                    },
+                  ),
+                  Text(
+                    'time ${zeroHourCheck(time)}:${zeroMinCheck(time).toString()}',
+                    style: TextStyle(fontSize: 25),
+                  )
+                ],
+              ),
+            ) */
           ]),
         ));
   }
+
+  Widget buildSingleCheckbox(CheckBoxState checkbox) => CheckboxListTile(
+        controlAffinity: ListTileControlAffinity.leading,
+        activeColor: color.AppColor.Gradient1,
+        value: checkbox.value,
+        title: Text(
+          checkbox.title,
+          style: TextStyle(fontSize: 20),
+        ),
+        onChanged: (value) => setState(() => checkbox.value = value!),
+      );
 }

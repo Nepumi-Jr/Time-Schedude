@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/src/widgets/editable_text.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Subject {
@@ -11,10 +12,6 @@ class Subject {
   late double timeEnd;
 
   Map<String, dynamic> minorListSubject = {};
-
-  Subject() {
-    getSubject;
-  }
 
   Subject.forsubject(this.name, this.link, this.learnAt, this.date,
       this.timeStart, this.timeEnd) {
@@ -48,7 +45,7 @@ class Subject {
   }
 }
 
-class TimeTable {
+/* class TimeTable {
   List<Map> listSubject = [];
   Map<String, dynamic> dicSubject = {};
 
@@ -68,7 +65,7 @@ class TimeTable {
       if(subject[0])
     }*/
   }*/
-}
+} */
 
 void main(List<String> args) {
   var subjec1 = Subject.forsubject(

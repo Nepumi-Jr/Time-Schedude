@@ -22,59 +22,17 @@ class _HomePageState extends State<HomePage> {
   late DateTime time_with_no_format, ampm, day_month_no_format;
   String timenow = "", ampm_now = "", day_month = "";
   late Timer _timer;
-
   late File jsonFile;
   late Directory dir;
   String fileName = "subject_info.json";
   bool fileExists = false;
   Map<String, dynamic> fileContent = {};
-
-  String class_name = "";
-
-  Map<String, dynamic> class_info = {};
-
-  get subjectClass => null;
-
-  Future<void> readTextFile() async {
-    String fileContent = 'Cheetah Coding';
-
-    jsonFile = new File(dir.path + "/" + fileName);
-    class_info.addAll(json.decode(jsonFile.readAsStringSync()));
-    print(class_info.toString());
-
-    getApplicationDocumentsDirectory().then((Directory directory) {
-      dir = directory;
-      File filePath = new File(dir.path + "/subject_info.json");
-      bool fileExists = filePath.existsSync();
-
-      if (fileExists) {
-        // read file
-        print('read json file');
-        String jsonData = filePath.readAsStringSync();
-        print(jsonData);
-        /* var parsed = jsonDecode(jsonData);
-        setState(() {
-          var jsonResult = parsed
-              .map<subjectClass>((json) => subjectClass.fromJsonFile(json))
-              .toList();
-        }); */
-      } else {
-        print('File Not Found');
-      }
-    });
-
-    /* 
-    File file = await jsonFile;
-
-    if (await file.exists()) {
-      try {
-        class_name += await file.readAsString();
-        return json.decode(fileContent);
-      } catch (e) {
-        print(e);
-      }
-    } */
-  }
+  List<List<String>> ter = [
+    ["Signal"],
+    ["Analog"],
+    ["Differential"],
+    ["Digital"]
+  ];
 
   @override
   void initState() {
@@ -95,53 +53,97 @@ class _HomePageState extends State<HomePage> {
         day_month = "${datetime3}";
       });
     });
-
-    print("กูยังทำงานอยู่1");
-
-    /*
-     FIle MANAGER
-    */
-
-    getApplicationDocumentsDirectory().then((Directory directory) {
-      dir = directory;
-      print("กูยังทำงานอยู่2");
-      jsonFile = new File(dir.path + "/" + fileName);
-      fileExists = jsonFile.existsSync();
-      if (fileExists)
-        this.setState(
-            () => fileContent = json.decode(jsonFile.readAsStringSync()));
-    });
-
-    print("กูยังทำงานอยู่3");
-    //readTextFile();
   }
 
-  void createFile(
-      Map<String, dynamic> content, Directory dir, String fileName) {
-    print("Creating file!");
-    File file = new File(dir.path + "/" + fileName);
-    print(dir.path + "/" + fileName);
-    file.createSync();
-    fileExists = true;
-    file.writeAsStringSync(json.encode(content));
-  }
-
-  void writeToFile(String key, dynamic value) {
-    print("Writing to file!");
-    Map<String, dynamic> content = {key: value};
-    if (fileExists) {
-      print("File exists");
-      print(dir.path + "/" + fileName);
-      Map<String, dynamic> jsonFileContent =
-          json.decode(jsonFile.readAsStringSync());
-      jsonFileContent.addAll(content);
-      jsonFile.writeAsStringSync(json.encode(jsonFileContent));
-    } else {
-      print("File does not exist!");
-      createFile(content, dir, fileName);
+  //widget for add subject in real time
+  List<Widget> getData(int count) {
+    List<Widget> data = [];
+    for (var i = 0; i < count; i++) {
+      data.add(Container(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(5),
+              height: 50,
+              width: double.maxFinite,
+              decoration: BoxDecoration(
+                  color: color.AppColor.box_class,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(0, 5),
+                        blurRadius: 5,
+                        color: Colors.grey.withOpacity(0.8))
+                  ]),
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            ter[i][0].toString(),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            "9:00 - 10:30 AM",
+                            style: TextStyle(
+                                fontSize: 12, fontWeight: FontWeight.normal),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  Expanded(child: Container()),
+                  Container(
+                    margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    width: 50,
+                    height: 30,
+                    decoration: BoxDecoration(
+                        color: color.AppColor.offline,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              offset: Offset(0, 5),
+                              blurRadius: 5,
+                              color: Colors.grey.withOpacity(1))
+                        ]),
+                    child: Center(
+                      child: Text(
+                        "Join",
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            )
+          ],
+        ),
+      ));
     }
-    this.setState(() => fileContent = json.decode(jsonFile.readAsStringSync()));
-    print(fileContent);
+    return data;
   }
 
   @override
@@ -149,43 +151,6 @@ class _HomePageState extends State<HomePage> {
         body: SingleChildScrollView(
           padding: const EdgeInsets.only(top: 35, left: 20, right: 20),
           child: Column(children: [
-            /*  Row(
-              children: [
-                Text(
-                  "Time-Schedule",
-                  style: TextStyle(
-                      fontSize: 30,
-                      color: color.AppColor.NamePage.withOpacity(0.8),
-                      fontWeight: FontWeight.w700),
-                ),
-                Expanded(
-                  child: Container(),
-                ),
-                Icon(
-                  Icons.backup_table,
-                  color: color.AppColor.NamePage.withOpacity(0.8),
-                  size: 30.0,
-                )
-                //Icon(Icon.arrow)
-              ],
-            ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                SizedBox(
-                  height: 10,
-                  width: 25,
-                ),
-                Text(
-                  "Time",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: color.AppColor.Font_sub.withOpacity(0.8),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 1), */
             Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 10, 5),
                 height: 170,
@@ -227,9 +192,7 @@ class _HomePageState extends State<HomePage> {
                           iconSize: 20,
                           color: Colors.white,
                           splashColor: Colors.white.withOpacity(0.2),
-                          onPressed: () {
-                            readTextFile();
-                          },
+                          onPressed: () {},
                         ),
                       ),
                       Expanded(
@@ -372,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                      Container(
+                      /* Container(
                         child: Column(
                           children: [
                             Container(
@@ -400,11 +363,12 @@ class _HomePageState extends State<HomePage> {
                                             width: 10,
                                           ),
                                           Text(
-                                            fileContent.toString(),
+                                            fileContent.toString() +
+                                                "teeeeeeeeeeee",
                                             style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold),
-                                          )
+                                          ),
                                         ],
                                       ),
                                       Row(
@@ -457,6 +421,9 @@ class _HomePageState extends State<HomePage> {
                             )
                           ],
                         ),
+                      ), */
+                      Column(
+                        children: getData(ter.length),
                       )
                     ],
                   ),
