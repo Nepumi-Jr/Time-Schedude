@@ -50,7 +50,7 @@ void main(List<String> args) {
     }
   }*/
 
-  print(TimeTable.listSubject[0].name);
+  print(TimeTable.timetable);
 
   /*print(timetable[0]);
   var user = Subject.fromJson(jsonDecode(timetable[0]));

@@ -1,16 +1,17 @@
 import 'subject.dart';
 import 'dart:convert';
+import 'time.dart';
 //import 'dart:io';
 //import 'package:path_provider/path_provider.dart';
 
 class TimeTable {
   static List<Subject> listSubject = [];
-
   static List<String> timetable = [];
   static List<List<String>> timeSubject = [];
   static late String nameEditSubject;
   static late String nameSubjectDelete;
   static late int numSubjectDelete;
+  static late int numListSubjectDelete;
 
   /*Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -58,6 +59,8 @@ class TimeTable {
     var minuteStart = int.parse(listTimeStart[1]);
     var hourEnd = int.parse(listTimeEnd[0]);
     var minuteEnd = int.parse(listTimeEnd[1]);
+
+    Time.forSubject(subject.date, hourStart, minuteStart, hourEnd, minuteEnd);
   }
 
   static void addSubject(Subject subject) {
@@ -79,7 +82,7 @@ class TimeTable {
       var nameSubject = Subject.fromJson(jsonDecode(timetable[i]));
       if (nameSubjectDelete == nameSubject.name) {
         if (timeLearn.join(",") == timeSubject[i].join(",")) {
-          numSubjectDelete = i;
+          numListSubjectDelete = i;
         }
       }
     }
@@ -94,7 +97,17 @@ class TimeTable {
     }
 
     timetable.removeAt(numSubjectDelete);
+    listSubject.removeAt(numListSubjectDelete);
   }
 
-  static void editSubject(Subject subject) {}
+  static void editSubject(Subject subject) {
+    // click edit then check if click trashcan delete this subject
+    // but clik done update this subject by delete then add by new info
+  }
+
+  static void callSubjectThisTime(Time time) {}
+
+  static void callInfoTable() {}
+
+  static void callInfoSubject(Subject subject) {}
 }
