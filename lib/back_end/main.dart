@@ -1,106 +1,60 @@
-import 'package:flutter/material.dart';
-import 'dart:io';
-import 'dart:convert';
-import 'package:path_provider/path_provider.dart';
+import 'Timetable.dart';
+import 'subject.dart';
 
-void main() {
-  runApp(new MaterialApp(
-    home: new Home(),
-  ));
-}
+void main(List<String> args) {
+  var subjec1 = Subject.addSubject(
+      'mathhhhhh', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
+  var subjec2 = Subject.addSubject(
+      'mathh', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
+  var subjec3 = Subject.addSubject(
+      'mathhh', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
+  var subjec4 = Subject.addSubject(
+      'mathhhh', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
+  var subjec5 = Subject.addSubject(
+      'math', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
+  var subjec6 = Subject.addSubject(
+      'mathhhhhh', 'www.youtube.com', 'online', 'monday', "13.00", "14.00");
 
-class Home extends StatefulWidget {
-  @override
-  State createState() => new HomeState();
-}
+  //var timetable1 = TimeTable.addSubject(subjec1);
 
-class HomeState extends State<Home> {
-  TextEditingController keyInputController = new TextEditingController();
-  TextEditingController valueInputController = new TextEditingController();
+  TimeTable.addSubject(subjec1);
+  //addSubject(subjec6);
+  //addSubject(subjec2);
+  //addSubject(subjec3);
+  //addSubject(subjec4);
 
-  late File jsonFile;
-  late Directory dir;
-  String fileName = "myFile.json";
-  bool fileExists = false;
-  late Map<String, dynamic> fileContent;
+  //editSubject(subjec1);
 
-  @override
-  void initState() {
-    super.initState();
-    getApplicationDocumentsDirectory().then((Directory directory) {
-      dir = directory;
-      jsonFile = new File(dir.path + "/" + fileName);
-      print(jsonFile = new File(dir.path + "/" + fileName));
-      fileExists = jsonFile.existsSync();
-      if (fileExists)
-        this.setState(
-            () => fileContent = json.decode(jsonFile.readAsStringSync()));
-    });
-  }
+  //allSubject.add(jsonEncode(subjec1.toJson()));
+  //timetable.add(jsonEncode(subjec2.toJson()));
+  //timetable.add(jsonEncode(subjec3.toJson()));
+  //timetable.add(jsonEncode(subjec4.toJson()));
+  //timetable.add(jsonEncode(subjec5.toJson()));
 
-  @override
-  void dispose() {
-    keyInputController.dispose();
-    valueInputController.dispose();
-    super.dispose();
-  }
+  /*var deleteSubject1 = Subject.deleteSubject(
+      'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);*/
+  var deleteSubject2 = Subject.deleteSubject(
+      'mathhhhhh', 'www.youtube.com', 'online', 'monday', "13.00", "14.00");
+  //subjectDelete = jsonEncode(deleteSubject1.toJson());
 
-  void createFile(
-      Map<String, dynamic> content, Directory dir, String fileName) {
-    print("Creating file!");
-    File file = new File(dir.path + "/" + fileName);
-    file.createSync();
-    fileExists = true;
-    file.writeAsStringSync(json.encode(content));
-  }
+  //deleteSubject(deleteSubject1);
+  //deleteSubject(deleteSubject2);
 
-  void writeToFile(String key, dynamic value) {
-    print("Writing to file!");
-    Map<String, dynamic> content = {key: value};
-    if (fileExists) {
-      print("File exists");
-      Map<String, dynamic> jsonFileContent =
-          json.decode(jsonFile.readAsStringSync());
-      jsonFileContent.addAll(content);
-      jsonFile.writeAsStringSync(json.encode(jsonFileContent));
-    } else {
-      print("File does not exist!");
-      createFile(content, dir, fileName);
+  //Timetable.editSubject(subjec1);
+  TimeTable.editSubject(subjec1);
+
+  /*for (int i = 0; i < allSubject.length; i++) {
+    if (subjectDelete == allSubject[i]) { 
+      print(i);
+      allSubject.removeAt(i);
     }
-    this.setState(() => fileContent = json.decode(jsonFile.readAsStringSync()));
-    print(fileContent);
-  }
+  }*/
 
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("JSON Tutorial"),
-      ),
-      body: new Column(
-        children: <Widget>[
-          new Padding(padding: new EdgeInsets.only(top: 10.0)),
-          new Text(
-            "File content: ",
-            style: new TextStyle(fontWeight: FontWeight.bold),
-          ),
-          new Text(fileContent.toString()),
-          new Padding(padding: new EdgeInsets.only(top: 10.0)),
-          new Text("Add to JSON file: "),
-          new TextField(
-            controller: keyInputController,
-          ),
-          new TextField(
-            controller: valueInputController,
-          ),
-          new Padding(padding: new EdgeInsets.only(top: 20.0)),
-          new RaisedButton(
-            child: new Text("Add key, value pair"),
-            onPressed: () =>
-                writeToFile(keyInputController.text, valueInputController.text),
-          )
-        ],
-      ),
-    );
-  }
+  print(TimeTable.timetable);
+
+  /*print(timetable[0]);
+  var user = Subject.fromJson(jsonDecode(timetable[0]));
+  print(user.name);
+  print(user.link);
+  print(user.learnAt);*/
 }
