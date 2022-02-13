@@ -9,10 +9,8 @@ class TimeTable {
   static List<String> timetable = [];
   static List<String> timetable2 = [];
   static List<List<String>> timeSubject = [];
-  static late String nameEditSubject;
-  static late String nameSubjectDelete;
-  static late int numSubjectDelete;
-  static late int numListSubjectDelete;
+  static int numSubjectDelete = 1000;
+  static int numListSubjectDelete = 1000;
 
   static void saveSubject() {
     var file = File('dataSubject.json');
@@ -25,15 +23,16 @@ class TimeTable {
 
   static void loadSubject() {
     File('dataSubject.json').readAsString().then((String contents) {
-      String test = contents.substring(1);
+      String test = contents.substring(1, contents.length - 1);
+
       List<String> result = test.split(', ');
-      Map valueMap = jsonDecode(result[0]);
+
       timetable2.add(result[0]);
-      //print(valueMap['name']);
-      //var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[0]));
-      //var user = Subject.fromJson(jsonDecode(TimeTable.timetable[0]));
-      print(timetable2);
-      var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[0]));
+      timetable2.add(result[1]);
+
+      //print(timetable2.length);
+
+      var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[1]));
       print(user2.name);
     });
   }
@@ -64,31 +63,43 @@ class TimeTable {
   }
 
   static void deleteSubject(Subject subject) {
-    nameSubjectDelete = subject.getname;
-    List<String> timeLearn = [];
-    //timeLearn.add(subject.timeStart);
-    //timeLearn.add(subject.timeEnd);
-
-    for (int i = 0; i < listSubject.length; i++) {
+    for (int i = 0; i < timetable.length; i++) {
       var nameSubject = Subject.fromJson(jsonDecode(timetable[i]));
-      if (nameSubjectDelete == nameSubject.name) {
-        if (timeLearn.join(",") == timeSubject[i].join(",")) {
-          numListSubjectDelete = i;
+      if (subject.name == nameSubject.name) {
+        if (subject.link == nameSubject.link) {
+          if (subject.learnAt == nameSubject.learnAt) {
+            if (subject.allTimeLearn.join(",") ==
+                nameSubject.allTimeLearn.join(",")) {
+              numListSubjectDelete = i;
+            }
+          }
         }
       }
+    }
+
+    if (numListSubjectDelete != 1000) {
+      timetable.removeAt(numListSubjectDelete);
     }
 
     for (int i = 0; i < timetable.length; i++) {
       var nameSubject = Subject.fromJson(jsonDecode(timetable[i]));
-      if (nameSubjectDelete == nameSubject.name) {
-        if (timeLearn.join(",") == timeSubject[i].join(",")) {
-          numSubjectDelete = i;
+      if (subject.name == nameSubject.name) {
+        if (subject.link == nameSubject.link) {
+          if (subject.learnAt == nameSubject.learnAt) {
+            if (subject.allTimeLearn.join(",") ==
+                nameSubject.allTimeLearn.join(",")) {
+              numSubjectDelete = i;
+            }
+          }
         }
       }
     }
 
-    timetable.removeAt(numSubjectDelete);
-    listSubject.removeAt(numListSubjectDelete);
+    if (numSubjectDelete != 1000) {
+      timetable.removeAt(numSubjectDelete);
+    }
+
+    //saveSubject();
   }
 
   static void editSubject(Subject subject) {

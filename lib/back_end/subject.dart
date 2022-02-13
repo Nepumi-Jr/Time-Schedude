@@ -17,7 +17,7 @@ class Subject {
       this.timeStart, this.timeEnd);*/
 
   Subject.addSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
-  //Subject.deleteSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
+  Subject.deleteSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
   //Subject.editSubjectt(this.name, this.link, this.learnAt, this.allTimeLearn);
 
   Subject.fromJson(Map<String, dynamic> json) {
