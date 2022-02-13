@@ -1,57 +1,45 @@
 import 'subject.dart';
 import 'dart:convert';
 import 'time.dart';
-//import 'dart:io';
+import 'dart:io';
 //import 'package:path_provider/path_provider.dart';
 
 class TimeTable {
   static List<Subject> listSubject = [];
   static List<String> timetable = [];
+  static List<String> timetable2 = [];
   static List<List<String>> timeSubject = [];
-  static late String nameEditSubject;
-  static late String nameSubjectDelete;
-  static late int numSubjectDelete;
-  static late int numListSubjectDelete;
+  static int numSubjectDelete = 1000;
+  static int numListSubjectDelete = 1000;
 
-  /*Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
+  static void saveSubject() {
+    var file = File('dataSubject.json');
+    var sink = file.openWrite();
+    sink.write(timetable);
 
-    return directory.path;
-  } 
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/subject.json');
+    // Close the IOSink to free system resources.
+    sink.close();
   }
 
-  Future<File> writeSubject(String subject) async {
-    final file = await _localFile;
+  static void loadSubject() {
+    File('dataSubject.json').readAsString().then((String contents) {
+      String test = contents.substring(1, contents.length - 1);
 
-    // Write the file
-    return file.writeAsString(subject);
+      List<String> result = test.split(', ');
+
+      timetable2.add(result[0]);
+      timetable2.add(result[1]);
+
+      //print(timetable2.length);
+
+      var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[1]));
+      print(user2.name);
+    });
   }
-
-  Future<String> readSubject() async {
-    try {
-      final file = await _localFile;
-
-      // Read the file
-      final contents = await file.readAsString();
-
-      return contents;
-    } catch (e) {
-      // If encountering an error
-      return 'encountering an error';
-    }
-  }*/
-
-  void saveSubject() {}
-
-  void loadSubject() {}
 
   void insertSubject() {}
 
-  static void splitTime(Subject subject) {
+  /*static void splitTime(Subject subject) {
     var listTimeStart = subject.timeStart.split('.');
     var listTimeEnd = subject.timeEnd.split('.');
 
@@ -61,43 +49,57 @@ class TimeTable {
     var minuteEnd = int.parse(listTimeEnd[1]);
 
     Time.forSubject(subject.date, hourStart, minuteStart, hourEnd, minuteEnd);
-  }
+  }*/
 
   static void addSubject(Subject subject) {
     listSubject.add(subject);
 
     timetable.add(jsonEncode(subject.toJson()));
-    timeSubject.add([subject.timeStart, subject.timeEnd]);
+    //timeSubject.add([subject.timeStart, subject.timeEnd]);
 
-    splitTime(subject);
+    //splitTime(subject);
+
+    saveSubject();
   }
 
   static void deleteSubject(Subject subject) {
-    nameSubjectDelete = subject.getname;
-    List<String> timeLearn = [];
-    timeLearn.add(subject.timeStart);
-    timeLearn.add(subject.timeEnd);
-
-    for (int i = 0; i < listSubject.length; i++) {
+    for (int i = 0; i < timetable.length; i++) {
       var nameSubject = Subject.fromJson(jsonDecode(timetable[i]));
-      if (nameSubjectDelete == nameSubject.name) {
-        if (timeLearn.join(",") == timeSubject[i].join(",")) {
-          numListSubjectDelete = i;
+      if (subject.name == nameSubject.name) {
+        if (subject.link == nameSubject.link) {
+          if (subject.learnAt == nameSubject.learnAt) {
+            if (subject.allTimeLearn.join(",") ==
+                nameSubject.allTimeLearn.join(",")) {
+              numListSubjectDelete = i;
+            }
+          }
         }
       }
+    }
+
+    if (numListSubjectDelete != 1000) {
+      timetable.removeAt(numListSubjectDelete);
     }
 
     for (int i = 0; i < timetable.length; i++) {
       var nameSubject = Subject.fromJson(jsonDecode(timetable[i]));
-      if (nameSubjectDelete == nameSubject.name) {
-        if (timeLearn.join(",") == timeSubject[i].join(",")) {
-          numSubjectDelete = i;
+      if (subject.name == nameSubject.name) {
+        if (subject.link == nameSubject.link) {
+          if (subject.learnAt == nameSubject.learnAt) {
+            if (subject.allTimeLearn.join(",") ==
+                nameSubject.allTimeLearn.join(",")) {
+              numSubjectDelete = i;
+            }
+          }
         }
       }
     }
 
-    timetable.removeAt(numSubjectDelete);
-    listSubject.removeAt(numListSubjectDelete);
+    if (numSubjectDelete != 1000) {
+      timetable.removeAt(numSubjectDelete);
+    }
+
+    //saveSubject();
   }
 
   static void editSubject(Subject subject) {

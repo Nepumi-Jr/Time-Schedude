@@ -1,60 +1,39 @@
+import 'dart:convert';
 import 'Timetable.dart';
 import 'subject.dart';
 
 void main(List<String> args) {
-  var subjec1 = Subject.addSubject(
-      'mathhhhhh', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
-  var subjec2 = Subject.addSubject(
-      'mathh', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
-  var subjec3 = Subject.addSubject(
-      'mathhh', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
-  var subjec4 = Subject.addSubject(
-      'mathhhh', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
-  var subjec5 = Subject.addSubject(
-      'math', 'www.youtube.com', 'online', 'monday', "9.00", "10.30");
-  var subjec6 = Subject.addSubject(
-      'mathhhhhh', 'www.youtube.com', 'online', 'monday', "13.00", "14.00");
+  TimeTable.addSubject(Subject.addSubject('math', 'www.youtube.com', 'online', [
+    [4, 8, 0, 20, 0],
+    [2, 14, 30, 17, 30]
+  ]));
+  TimeTable.addSubject(
+      Subject.addSubject('englist', 'www.english.com', 'onsite', [
+    [3, 7, 30, 19, 30],
+    [1, 13, 0, 16, 00]
+  ]));
 
-  //var timetable1 = TimeTable.addSubject(subjec1);
-
-  TimeTable.addSubject(subjec1);
-  //addSubject(subjec6);
-  //addSubject(subjec2);
-  //addSubject(subjec3);
-  //addSubject(subjec4);
-
-  //editSubject(subjec1);
-
-  //allSubject.add(jsonEncode(subjec1.toJson()));
-  //timetable.add(jsonEncode(subjec2.toJson()));
-  //timetable.add(jsonEncode(subjec3.toJson()));
-  //timetable.add(jsonEncode(subjec4.toJson()));
-  //timetable.add(jsonEncode(subjec5.toJson()));
-
-  /*var deleteSubject1 = Subject.deleteSubject(
-      'math', 'www.youtube.com', 'online', 'monday', 9.00, 10.30);*/
-  var deleteSubject2 = Subject.deleteSubject(
-      'mathhhhhh', 'www.youtube.com', 'online', 'monday', "13.00", "14.00");
-  //subjectDelete = jsonEncode(deleteSubject1.toJson());
-
-  //deleteSubject(deleteSubject1);
-  //deleteSubject(deleteSubject2);
-
-  //Timetable.editSubject(subjec1);
-  TimeTable.editSubject(subjec1);
-
-  /*for (int i = 0; i < allSubject.length; i++) {
-    if (subjectDelete == allSubject[i]) { 
-      print(i);
-      allSubject.removeAt(i);
-    }
-  }*/
+  TimeTable.deleteSubject(
+      Subject.deleteSubject('englist', 'www.english.com', 'onsite', [
+    [3, 7, 30, 19, 30],
+    [1, 13, 0, 16, 00]
+  ]));
 
   print(TimeTable.timetable);
 
-  /*print(timetable[0]);
-  var user = Subject.fromJson(jsonDecode(timetable[0]));
+  //print(TimeTable.listSubject[0].allTimeLearn[0][2]);
+
+  //print(TimeTable.timetable2);
+
+  //print(TimeTable.listSubject[0].allTimeLearn);
+
+  //var user = Subject.fromJsonButListTime(jsonDecode(TimeTable.timetable[0]));
+
+  /*var user = Subject.fromJson(jsonDecode(TimeTable.timetable[0]));
   print(user.name);
   print(user.link);
-  print(user.learnAt);*/
+  print(user.learnAt);
+  //print(user.date);
+  //print(user.timeEnd[0][2]);
+  print(user.allTimeLearn);*/
 }
