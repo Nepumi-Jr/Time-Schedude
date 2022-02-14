@@ -24,8 +24,8 @@ class _scheduleState extends State<schedule> {
                   width: 30,
                 ),
                 Container(
-                  width: 35,
-                  height: 35,
+                  width: 53,
+                  height: 31,
                   decoration: BoxDecoration(
                       color: color.AppColor.Gradient2,
                       borderRadius: BorderRadius.circular(8),
@@ -49,11 +49,10 @@ class _scheduleState extends State<schedule> {
                             blurRadius: 5,
                             color: Colors.grey.withOpacity(1))
                       ]),
-                  padding: const EdgeInsets.only(left: 1),
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 3.5,
+                        width: 13.5,
                       ),
                       Icon(
                         IconData(0xf570, fontFamily: 'MaterialIcons'),
@@ -81,7 +80,7 @@ class _scheduleState extends State<schedule> {
                   "Class Schedule",
                   style: TextStyle(
                       fontSize: 20,
-                      color: color.AppColor.NamePage,
+                      color: color.AppColor.NameWidget,
                       fontWeight: FontWeight.bold),
                 ),
               ],
