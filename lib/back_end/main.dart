@@ -22,7 +22,13 @@ void main(List<String> args) {
     [1, 13, 0, 16, 00]
   ]));*/
 
-  //print(TimeTable.timetable2);
+  print(TimeTable.timetable[0]);
+
+  var ter = Subject.fromJson(jsonDecode(TimeTable.timetable[0]));
+
+  var tername = ter.link;
+
+  print(tername);
 
   //print(TimeTable.listSubject[0].allTimeLearn[0][2]);
 

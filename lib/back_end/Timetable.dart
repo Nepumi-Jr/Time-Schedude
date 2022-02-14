@@ -2,7 +2,7 @@ import 'subject.dart';
 import 'dart:convert';
 import 'time.dart';
 import 'dart:io';
-//import 'package:path_provider/path_provider.dart';
+//import 'storage.dart';
 
 class TimeTable {
   static List<Subject> listSubject = [];
@@ -102,9 +102,6 @@ class TimeTable {
     if (numSubjectDelete != 1000) {
       timetable.removeAt(numSubjectDelete);
     }
-
-    print(timetable);
-
     //saveSubject();
   }
 
@@ -118,38 +115,4 @@ class TimeTable {
   static void callInfoTable() {}
 
   static void callInfoSubject(Subject subject) {}
-
-  /*static Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
-  }
-
-  static Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/counter.txt');
-  }
-
-  static Future<String> readCounter() async {
-    try {
-      final file = await _localFile;
-
-      // Read the file
-      final contents = await file.readAsString();
-
-      return contents;
-    } catch (e) {
-      // If encountering an error, return 0
-      return 'encountering an error';
-    }
-  }
-
-  static Future<File> writeCounter(String counter) async {
-    final file = await _localFile;
-
-    print(counter);
-
-    // Write the file
-    return file.writeAsString(counter);
-  }*/
 }
