@@ -1,3 +1,5 @@
+import 'package:sendlink_application/back_end/storage.dart';
+
 import 'subject.dart';
 import 'dart:convert';
 import 'time.dart';
@@ -23,7 +25,7 @@ class TimeTable {
   }
 
   static void loadSubject() {
-    File('dataSubject.json').readAsString().then((String contents) {
+    /* File('dataSubject.json').readAsString().then((String contents) {
       String test = contents.substring(1, contents.length - 1);
 
       result = test.split(', ');
@@ -36,7 +38,15 @@ class TimeTable {
 
       //var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[0]));
       //print(user2.name);
-    });
+    }); */
+
+    String temp = Storage.readSubject().toString();
+    temp = temp.substring(1, temp.length - 1);
+    List<String> result = temp.split(', ');
+
+    for (var i = 0; i < result.length; i++) {
+      TimeTable.timetable.add(result[i]);
+    }
   }
 
   void insertSubject() {}
@@ -57,6 +67,8 @@ class TimeTable {
     listSubject.add(subject);
 
     timetable.add(jsonEncode(subject.toJson()));
+
+    Storage.writeSubject(timetable.toString());
     //timeSubject.add([subject.timeStart, subject.timeEnd]);
 
     //splitTime(subject);
