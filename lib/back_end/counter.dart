@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-
+import 'Timetable.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+
+import 'subject.dart';
 
 void main() {
   runApp(
@@ -14,37 +16,36 @@ void main() {
 }
 
 class CounterStorage {
-  Future<String> get _localPath async {
+  static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
     return directory.path;
   }
 
-  Future<File> get _localFile async {
+  static Future<File> get _localFile async {
     final path = await _localPath;
-    print(path);
     return File('$path/counter.txt');
   }
 
-  Future<int> readCounter() async {
+  static Future<String> readCounter() async {
     try {
       final file = await _localFile;
 
       // Read the file
       final contents = await file.readAsString();
 
-      return int.parse(contents);
+      return contents;
     } catch (e) {
       // If encountering an error, return 0
-      return 0;
+      return 'error';
     }
   }
 
-  Future<File> writeCounter(int counter) async {
+  static Future<File> writeCounter(String counter) async {
     final file = await _localFile;
 
     // Write the file
-    return file.writeAsString('$counter');
+    return file.writeAsString(counter);
   }
 }
 
@@ -58,12 +59,19 @@ class FlutterDemo extends StatefulWidget {
 }
 
 class _FlutterDemoState extends State<FlutterDemo> {
-  int _counter = 0;
+  String _counter = 'aaaa';
 
   @override
   void initState() {
     super.initState();
-    widget.storage.readCounter().then((int value) {
+
+    TimeTable.addSubject(
+        Subject.addSubject('englist', 'www.english.com', 'onsite', [
+      [3, 7, 30, 19, 30],
+      [1, 13, 0, 16, 00]
+    ]));
+
+    CounterStorage.readCounter().then((String value) {
       setState(() {
         _counter = value;
       });
@@ -72,11 +80,11 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
   Future<File> _incrementCounter() {
     setState(() {
-      _counter++;
+      _counter = TimeTable.timetable.toString();
     });
 
     // Write the variable as a string to the file.
-    return widget.storage.writeCounter(_counter);
+    return CounterStorage.writeCounter(_counter);
   }
 
   @override
@@ -87,7 +95,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
       ),
       body: Center(
         child: Text(
-          'Button tapped $_counter time${_counter == 1 ? '' : 's'}.',
+          'Button tapped $_counter time',
         ),
       ),
       floatingActionButton: FloatingActionButton(

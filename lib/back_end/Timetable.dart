@@ -11,6 +11,7 @@ class TimeTable {
   static List<List<String>> timeSubject = [];
   static int numSubjectDelete = 1000;
   static int numListSubjectDelete = 1000;
+  static late List<String> result;
 
   static void saveSubject() {
     var file = File('dataSubject.json');
@@ -25,15 +26,16 @@ class TimeTable {
     File('dataSubject.json').readAsString().then((String contents) {
       String test = contents.substring(1, contents.length - 1);
 
-      List<String> result = test.split(', ');
+      result = test.split(', ');
+      print(result[0]);
 
-      timetable2.add(result[0]);
-      timetable2.add(result[1]);
+      //timetable2.add(result[0]);
+      //timetable2.add(result[1]);
 
-      //print(timetable2.length);
+      //print(timetable2);
 
-      var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[1]));
-      print(user2.name);
+      //var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[0]));
+      //print(user2.name);
     });
   }
 
@@ -59,7 +61,9 @@ class TimeTable {
 
     //splitTime(subject);
 
-    saveSubject();
+    //writeCounter(timetable[0]);
+
+    //saveSubject();
   }
 
   static void deleteSubject(Subject subject) {
@@ -99,6 +103,8 @@ class TimeTable {
       timetable.removeAt(numSubjectDelete);
     }
 
+    print(timetable);
+
     //saveSubject();
   }
 
@@ -112,4 +118,38 @@ class TimeTable {
   static void callInfoTable() {}
 
   static void callInfoSubject(Subject subject) {}
+
+  /*static Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
+  }
+
+  static Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/counter.txt');
+  }
+
+  static Future<String> readCounter() async {
+    try {
+      final file = await _localFile;
+
+      // Read the file
+      final contents = await file.readAsString();
+
+      return contents;
+    } catch (e) {
+      // If encountering an error, return 0
+      return 'encountering an error';
+    }
+  }
+
+  static Future<File> writeCounter(String counter) async {
+    final file = await _localFile;
+
+    print(counter);
+
+    // Write the file
+    return file.writeAsString(counter);
+  }*/
 }

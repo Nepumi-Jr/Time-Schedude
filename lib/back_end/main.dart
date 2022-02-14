@@ -3,23 +3,26 @@ import 'Timetable.dart';
 import 'subject.dart';
 
 void main(List<String> args) {
-  TimeTable.addSubject(Subject.addSubject('math', 'www.youtube.com', 'online', [
+  //TimeTable.loadSubject();
+
+  //TimeTable.loadSubject();
+  /*TimeTable.addSubject(Subject.addSubject('math', 'www.youtube.com', 'online', [
     [4, 8, 0, 20, 0],
     [2, 14, 30, 17, 30]
-  ]));
+  ]));*/
   TimeTable.addSubject(
       Subject.addSubject('englist', 'www.english.com', 'onsite', [
     [3, 7, 30, 19, 30],
     [1, 13, 0, 16, 00]
   ]));
 
-  TimeTable.deleteSubject(
+  /*TimeTable.deleteSubject(
       Subject.deleteSubject('englist', 'www.english.com', 'onsite', [
     [3, 7, 30, 19, 30],
     [1, 13, 0, 16, 00]
-  ]));
+  ]));*/
 
-  print(TimeTable.timetable);
+  //print(TimeTable.timetable2);
 
   //print(TimeTable.listSubject[0].allTimeLearn[0][2]);
 
