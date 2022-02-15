@@ -1,5 +1,3 @@
-import 'package:sendlink_application/back_end/storage.dart';
-
 import 'subject.dart';
 import 'dart:convert';
 import 'time.dart';
@@ -13,23 +11,23 @@ class TimeTable {
   static List<List<String>> timeSubject = [];
   static int numSubjectDelete = 1000;
   static int numListSubjectDelete = 1000;
-  static late List<String> result;
 
   static void saveSubject() {
-    var file = File('dataSubject.json');
+    //Storage.writeSubject(timetable.toString());
+
+    /*var file = File('dataSubject.json');
     var sink = file.openWrite();
     sink.write(timetable);
 
     // Close the IOSink to free system resources.
-    sink.close();
+    sink.close();*/
   }
 
   static void loadSubject() {
-    /* File('dataSubject.json').readAsString().then((String contents) {
+    /*myFile.readAsString().then((String contents) {
       String test = contents.substring(1, contents.length - 1);
 
       result = test.split(', ');
-      print(result[0]);
 
       //timetable2.add(result[0]);
       //timetable2.add(result[1]);
@@ -38,15 +36,16 @@ class TimeTable {
 
       //var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[0]));
       //print(user2.name);
-    }); */
+    });*/
 
-    String temp = Storage.readSubject().toString();
+    /*String temp = Storage.readSubject().toString();
     temp = temp.substring(1, temp.length - 1);
+    print(temp);
     List<String> result = temp.split(', ');
-
+    print(result);
     for (var i = 0; i < result.length; i++) {
       TimeTable.timetable.add(result[i]);
-    }
+    }*/
   }
 
   void insertSubject() {}
@@ -68,14 +67,7 @@ class TimeTable {
 
     timetable.add(jsonEncode(subject.toJson()));
 
-    Storage.writeSubject(timetable.toString());
-    //timeSubject.add([subject.timeStart, subject.timeEnd]);
-
-    //splitTime(subject);
-
-    //writeCounter(timetable[0]);
-
-    //saveSubject();
+    //Storage.writeSubject(timetable.toString());
   }
 
   static void deleteSubject(Subject subject) {
@@ -122,9 +114,19 @@ class TimeTable {
     // but clik done update this subject by delete then add by new info
   }
 
-  static void callSubjectThisTime(Time time) {}
+  static void callSubjectThisTime(Time time) {
+    for (int i = 0; i < timetable.length; i++) {}
+  }
 
-  static void callInfoTable() {}
+  static void callInfoTable() {
+    print(timetable);
+  }
 
-  static void callInfoSubject(Subject subject) {}
+  static String callInfoSubject(Subject subject) {
+    return subject.name +
+        subject.link +
+        subject.learnAt +
+        'in day' +
+        subject.allTimeLearn[0][0];
+  }
 }
