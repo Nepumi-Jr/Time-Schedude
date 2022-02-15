@@ -12,6 +12,7 @@ class settingpage extends StatefulWidget {
 //dropdown STRING.
 String dropdownValue = 'English';
 bool toggleValue = true;
+int Min = 30;
 
 class _settingpageState extends State<settingpage> {
   @override
@@ -115,23 +116,66 @@ class _settingpageState extends State<settingpage> {
                       //switch**************************
                       Expanded(child: Container()),
                       AnimatedContainer(
-                        duration: Duration(milliseconds: 1000),
-                        width: 100,
-                        height: 40,
+                        duration: Duration(milliseconds: 300),
+                        width: 65,
+                        height: 35,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+                          gradient: LinearGradient(
+                              colors: [
+                                color.AppColor.Gradient1,
+                                color.AppColor.Gradient1.withOpacity(0.8),
+                                color.AppColor.Gradient2.withOpacity(0.8),
+                                color.AppColor.Gradient2,
+                                //add more colors for gradient
+                              ],
+                              begin: Alignment
+                                  .topRight, //begin of the gradient color
+                              end: Alignment
+                                  .bottomLeft, //end of the gradient color
+                              stops: [
+                                0,
+                                0.1,
+                                0.9,
+                                1
+                              ] //stops for individual color
+                              //set the stops number equal to numbers of color
+                              ),
+                          borderRadius: BorderRadius.circular(20),
                           color: toggleValue
-                              ? Colors.greenAccent[100]
-                              : Colors.redAccent[100].withOpacity(0.5),
+                              ? Colors.greenAccent
+                              : color.AppColor.background_textfield
+                                  .withOpacity(0.1),
                         ),
                         child: Stack(
                           children: <Widget>[
                             AnimatedPositioned(
-                                duration: Duration(milliseconds: 1000),
-                                curve: Curves.easeIn,
-                                top: 3,
-                                left: toggleValue ? 60 : 0,
-                                right: toggleValue ? 60 : 0)
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeIn,
+                              top: 1.5,
+                              left: toggleValue ? 25 : 0,
+                              right: toggleValue ? 0 : 25,
+                              child: InkWell(
+                                onTap: toggleButtons,
+                                child: AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 300),
+                                    transitionBuilder: (Widget child,
+                                        Animation<double> animation) {
+                                      return RotationTransition(
+                                          child: child, turns: animation);
+                                    },
+                                    child: toggleValue
+                                        ? Icon(Icons.circle,
+                                            color: Colors.white,
+                                            size: 33,
+                                            key: UniqueKey())
+                                        : Icon(
+                                            Icons.circle,
+                                            color: Colors.white,
+                                            size: 33,
+                                            key: UniqueKey(),
+                                          )),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -193,29 +237,45 @@ class _settingpageState extends State<settingpage> {
                               color: Colors.black,
                               fontWeight: FontWeight.w600)),
                       Expanded(child: Container()),
+                      SizedBox(width: 5),
                       Container(
-                        width: 34,
+                        width: 50,
                         height: 26,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius:
                               BorderRadius.circular(5), //border corner radius
                         ),
-                      ),
-                      SizedBox(width: 5),
-                      Text("hr."),
-                      SizedBox(width: 5),
-                      Container(
-                        width: 34,
-                        height: 26,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.circular(5), //border corner radius
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 1,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 13,
+                                ),
+                                Text(
+                                  "$Min",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                )
+                              ],
+                            )
+                          ],
                         ),
                       ),
                       SizedBox(width: 5),
-                      Text("min."),
+                      Text(
+                        "min.",
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600),
+                      ),
                       SizedBox(width: 25),
                     ],
                   ),
@@ -445,5 +505,11 @@ class _settingpageState extends State<settingpage> {
         ),
       ),
     );
+  }
+
+  toggleButtons() {
+    setState(() {
+      toggleValue = !toggleValue;
+    });
   }
 }
