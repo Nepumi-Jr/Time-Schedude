@@ -9,6 +9,10 @@ class settingpage extends StatefulWidget {
   _settingpageState createState() => _settingpageState();
 }
 
+//dropdown STRING.
+String dropdownValue = 'English';
+bool toggleValue = true;
+
 class _settingpageState extends State<settingpage> {
   @override
   Widget build(BuildContext context) {
@@ -109,6 +113,31 @@ class _settingpageState extends State<settingpage> {
                               color: Colors.black,
                               fontWeight: FontWeight.w600)),
                       //switch**************************
+                      Expanded(child: Container()),
+                      AnimatedContainer(
+                        duration: Duration(milliseconds: 1000),
+                        width: 100,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: toggleValue
+                              ? Colors.greenAccent[100]
+                              : Colors.redAccent[100].withOpacity(0.5),
+                        ),
+                        child: Stack(
+                          children: <Widget>[
+                            AnimatedPositioned(
+                                duration: Duration(milliseconds: 1000),
+                                curve: Curves.easeIn,
+                                top: 3,
+                                left: toggleValue ? 60 : 0,
+                                right: toggleValue ? 60 : 0)
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 25,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -190,6 +219,225 @@ class _settingpageState extends State<settingpage> {
                       SizedBox(width: 25),
                     ],
                   ),
+                  Row(children: [
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text("//alarm before class start.",
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: color.AppColor.Font_sub,
+                            fontWeight: FontWeight.w600))
+                  ]),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Row(children: [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Language",
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Expanded(child: Container()),
+                    DropdownButton<String>(
+                      value: dropdownValue,
+                      icon: const Icon(Icons.arrow_downward),
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.deepPurple),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownValue = newValue!;
+                        });
+                      },
+                      items: <String>['English', 'Thai']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(
+                      width: 25,
+                    ),
+                  ]),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                          width: 110,
+                          height: 31,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: [
+                                BoxShadow(
+                                    offset: Offset(0, 5),
+                                    blurRadius: 5,
+                                    color: Colors.grey.withOpacity(1))
+                              ]),
+                          padding: EdgeInsets.only(top: 3),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 34.5,
+                                  ),
+                                  Text("reset",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.red,
+                                      )),
+                                ],
+                              ),
+                            ],
+                          )),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text("//reset application.",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: color.AppColor.Font_sub,
+                              fontWeight: FontWeight.w600)),
+                    ],
+                  ),
+                  Expanded(child: Container()),
+                  Row(
+                    children: [
+                      Expanded(child: Container()),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        width: 90,
+                        height: 35,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(13),
+                            gradient: LinearGradient(
+                                colors: [
+                                  color.AppColor.Gradient1,
+                                  color.AppColor.Gradient1.withOpacity(0.8),
+                                  color.AppColor.Gradient2.withOpacity(0.8),
+                                  color.AppColor.Gradient2,
+                                  //add more colors for gradient
+                                ],
+                                begin: Alignment
+                                    .topRight, //begin of the gradient color
+                                end: Alignment
+                                    .bottomLeft, //end of the gradient color
+                                stops: [
+                                  0,
+                                  0.1,
+                                  0.9,
+                                  1
+                                ] //stops for individual color
+                                //set the stops number equal to numbers of color
+                                ),
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(0, 5),
+                                  blurRadius: 5,
+                                  color: Colors.grey.withOpacity(1))
+                            ] //border corner radius
+                            ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 19,
+                                ),
+                                Text("Apply",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700)),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        width: 90,
+                        height: 35,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(13),
+                            gradient: LinearGradient(
+                                colors: [
+                                  color.AppColor.Gradient1,
+                                  color.AppColor.Gradient1.withOpacity(0.8),
+                                  color.AppColor.Gradient2.withOpacity(0.8),
+                                  color.AppColor.Gradient2,
+                                  //add more colors for gradient
+                                ],
+                                begin: Alignment
+                                    .topRight, //begin of the gradient color
+                                end: Alignment
+                                    .bottomLeft, //end of the gradient color
+                                stops: [
+                                  0,
+                                  0.1,
+                                  0.9,
+                                  1
+                                ] //stops for individual color
+                                //set the stops number equal to numbers of color
+                                ),
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(0, 5),
+                                  blurRadius: 5,
+                                  color: Colors.grey.withOpacity(1))
+                            ] //border corner radius
+                            ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 22,
+                                ),
+                                Text("Done",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700)),
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
