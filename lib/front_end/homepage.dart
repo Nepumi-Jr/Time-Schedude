@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:sendlink_application/front_end/subject.dart';
 import 'colors.dart' as color;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
