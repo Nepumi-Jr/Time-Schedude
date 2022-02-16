@@ -1,8 +1,11 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sendlink_application/back_end/Timetable.dart';
+import 'package:sendlink_application/back_end/storage.dart';
 import 'package:sendlink_application/back_end/subject.dart';
 import 'package:sendlink_application/front_end/checkbox_state.dart';
 import 'colors.dart' as color;
@@ -26,6 +29,8 @@ class _AddpageState extends State<Addpage> {
   late TimeOfDay time_end_picker;
   late TimeOfDay picked;
 
+  late String subject;
+
   bool value = false;
 
   List<CheckBoxState> dayInWeek = [];
@@ -48,6 +53,15 @@ class _AddpageState extends State<Addpage> {
     super.initState();
     time_start_picker = TimeOfDay.now();
     time_end_picker = TimeOfDay.now();
+  }
+
+  Future<File> _incrementCounter() {
+    setState(() {
+      subject = TimeTable.timetable.toString();
+    });
+
+    // Write the variable as a string to the file.
+    return Storage.writeSubject(subject);
   }
 
   Future<Null> selectTimeStart(BuildContext context) async {
@@ -287,72 +301,13 @@ class _AddpageState extends State<Addpage> {
                   SizedBox(height: 2),
                   Row(children: [
                     SizedBox(width: 10),
-                    Text("Study hours",
+                    Text("Meeting Day",
                         style: TextStyle(
                             fontSize: 18,
                             color: color.AppColor.Font_sub,
                             fontWeight: FontWeight.bold)),
                   ]),
                   SizedBox(height: 5),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          selectTimeStart(context);
-                        }, // Handle your callback
-                        child: Ink(
-                          height: 45,
-                          width: 120,
-                          decoration: BoxDecoration(
-                            color: color.AppColor.box_class.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(child: Container()),
-                      Container(
-                        child: Text("to"),
-                      ),
-                      Expanded(child: Container()),
-                      InkWell(
-                        onTap: () {
-                          selectTimeEnd(context);
-                        }, // Handle your callback
-                        child: Ink(
-                          height: 45,
-                          width: 120,
-                          decoration: BoxDecoration(
-                            color: color.AppColor.box_class.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${zeroHourCheck(time_end_picker)}:${zeroMinCheck(time_end_picker)}',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                    ],
-                  ),
                   SizedBox(height: 2),
                   Row(children: [
                     SizedBox(width: 10),
