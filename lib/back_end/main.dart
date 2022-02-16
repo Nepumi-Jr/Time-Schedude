@@ -5,15 +5,42 @@ import 'TimeSub.dart';
 import 'Timetable.dart';
 import 'subject.dart';
 
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
+
 void main(List<String> args) {
   //print(TimeTable.timetable.length);
   //var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[0]));
   //rint(user2.name);
 
-  TimeTable.addSubject(Subject('math', 'www.youtube.com', 'online',
-      [TimeSub.forSubject("FrIDaY", 9, 00, 10, 30)]));
+  TimeTable.addSubject(Subject('math', 'www.youtube.com', 'online', [
+    TimeSub.forSubject("FrIDaY", 9, 00, 10, 30),
+    TimeSub.forSubject("MOnDAy", 17, 32, 18, 11)
+  ]));
+  print(TimeTable.tToString());
 
-  print(TimeTable.listSubject[0].allTimeLearn[0].dayOfWeek);
+  TimeTable.addTimeToSubject(
+      "math", TimeSub.forSubject("Wednesday", 9, 30, 12, 00));
+
+  print(TimeTable.tToString());
+
+  TimeTable.addSubject(Subject('life', 'www.pornhub.com', 'online',
+      [TimeSub.forSubject("Tuesday", 9, 00, 10, 30)]));
+  print(TimeTable.tToString());
+
+  print("-----------------------------------------");
+
+  TimeTable.editSubject("math", Subject("cal kuay", "googoo", "hell", []));
+  print(TimeTable.tToString());
+
+  TimeTable.editSubject(
+      "cal kuay", Subject("cal kuay", "pondhub", "heaven", []));
+  print(TimeTable.tToString());
+
+  print("Test time DUL");
+
+  print(TimeSub.isDuplicatedTime(TimeSub.forSubject("monday", 10, 29, 12, 00),
+      TimeSub.forSubject("monday", 9, 00, 10, 30)));
 
   //print(TimeTable.listSubject[0].allTimeLearn);
   //TimeTable.loadSubject();

@@ -41,6 +41,7 @@ dependencies:
   translator: ^0.1.7
   flutter_linkify: ^5.0.2
   url_launcher: ^6.0.20
+  crypto: ^3.0.1
 
 dev_dependencies:
   flutter_test:

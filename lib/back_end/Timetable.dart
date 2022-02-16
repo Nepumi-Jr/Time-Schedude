@@ -2,6 +2,7 @@ import 'subject.dart';
 import 'dart:convert';
 import 'TimeSub.dart';
 import 'dart:io';
+// TODO : Don't forget about storage stuff
 //import 'storage.dart';
 
 class TimeTable {
@@ -10,122 +11,119 @@ class TimeTable {
   //static late String learnAt;
   //static late List allTimeLearn;
   static List<Subject> listSubject = [];
-  static List<String> timetable = [];
-  static List<List<String>> timeSubject = [];
   static int numSubjectDelete = 1000;
   static int numListSubjectDelete = 1000;
+  // TODO : Don't forget to save idCounter
+  static int idCounter = 0;
 
   //TimeTable
 
   static void saveSubject() {
-    //Storage.writeSubject(timetable.toString());
-
-    /*var file = File('dataSubject.json');
-    var sink = file.openWrite();
-    sink.write(timetable);
-
-    // Close the IOSink to free system resources.
-    sink.close();*/
+    String jsonText = jsonEncode(listSubject);
+    print(jsonText);
+    // TODO : Don't forget about storage stuff
+    //Storage.writeSubject(jsonText);
   }
 
-  static void loadSubject() {
-    /*myFile.readAsString().then((String contents) {
-      String test = contents.substring(1, contents.length - 1);
-
-      result = test.split(', ');
-
-      //timetable2.add(result[0]);
-      //timetable2.add(result[1]);
-
-      //print(timetable2);
-
-      //var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[0]));
-      //print(user2.name);
-    });*/
-
-    /*String temp = Storage.readSubject().toString();
-    temp = temp.substring(1, temp.length - 1);
-    print(temp);
-    List<String> result = temp.split(', ');
-    print(result);
-    for (var i = 0; i < result.length; i++) {
-      TimeTable.timetable.add(result[i]);
-    }*/
+  static void loadSubject() async {
+    //String jsonText = await Storage.readSubject();
+    // listSubject = []
+    // List listSomething = jsonDecode(jsonText);
+    // for (var e in listSomething) {
+    //   listSubject.add(Subject.fromJson(e));
+    // }
   }
 
   void insertSubject() {}
 
-  /*static void splitTime(Subject subject) {
-    var listTimeStart = subject.timeStart.split('.');
-    var listTimeEnd = subject.timeEnd.split('.');
-
-    var hourStart = int.parse(listTimeStart[0]);
-    var minuteStart = int.parse(listTimeStart[1]);
-    var hourEnd = int.parse(listTimeEnd[0]);
-    var minuteEnd = int.parse(listTimeEnd[1]);
-
-    Time.forSubject(subject.date, hourStart, minuteStart, hourEnd, minuteEnd);
-  }*/
-
   static void addSubject(Subject subject) {
+    subject.id = idCounter;
+    subject.doGenTimeId();
     listSubject.add(subject);
-
-    String jsonText = jsonEncode(listSubject);
-    print(jsonText);
-
-    //Storage.writeSubject(timetable.toString());
+    saveSubject();
+    idCounter++;
   }
 
-  /*static void deleteSubject(Subject subject) {
-    for (int i = 0; i < timetable.length; i++) {
-      var nameSubject = Subject.fromJson(jsonDecode(timetable[i]));
-      if (subject.name == nameSubject.name) {
-        if (subject.link == nameSubject.link) {
-          if (subject.learnAt == nameSubject.learnAt) {
-            if (subject.allTimeLearn.join(",") ==
-                nameSubject.allTimeLearn.join(",")) {
-              numListSubjectDelete = i;
-            }
-          }
+  static int getSubjectIndexFromName(String subjectName) {
+    for (int i = 0; i < listSubject.length; i++) {
+      if (listSubject[i].name.toLowerCase() == subjectName.toLowerCase()) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  static void addTimeToSubject(String subjectName, TimeSub newTime) {
+    int ind = getSubjectIndexFromName(subjectName);
+    if (ind == -1) {
+      //! หาวิชาไม่เจอ ควย!!!
+    }
+    listSubject[ind].allTimeLearn.add(newTime);
+    listSubject[ind].allTimeId.add(listSubject[ind].getHashTime(newTime));
+  }
+
+  static void removeSubject(String subjectName) {
+    int ind = getSubjectIndexFromName(subjectName);
+    listSubject.removeAt(ind);
+  }
+
+  static void removeSubjectTime(String subjectName, TimeSub tim) {
+    int ind = getSubjectIndexFromName(subjectName);
+    int timInd = -1;
+    for (int i = 0; i < listSubject[ind].allTimeLearn.length; i++) {
+      if (listSubject[ind].allTimeLearn[i].dayOfWeek == tim.dayOfWeek &&
+          listSubject[ind].allTimeLearn[i].hourStart == tim.hourStart &&
+          listSubject[ind].allTimeLearn[i].minuteStart == tim.minuteStart) {
+        timInd = i;
+        break;
+      }
+    }
+    if (timInd == -1) {
+      //! อย่าหลอน
+    }
+    listSubject[ind].allTimeLearn.removeAt(timInd);
+  }
+
+  static void editSubject(String subjectOldName, Subject theNewSubject) {
+    int ind = getSubjectIndexFromName(subjectOldName);
+    theNewSubject.id = listSubject[ind].id;
+    theNewSubject.allTimeId = listSubject[ind].allTimeId;
+    theNewSubject.allTimeLearn = listSubject[ind].allTimeLearn;
+
+    listSubject.removeAt(ind);
+    listSubject.add(theNewSubject);
+  }
+
+  static void editSubjectTime(
+      String subjectName, TimeSub oldTime, TimeSub newTime) {
+    removeSubjectTime(subjectName, oldTime);
+    addTimeToSubject(subjectName, newTime);
+  }
+
+  static bool isDuplicatedWithSubject(TimeSub tim) {
+    for (var e in listSubject) {
+      for (var f in e.allTimeLearn) {
+        if (TimeSub.isDuplicatedTime(f, tim)) {
+          return true;
         }
       }
     }
+    return false;
+  }
 
-    if (numListSubjectDelete != 1000) {
-      timetable.removeAt(numListSubjectDelete);
-    }
-
-    for (int i = 0; i < timetable.length; i++) {
-      var nameSubject = Subject.fromJson(jsonDecode(timetable[i]));
-      if (subject.name == nameSubject.name) {
-        if (subject.link == nameSubject.link) {
-          if (subject.learnAt == nameSubject.learnAt) {
-            if (subject.allTimeLearn.join(",") ==
-                nameSubject.allTimeLearn.join(",")) {
-              numSubjectDelete = i;
-            }
-          }
+  static String callSubjectThisTime(TimeSub time) {
+    for (var e in listSubject) {
+      for (var f in e.allTimeLearn) {
+        if (TimeSub.isInBetween(f, TimeSub.fromSubjectToTime(time), true)) {
+          return e.name;
         }
       }
     }
-
-    if (numSubjectDelete != 1000) {
-      timetable.removeAt(numSubjectDelete);
-    }
-    //saveSubject();
-  }*/
-
-  static void editSubject(Subject subject) {
-    // click edit then check if click trashcan delete this subject
-    // but clik done update this subject by delete then add by new info
-  }
-
-  static void callSubjectThisTime(TimeSub time) {
-    for (int i = 0; i < timetable.length; i++) {}
+    return "-";
   }
 
   static void callInfoTable() {
-    print(timetable);
+    //? Bruh
   }
 
   static String callInfoSubject(Subject subject) {
@@ -134,5 +132,23 @@ class TimeTable {
         subject.learnAt +
         'in day ' +
         subject.allTimeLearn[0].dayOfWeek.toString();
+  }
+
+  static String tToString() {
+    String result = "";
+    for (var e in listSubject) {
+      result += "========== ${e.name} ==========\n";
+      result += "ID   : ${e.id}\n";
+      result += "link : ${e.link}\n";
+      result += "at   : ${e.learnAt}\n";
+      result += "Times...\n\t";
+      for (var f in e.allTimeLearn) {
+        result +=
+            "[${TimeSub.intDayToStr(f.dayOfWeek)} at ${f.hourStart}:${f.minuteStart} to ${f.hourEnd}:${f.minuteEnd}] ";
+      }
+      result += "\n\n";
+    }
+
+    return result;
   }
 }

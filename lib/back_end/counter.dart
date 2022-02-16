@@ -71,8 +71,6 @@ class _FlutterDemoState extends State<FlutterDemo> {
     //   [1, 13, 0, 16, 00]
     // ]));
 
-    print(TimeTable.timetable);
-
     CounterStorage.readCounter().then((String value) {
       setState(() {
         _counter = value;
@@ -82,7 +80,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
   Future<File> _incrementCounter() {
     setState(() {
-      _counter = TimeTable.timetable.toString();
+      _counter = "Kuy";
     });
 
     // Write the variable as a string to the file.
