@@ -1,16 +1,21 @@
 import 'subject.dart';
 import 'dart:convert';
-import 'time.dart';
+import 'TimeSub.dart';
 import 'dart:io';
 //import 'storage.dart';
 
 class TimeTable {
+  // static late String name;
+  //static late String link;
+  //static late String learnAt;
+  //static late List allTimeLearn;
   static List<Subject> listSubject = [];
   static List<String> timetable = [];
-  static List<String> timetable2 = [];
   static List<List<String>> timeSubject = [];
   static int numSubjectDelete = 1000;
   static int numListSubjectDelete = 1000;
+
+  //TimeTable
 
   static void saveSubject() {
     //Storage.writeSubject(timetable.toString());
@@ -65,12 +70,13 @@ class TimeTable {
   static void addSubject(Subject subject) {
     listSubject.add(subject);
 
-    timetable.add(jsonEncode(subject.toJson()));
+    String jsonText = jsonEncode(listSubject);
+    print(jsonText);
 
     //Storage.writeSubject(timetable.toString());
   }
 
-  static void deleteSubject(Subject subject) {
+  /*static void deleteSubject(Subject subject) {
     for (int i = 0; i < timetable.length; i++) {
       var nameSubject = Subject.fromJson(jsonDecode(timetable[i]));
       if (subject.name == nameSubject.name) {
@@ -107,14 +113,14 @@ class TimeTable {
       timetable.removeAt(numSubjectDelete);
     }
     //saveSubject();
-  }
+  }*/
 
   static void editSubject(Subject subject) {
     // click edit then check if click trashcan delete this subject
     // but clik done update this subject by delete then add by new info
   }
 
-  static void callSubjectThisTime(Time time) {
+  static void callSubjectThisTime(TimeSub time) {
     for (int i = 0; i < timetable.length; i++) {}
   }
 
@@ -126,7 +132,7 @@ class TimeTable {
     return subject.name +
         subject.link +
         subject.learnAt +
-        'in day' +
-        subject.allTimeLearn[0][0];
+        'in day ' +
+        subject.allTimeLearn[0].dayOfWeek.toString();
   }
 }

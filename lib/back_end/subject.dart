@@ -1,3 +1,5 @@
+import 'package:sendlink_application/back_end/TimeSub.dart';
+
 class Subject {
   late String name;
   late String link;
@@ -5,7 +7,7 @@ class Subject {
   //late int date;
   //late int timeStart;
   //late List timeEnd;
-  late List allTimeLearn;
+  late List<TimeSub> allTimeLearn;
 
   /*Subject.deleteSubject(this.name, this.link, this.learnAt, this.date,
       this.timeStart, this.timeEnd);*/
@@ -16,7 +18,7 @@ class Subject {
   /*Subject.editSubject(this.name, this.link, this.learnAt, this.date,
       this.timeStart, this.timeEnd);*/
 
-  Subject.addSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
+  Subject(this.name, this.link, this.learnAt, this.allTimeLearn);
   Subject.deleteSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
   //Subject.editSubjectt(this.name, this.link, this.learnAt, this.allTimeLearn);
 

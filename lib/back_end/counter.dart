@@ -65,11 +65,11 @@ class _FlutterDemoState extends State<FlutterDemo> {
   void initState() {
     super.initState();
 
-    TimeTable.addSubject(
-        Subject.addSubject('englist', 'www.english.com', 'onsite', [
-      [3, 7, 30, 19, 30],
-      [1, 13, 0, 16, 00]
-    ]));
+    // TimeTable.addSubject(
+    //     Subject.addSubject('englist', 'www.english.com', 'onsite', [
+    //   [3, 7, 30, 19, 30],
+    //   [1, 13, 0, 16, 00]
+    // ]));
 
     print(TimeTable.timetable);
 
