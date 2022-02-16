@@ -36,14 +36,14 @@ class _HomePageState extends State<HomePage> {
   List<Subject> subject_upnext = [];
   List<Subject> subject_done = [];
 
-  @override
+  /*  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     runningClock();
   }
-
-  void testingAddTimeTable() {
+ */
+  /* void testingAddTimeTable() {
     TimeTable.addSubject(Subject.addSubject(
         'Circuit Signal System', 'www.english.com', 'onsite', [
       [4, 7, 30, 19, 30],
@@ -61,9 +61,9 @@ class _HomePageState extends State<HomePage> {
       [3, 7, 30, 19, 30],
       [1, 13, 0, 16, 00]
     ]));
-  }
+  } */
 
-  void runningClock() {
+  /*  void runningClock() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         time_with_no_format = DateTime.now();
@@ -83,19 +83,19 @@ class _HomePageState extends State<HomePage> {
         hourCheckInt = int.parse(hourCheck);
         minuteCheckInt = int.parse(minuteCheck);
       });
-      testingAddTimeTable();
+      //testingAddTimeTable();
       openData();
       print(subject_during[0]);
     });
   }
-
-  void openData() {
+ */
+  /* void openData() {
     subject = TimeTable.listSubject;
     addData();
     for (var i = 0; i < subject.length; i++) {
       for (var i = 0; i < subject[i].allTimeLearn.length; i++) {}
     }
-  }
+  } */
 
   Future<int> dayStringToDayInt(String dayString) async {
     if (dayString == 'Sunday') {
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void addData() {
+  /*  void addData() {
     for (var i = 0; i < TimeTable.listSubject.length; i++) {
       for (var j = 0; j < TimeTable.listSubject[i].allTimeLearn.length; j++) {
         //done
@@ -136,11 +136,11 @@ class _HomePageState extends State<HomePage> {
         }
       }
     }
-  }
-
+  } */
+/* 
   int timeCheck(int i, int j, int positionTime) {
     return TimeTable.listSubject[i].allTimeLearn[j][positionTime];
-  }
+  } */
 
   /* Future<File> _incrementCounter() {
     setState(() {
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
 
   //start 0
   //end 1
-  String getTimeClass(int i, int j, int when) {
+  /* String getTimeClass(int i, int j, int when) {
     int hour = 1;
     int minute = 2;
     String tempHour;
@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage> {
     } else {
       return tempHour + ":" + tempMinute;
     }
-  }
+  } */
 
   //widget for add subject in real time
   List<Widget> getDurringClass() {
@@ -226,13 +226,13 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             width: 15,
                           ),
-                          Text(
+                          /* Text(
                             getTimeClass(i, 0, 0) +
                                 " - " +
                                 getTimeClass(i, 0, 1),
                             style: TextStyle(
                                 fontSize: 12, fontWeight: FontWeight.normal),
-                          )
+                          ) */
                         ],
                       )
                     ],

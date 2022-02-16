@@ -1,35 +1,38 @@
-import 'package:sendlink_application/back_end/storage.dart';
-
 import 'subject.dart';
 import 'dart:convert';
-import 'time.dart';
+import 'TimeSub.dart';
 import 'dart:io';
-//import 'package:path_provider/path_provider.dart';
+//import 'storage.dart';
 
 class TimeTable {
+  // static late String name;
+  //static late String link;
+  //static late String learnAt;
+  //static late List allTimeLearn;
   static List<Subject> listSubject = [];
   static List<String> timetable = [];
-  static List<String> timetable2 = [];
   static List<List<String>> timeSubject = [];
   static int numSubjectDelete = 1000;
   static int numListSubjectDelete = 1000;
-  static late List<String> result;
+
+  //TimeTable
 
   static void saveSubject() {
-    var file = File('dataSubject.json');
+    //Storage.writeSubject(timetable.toString());
+
+    /*var file = File('dataSubject.json');
     var sink = file.openWrite();
     sink.write(timetable);
 
     // Close the IOSink to free system resources.
-    sink.close();
+    sink.close();*/
   }
 
   static void loadSubject() {
-    /* File('dataSubject.json').readAsString().then((String contents) {
+    /*myFile.readAsString().then((String contents) {
       String test = contents.substring(1, contents.length - 1);
 
       result = test.split(', ');
-      print(result[0]);
 
       //timetable2.add(result[0]);
       //timetable2.add(result[1]);
@@ -38,15 +41,16 @@ class TimeTable {
 
       //var user2 = Subject.fromJson(jsonDecode(TimeTable.timetable2[0]));
       //print(user2.name);
-    }); */
+    });*/
 
-    String temp = Storage.readSubject().toString();
+    /*String temp = Storage.readSubject().toString();
     temp = temp.substring(1, temp.length - 1);
+    print(temp);
     List<String> result = temp.split(', ');
-
+    print(result);
     for (var i = 0; i < result.length; i++) {
       TimeTable.timetable.add(result[i]);
-    }
+    }*/
   }
 
   void insertSubject() {}
@@ -66,19 +70,13 @@ class TimeTable {
   static void addSubject(Subject subject) {
     listSubject.add(subject);
 
-    timetable.add(jsonEncode(subject.toJson()));
+    String jsonText = jsonEncode(listSubject);
+    print(jsonText);
 
-    Storage.writeSubject(timetable.toString());
-    //timeSubject.add([subject.timeStart, subject.timeEnd]);
-
-    //splitTime(subject);
-
-    //writeCounter(timetable[0]);
-
-    //saveSubject();
+    //Storage.writeSubject(timetable.toString());
   }
 
-  static void deleteSubject(Subject subject) {
+  /*static void deleteSubject(Subject subject) {
     for (int i = 0; i < timetable.length; i++) {
       var nameSubject = Subject.fromJson(jsonDecode(timetable[i]));
       if (subject.name == nameSubject.name) {
@@ -114,54 +112,27 @@ class TimeTable {
     if (numSubjectDelete != 1000) {
       timetable.removeAt(numSubjectDelete);
     }
-
-    print(timetable);
-
     //saveSubject();
-  }
+  }*/
 
   static void editSubject(Subject subject) {
     // click edit then check if click trashcan delete this subject
     // but clik done update this subject by delete then add by new info
   }
 
-  static void callSubjectThisTime(Time time) {}
-
-  static void callInfoTable() {}
-
-  static void callInfoSubject(Subject subject) {}
-
-  /*static Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
+  static void callSubjectThisTime(TimeSub time) {
+    for (int i = 0; i < timetable.length; i++) {}
   }
 
-  static Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/counter.txt');
+  static void callInfoTable() {
+    print(timetable);
   }
 
-  static Future<String> readCounter() async {
-    try {
-      final file = await _localFile;
-
-      // Read the file
-      final contents = await file.readAsString();
-
-      return contents;
-    } catch (e) {
-      // If encountering an error, return 0
-      return 'encountering an error';
-    }
+  static String callInfoSubject(Subject subject) {
+    return subject.name +
+        subject.link +
+        subject.learnAt +
+        'in day ' +
+        subject.allTimeLearn[0].dayOfWeek.toString();
   }
-
-  static Future<File> writeCounter(String counter) async {
-    final file = await _localFile;
-
-    print(counter);
-
-    // Write the file
-    return file.writeAsString(counter);
-  }*/
 }

@@ -1,13 +1,11 @@
-import 'package:sendlink_application/back_end/TimeSub.dart';
-
-class Subject {
+class Todo {
   late String name;
   late String link;
   late String learnAt;
   //late int date;
   //late int timeStart;
   //late List timeEnd;
-  late List<TimeSub> allTimeLearn;
+  late List allTimeLearn;
 
   /*Subject.deleteSubject(this.name, this.link, this.learnAt, this.date,
       this.timeStart, this.timeEnd);*/
@@ -18,11 +16,11 @@ class Subject {
   /*Subject.editSubject(this.name, this.link, this.learnAt, this.date,
       this.timeStart, this.timeEnd);*/
 
-  Subject(this.name, this.link, this.learnAt, this.allTimeLearn);
-  Subject.deleteSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
+  Todo.addSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
+  Todo.deleteSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
   //Subject.editSubjectt(this.name, this.link, this.learnAt, this.allTimeLearn);
 
-  Subject.fromJson(Map<String, dynamic> json) {
+  Todo.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     link = json['link'];
     learnAt = json['learnAt'];

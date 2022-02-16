@@ -3,56 +3,22 @@ import 'dart:io';
 import 'Timetable.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-
+import 'storage.dart';
 import 'subject.dart';
 
 void main() {
   runApp(
     MaterialApp(
       title: 'Reading and Writing Files',
-      home: FlutterDemo(storage: CounterStorage()),
+      home: FlutterDemo(storage: Storage()),
     ),
   );
-}
-
-class CounterStorage {
-  static Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
-  }
-
-  static Future<File> get _localFile async {
-    final path = await _localPath;
-    return File('$path/counter.txt');
-  }
-
-  static Future<String> readCounter() async {
-    try {
-      final file = await _localFile;
-
-      // Read the file
-      final contents = await file.readAsString();
-
-      return contents;
-    } catch (e) {
-      // If encountering an error, return 0
-      return 'error';
-    }
-  }
-
-  static Future<File> writeCounter(String counter) async {
-    final file = await _localFile;
-
-    // Write the file
-    return file.writeAsString(counter);
-  }
 }
 
 class FlutterDemo extends StatefulWidget {
   const FlutterDemo({Key? key, required this.storage}) : super(key: key);
 
-  final CounterStorage storage;
+  final Storage storage;
 
   @override
   _FlutterDemoState createState() => _FlutterDemoState();
@@ -65,15 +31,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
   void initState() {
     super.initState();
 
-    // TimeTable.addSubject(
-    //     Subject.addSubject('englist', 'www.english.com', 'onsite', [
-    //   [3, 7, 30, 19, 30],
-    //   [1, 13, 0, 16, 00]
-    // ]));
-
-    print(TimeTable.timetable);
-
-    CounterStorage.readCounter().then((String value) {
+    Storage.readSubject().then((String value) {
       setState(() {
         _counter = value;
       });
@@ -82,11 +40,16 @@ class _FlutterDemoState extends State<FlutterDemo> {
 
   Future<File> _incrementCounter() {
     setState(() {
-      _counter = TimeTable.timetable.toString();
+      /*TimeTable.addSubject(
+          Subject.addSubject('math', 'www.youtube.com', 'online', [
+        [4, 8, 0, 20, 0],
+        [2, 14, 30, 17, 30]
+      ]));*/
+      _counter = TimeTable.listSubject[0].link;
     });
 
     // Write the variable as a string to the file.
-    return CounterStorage.writeCounter(_counter);
+    return Storage.writeSubject(_counter);
   }
 
   @override
