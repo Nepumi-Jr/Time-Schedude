@@ -120,8 +120,8 @@ class _AddpageState extends State<Addpage> {
                   width: 30,
                 ),
                 Container(
-                  width: 35,
-                  height: 35,
+                  width: 53,
+                  height: 31,
                   decoration: BoxDecoration(
                       color: color.AppColor.Gradient2,
                       borderRadius: BorderRadius.circular(8),
@@ -145,11 +145,10 @@ class _AddpageState extends State<Addpage> {
                             blurRadius: 5,
                             color: Colors.grey.withOpacity(1))
                       ]),
-                  padding: const EdgeInsets.only(left: 1),
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 3.5,
+                        width: 13.5,
                       ),
                       Icon(
                         IconData(0xf570, fontFamily: 'MaterialIcons'),
@@ -307,36 +306,87 @@ class _AddpageState extends State<Addpage> {
                             color: color.AppColor.Font_sub,
                             fontWeight: FontWeight.bold)),
                   ]),
-                  SizedBox(height: 5),
-                  SizedBox(height: 2),
-                  Row(children: [
-                    SizedBox(width: 10),
-                    Text("Date Class:",
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: color.AppColor.Font_sub,
-                            fontWeight: FontWeight.bold)),
-                  ]),
-                  SizedBox(height: 2),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 10),
-                      Column(
-                        //crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //...dayInWeek.map(buildSingleCheckbox).toList(),
-                        ],
-                      ),
-                    ],
-                  ),
                   Container(
-                    child: RaisedButton(
-                      onPressed: () => {print(555)},
-                      child: Text('Submit'),
-                      //other properties
-                    ),
-                  )
+                      margin: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: color.AppColor.box_class.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              height: 60,
+                              width: double.maxFinite,
+                              decoration: BoxDecoration(
+                                  color: color.AppColor.Gradient2,
+                                  borderRadius: BorderRadius.circular(15),
+                                  gradient: LinearGradient(
+                                      colors: [
+                                        color.AppColor.Gradient1,
+                                        color.AppColor.Gradient1
+                                            .withOpacity(0.7),
+                                        color.AppColor.Gradient2
+                                            .withOpacity(0.7),
+                                        color.AppColor.Gradient2,
+                                        //add more colors for gradient
+                                      ],
+                                      begin: Alignment
+                                          .topRight, //begin of the gradient color
+                                      end: Alignment
+                                          .bottomLeft, //end of the gradient color
+                                      stops: [
+                                        0,
+                                        0.1,
+                                        0.9,
+                                        1
+                                      ] //stops for individual color
+                                      //set the stops number equal to numbers of color
+                                      ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        offset: Offset(0, 5),
+                                        blurRadius: 5,
+                                        color: Colors.grey.withOpacity(1))
+                                  ]),
+                              child: Row(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "Monday",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Container(
+                                            color: Colors.red,
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            )
+                          ],
+                        ),
+                      ))
                 ],
               ),
             ),
