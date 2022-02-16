@@ -4,7 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:sendlink_application/front_end/subject.dart';
+import 'package:sendlink_application/back_end/Timetable.dart';
+import 'package:sendlink_application/back_end/storage.dart';
+import 'package:sendlink_application/back_end/subject.dart';
 import 'colors.dart' as color;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -18,27 +20,50 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //time for clock
+  // !Time Variable
   late DateTime time_with_no_format, ampm, day_month_no_format;
   String timenow = "", ampm_now = "", day_month = "";
   late Timer _timer;
-  late File jsonFile;
-  late Directory dir;
-  String fileName = "subject_info.json";
-  bool fileExists = false;
-  Map<String, dynamic> fileContent = {};
-  List<List<String>> ter = [
-    ["Signal"],
-    ["Analog"],
-    ["Differential"],
-    ["Digital"]
-  ];
+  late int hourCheckInt;
+  late int minuteCheckInt;
+  late String hourCheck;
+  late String minuteCheck;
+  String dayInWeek = "";
+
+  // !Subject Variable
+  List<Subject> subject = [];
+  List<Subject> subject_during = [];
+  List<Subject> subject_upnext = [];
+  List<Subject> subject_done = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    runningClock();
+  }
 
+  void testingAddTimeTable() {
+    TimeTable.addSubject(Subject.addSubject(
+        'Circuit Signal System', 'www.english.com', 'onsite', [
+      [4, 7, 30, 19, 30],
+      [2, 13, 0, 16, 00]
+    ]));
+
+    TimeTable.addSubject(
+        Subject.addSubject('English', 'www.english.com', 'onsite', [
+      [3, 7, 30, 18, 30],
+      [1, 13, 0, 17, 30]
+    ]));
+
+    TimeTable.addSubject(Subject.addSubject(
+        'Digital Logic Design', 'www.english.com', 'onsite', [
+      [3, 7, 30, 19, 30],
+      [1, 13, 0, 16, 00]
+    ]));
+  }
+
+  void runningClock() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         time_with_no_format = DateTime.now();
@@ -48,17 +73,121 @@ class _HomePageState extends State<HomePage> {
         String datetime2 = DateFormat("a").format(ampm);
         String datetime3 =
             DateFormat("EEEEEE, MMM dd").format(day_month_no_format);
+        String datetime4 = DateFormat("EEEEEE").format(day_month_no_format);
         timenow = "${datetime1}";
         ampm_now = "${datetime2}";
         day_month = "${datetime3}";
+        dayInWeek = "${datetime4}";
+        hourCheck = DateFormat("HH").format(time_with_no_format);
+        minuteCheck = DateFormat("mm").format(time_with_no_format);
+        hourCheckInt = int.parse(hourCheck);
+        minuteCheckInt = int.parse(minuteCheck);
       });
+      testingAddTimeTable();
+      openData();
+      print(subject_during[0]);
     });
   }
 
+  void openData() {
+    subject = TimeTable.listSubject;
+    addData();
+    for (var i = 0; i < subject.length; i++) {
+      for (var i = 0; i < subject[i].allTimeLearn.length; i++) {}
+    }
+  }
+
+  Future<int> dayStringToDayInt(String dayString) async {
+    if (dayString == 'Sunday') {
+      return 1;
+    } else if (dayString == 'Monday') {
+      return 2;
+    } else if (dayString == 'Tuesday') {
+      return 3;
+    } else if (dayString == 'Wednesday') {
+      return 4;
+    } else if (dayString == 'Thursday') {
+      return 5;
+    } else if (dayString == 'Friday') {
+      return 6;
+    } else if (dayString == 'Saturday') {
+      return 7;
+    } else {
+      return -1;
+    }
+  }
+
+  void addData() {
+    for (var i = 0; i < TimeTable.listSubject.length; i++) {
+      for (var j = 0; j < TimeTable.listSubject[i].allTimeLearn.length; j++) {
+        //done
+        if (hourCheckInt > timeCheck(i, j, 3) &&
+            minuteCheckInt > timeCheck(i, j, 4) &&
+            dayStringToDayInt(dayInWeek) == timeCheck(i, j, 0)) {
+          subject_done.add(TimeTable.listSubject[i]);
+        } else if (hourCheckInt < timeCheck(i, j, 1) &&
+            minuteCheckInt < timeCheck(i, j, 2) &&
+            dayStringToDayInt(dayInWeek) == timeCheck(i, j, 0)) {
+          subject_upnext.add(TimeTable.listSubject[i]);
+        } else if (hourCheckInt < timeCheck(i, j, 1) &&
+            minuteCheckInt < timeCheck(i, j, 2) &&
+            dayStringToDayInt(dayInWeek) == timeCheck(i, j, 0)) {
+          subject_during.add(TimeTable.listSubject[i]);
+        }
+      }
+    }
+  }
+
+  int timeCheck(int i, int j, int positionTime) {
+    return TimeTable.listSubject[i].allTimeLearn[j][positionTime];
+  }
+
+  /* Future<File> _incrementCounter() {
+    setState(() {
+      subject = TimeTable.timetable.toString();
+    });
+
+    // Write the variable as a string to the file.
+    return Storage.writeSubject(subject);
+  } */
+
+  //start 0
+  //end 1
+  String getTimeClass(int i, int j, int when) {
+    int hour = 1;
+    int minute = 2;
+    String tempHour;
+    String tempMinute;
+    if (when == 0) {
+      int hour = 1;
+      int minute = 2;
+    } else if (when == 1) {
+      int hour = 3;
+      int minute = 4;
+    }
+    if (subject_during[i].allTimeLearn[j][hour] < 10) {
+      tempHour = "0" + subject_during[i].allTimeLearn[j][hour].toString();
+    } else {
+      tempHour = subject_during[i].allTimeLearn[j][hour].toString();
+    }
+    if (subject_during[i].allTimeLearn[j][minute] < 10) {
+      tempMinute = "0" + subject_during[i].allTimeLearn[j][minute].toString();
+    } else {
+      tempMinute = subject_during[i].allTimeLearn[j][minute].toString();
+    }
+    if (subject_during[i].allTimeLearn[j][hour] >= 12 && when == 1) {
+      return tempHour + ":" + tempMinute + " PM ";
+    } else if (subject_during[i].allTimeLearn[j][hour] < 12 && when == 1) {
+      return tempHour + ":" + tempMinute + " AM ";
+    } else {
+      return tempHour + ":" + tempMinute;
+    }
+  }
+
   //widget for add subject in real time
-  List<Widget> getData(int count) {
+  List<Widget> getDurringClass() {
     List<Widget> data = [];
-    for (var i = 0; i < count; i++) {
+    for (var i = 0; i < subject_during.length; i++) {
       data.add(Container(
         child: Column(
           children: [
@@ -86,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                             width: 10,
                           ),
                           Text(
-                            ter[i][0].toString(),
+                            subject_during[i].name,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -98,7 +227,9 @@ class _HomePageState extends State<HomePage> {
                             width: 15,
                           ),
                           Text(
-                            "9:00 - 10:30 AM",
+                            getTimeClass(i, 0, 0) +
+                                " - " +
+                                getTimeClass(i, 0, 1),
                             style: TextStyle(
                                 fontSize: 12, fontWeight: FontWeight.normal),
                           )
@@ -423,7 +554,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ), */
                       Column(
-                        children: getData(ter.length),
+                        children: getDurringClass(),
                       )
                     ],
                   ),
