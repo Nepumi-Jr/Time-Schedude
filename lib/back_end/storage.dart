@@ -1,3 +1,6 @@
+/*
+  TODO : @Ford ฝากไปเทสการอ่านไฟล์เขียนไฟล์ด้วย !!!!
+*/
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
@@ -8,27 +11,26 @@ class Storage {
     return directory.path;
   }
 
-  static Future<File> get _localFile async {
+  static Future<File> getFile(String fileName) async {
     final path = await _localPath;
-    return File('$path/subject.json');
+    return File('$path/$fileName');
   }
 
-  static Future<String> readSubject() async {
+  static Future<String> readFile(String fileName) async {
     try {
-      final file = await _localFile;
+      final file = await getFile(fileName);
 
       // Read the file
       final contents = await file.readAsString();
 
       return contents;
     } catch (e) {
-      // If encountering an error, return 0
       return 'error';
     }
   }
 
-  static Future<File> writeSubject(String subject) async {
-    final file = await _localFile;
+  static Future<File> writeFile(String fileName, String subject) async {
+    final file = await getFile(fileName);
 
     // Write the file
     return file.writeAsString(subject);
