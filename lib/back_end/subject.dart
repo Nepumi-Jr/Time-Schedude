@@ -11,18 +11,7 @@ class Subject {
   late List<int> allTimeId;
   late List<TimeSub> allTimeLearn;
 
-  /*Subject.deleteSubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd);*/
-
-  /*Subject.addSubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd);*/
-
-  /*Subject.editSubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd);*/
-
   Subject(this.name, this.link, this.learnAt, this.allTimeLearn);
-  Subject.deleteSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
-  //Subject.editSubjectt(this.name, this.link, this.learnAt, this.allTimeLearn);
 
   void doGenTimeId() {
     allTimeId = [];
@@ -44,11 +33,12 @@ class Subject {
     }
     allTimeId = [];
     for (var timId in json['allTimeId']) {
-      allTimeLearn.add(timId);
+      allTimeId.add(timId);
     }
     name = json['name'];
     link = json['link'];
     learnAt = json['learnAt'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() => {

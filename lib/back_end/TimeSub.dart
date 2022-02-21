@@ -120,7 +120,7 @@ class TimeSub {
     return false;
   }
 
-  static bool isDuplicatedTime(TimeSub a, TimeSub b) {
+  static bool isOverlapTime(TimeSub a, TimeSub b) {
     if (a.dayOfWeek == b.dayOfWeek) {
       //? Case 1
       //? L1(+1)      R1(-1)        ( b )

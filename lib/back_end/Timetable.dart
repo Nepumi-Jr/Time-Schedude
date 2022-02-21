@@ -1,4 +1,5 @@
 import 'subject.dart';
+import 'todo.dart';
 import 'dart:convert';
 import 'TimeSub.dart';
 import 'dart:io';
@@ -6,37 +7,53 @@ import 'dart:io';
 //import 'storage.dart';
 
 class TimeTable {
-  // static late String name;
-  //static late String link;
-  //static late String learnAt;
-  //static late List allTimeLearn;
   static List<Subject> listSubject = [];
-  static int numSubjectDelete = 1000;
-  static int numListSubjectDelete = 1000;
+  static List<Todo> listTodo = [];
   // TODO : Don't forget to save idCounter
   static int idCounter = 0;
 
   //TimeTable
 
   static void saveSubject() {
-    String jsonText = jsonEncode(listSubject);
-    print(jsonText);
-    // TODO : Don't forget about storage stuff
-    //Storage.writeSubject(jsonText);
+    // String subjectJson = jsonEncode(listSubject);
+    // Storage.writeFile("subject.json", subjectJson);
+
+    // Storage.writeFile("id.dat", "$idCounter");
+
+    // String todoJson = jsonEncode(listTodo);
+    // Storage.writeFile("todo.json", todoJson);
   }
 
   static void loadSubject() async {
-    //String jsonText = await Storage.readSubject();
-    // listSubject = []
-    // List listSomething = jsonDecode(jsonText);
-    // for (var e in listSomething) {
-    //   listSubject.add(Subject.fromJson(e));
-    // }
+    // String subjectJson = await Storage.readFile("subject.json");
+    // loadSubjectsFromJson(subjectJson);
+
+    // idCounter = int.parse(await Storage.readFile("id.dat"));
+
+    // String todoJson = await Storage.readFile("todo.json");
+    // loadTodoFromJson(todoJson);
   }
 
-  void insertSubject() {}
+  static void loadSubjectsFromJson(String sJSON) {
+    List ll = jsonDecode(sJSON);
+    listSubject = [];
+    for (var e in ll) {
+      listSubject.add(Subject.fromJson(e));
+    }
+  }
+
+  static void loadTodoFromJson(String tJSON) {
+    List ll = jsonDecode(tJSON);
+    listTodo = [];
+    for (var e in ll) {
+      listTodo.add(Todo.fromJson(e));
+    }
+  }
 
   static void addSubject(Subject subject) {
+    if (isExistName(subject.name)) {
+      return;
+    }
     subject.id = idCounter;
     subject.doGenTimeId();
     listSubject.add(subject);
@@ -53,10 +70,15 @@ class TimeTable {
     return -1;
   }
 
+  static bool isExistName(String subjectName) {
+    return getSubjectIndexFromName(subjectName) != -1;
+  }
+
   static void addTimeToSubject(String subjectName, TimeSub newTime) {
     int ind = getSubjectIndexFromName(subjectName);
     if (ind == -1) {
       //! หาวิชาไม่เจอ ควย!!!
+      return;
     }
     listSubject[ind].allTimeLearn.add(newTime);
     listSubject[ind].allTimeId.add(listSubject[ind].getHashTime(newTime));
@@ -64,11 +86,19 @@ class TimeTable {
 
   static void removeSubject(String subjectName) {
     int ind = getSubjectIndexFromName(subjectName);
+    if (ind == -1) {
+      //! หาวิชาไม่เจอ!!!
+      return;
+    }
     listSubject.removeAt(ind);
   }
 
   static void removeSubjectTime(String subjectName, TimeSub tim) {
     int ind = getSubjectIndexFromName(subjectName);
+    if (ind == -1) {
+      //! หาวิชาไม่เจอ!!!
+      return;
+    }
     int timInd = -1;
     for (int i = 0; i < listSubject[ind].allTimeLearn.length; i++) {
       if (listSubject[ind].allTimeLearn[i].dayOfWeek == tim.dayOfWeek &&
@@ -80,11 +110,15 @@ class TimeTable {
     }
     if (timInd == -1) {
       //! อย่าหลอน
+      return;
     }
     listSubject[ind].allTimeLearn.removeAt(timInd);
   }
 
   static void editSubject(String subjectOldName, Subject theNewSubject) {
+    if (isExistName(theNewSubject.name)) {
+      return;
+    }
     int ind = getSubjectIndexFromName(subjectOldName);
     theNewSubject.id = listSubject[ind].id;
     theNewSubject.allTimeId = listSubject[ind].allTimeId;
@@ -100,10 +134,10 @@ class TimeTable {
     addTimeToSubject(subjectName, newTime);
   }
 
-  static bool isDuplicatedWithSubject(TimeSub tim) {
+  static bool isOverlapAnySubject(TimeSub tim) {
     for (var e in listSubject) {
       for (var f in e.allTimeLearn) {
-        if (TimeSub.isDuplicatedTime(f, tim)) {
+        if (TimeSub.isOverlapTime(f, tim)) {
           return true;
         }
       }
@@ -126,7 +160,12 @@ class TimeTable {
     //? Bruh
   }
 
-  static String callInfoSubject(Subject subject) {
+  static Subject callInfoSubject(String nameSubject) {
+    return listSubject[getSubjectIndexFromName(nameSubject)];
+  }
+
+  static String callInfoSubjectStr(String nameSubject) {
+    Subject subject = listSubject[getSubjectIndexFromName(nameSubject)];
     return subject.name +
         subject.link +
         subject.learnAt +
