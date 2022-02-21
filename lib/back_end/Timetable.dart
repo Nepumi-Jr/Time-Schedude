@@ -51,8 +51,17 @@ class TimeTable {
   }
 
   static void addSubject(Subject subject) {
+    //? Check name
     if (isExistName(subject.name)) {
+      //! Duplicated name
       return;
+    }
+    //? Check Times
+    for (var e in subject.allTimeLearn) {
+      if (isOverlapAnySubject(e)) {
+        //! Overlap Time
+        return;
+      }
     }
     subject.id = idCounter;
     subject.doGenTimeId();
@@ -78,6 +87,10 @@ class TimeTable {
     int ind = getSubjectIndexFromName(subjectName);
     if (ind == -1) {
       //! หาวิชาไม่เจอ ควย!!!
+      return;
+    }
+    if (isOverlapAnySubject(newTime)) {
+      //! Overlap Time
       return;
     }
     listSubject[ind].allTimeLearn.add(newTime);
@@ -116,21 +129,39 @@ class TimeTable {
   }
 
   static void editSubject(String subjectOldName, Subject theNewSubject) {
+    int ind = getSubjectIndexFromName(subjectOldName);
+    Subject oldSubj = listSubject[ind];
+    listSubject.removeAt(ind);
+    //? Check name
     if (isExistName(theNewSubject.name)) {
+      //! Duplicated name
+      listSubject.add(oldSubj);
       return;
     }
-    int ind = getSubjectIndexFromName(subjectOldName);
-    theNewSubject.id = listSubject[ind].id;
-    theNewSubject.allTimeId = listSubject[ind].allTimeId;
-    theNewSubject.allTimeLearn = listSubject[ind].allTimeLearn;
+    //? Check Times
+    for (var e in theNewSubject.allTimeLearn) {
+      if (isOverlapAnySubject(e)) {
+        //! Overlap Time
+        listSubject.add(oldSubj);
+        return;
+      }
+    }
 
-    listSubject.removeAt(ind);
+    theNewSubject.id = oldSubj.id;
+    theNewSubject.allTimeId = oldSubj.allTimeId;
+    theNewSubject.allTimeLearn = oldSubj.allTimeLearn;
+
     listSubject.add(theNewSubject);
   }
 
   static void editSubjectTime(
       String subjectName, TimeSub oldTime, TimeSub newTime) {
     removeSubjectTime(subjectName, oldTime);
+    if (isOverlapAnySubject(newTime)) {
+      //! Overlap Time
+      addTimeToSubject(subjectName, oldTime);
+      return;
+    }
     addTimeToSubject(subjectName, newTime);
   }
 
@@ -171,6 +202,18 @@ class TimeTable {
         subject.learnAt +
         'in day ' +
         subject.allTimeLearn[0].dayOfWeek.toString();
+  }
+
+  static int getTimeSubjectIdAtTime(TimeSub time) {
+    for (var e in listSubject) {
+      for (int i = 0; i < e.allTimeLearn.length; i++) {
+        if (TimeSub.isInBetween(
+            e.allTimeLearn[i], TimeSub.fromSubjectToTime(time), true)) {
+          return e.allTimeId[i];
+        }
+      }
+    }
+    return -1;
   }
 
   static String tToString() {

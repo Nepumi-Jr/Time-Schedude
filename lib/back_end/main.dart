@@ -39,7 +39,7 @@ void main(List<String> args) {
 
   print("Test time DUL");
 
-  print(TimeSub.isDuplicatedTime(TimeSub.forSubject("monday", 10, 29, 12, 00),
+  print(TimeSub.isOverlapTime(TimeSub.forSubject("monday", 10, 29, 12, 00),
       TimeSub.forSubject("monday", 9, 00, 10, 30)));
 
   //print(TimeTable.listSubject[0].allTimeLearn);
