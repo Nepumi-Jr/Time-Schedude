@@ -1,4 +1,4 @@
-import 'package:sendlink_application/back_end/TimeSub.dart';
+import 'time_sub.dart';
 
 class TimeTodo {
   late int timeMinute;
