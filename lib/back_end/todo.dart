@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'TimeTodo.dart';
+import 'time_todo.dart';
 
 class Todo {
   late String name;
