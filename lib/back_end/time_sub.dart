@@ -5,7 +5,26 @@ class TimeSub {
   late int hourEnd;
   late int minuteEnd;
 
-  static strDayToInt(String dayOfWeek) {
+  @override
+  bool operator ==(other) {
+    return dayOfWeek == (other as TimeSub).dayOfWeek &&
+        hourStart == other.hourStart &&
+        minuteStart == other.minuteStart &&
+        hourEnd == other.hourEnd &&
+        minuteEnd == other.minuteEnd;
+  }
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode {
+    return minuteEnd +
+        hourEnd * 60 +
+        minuteStart * 60 * 24 +
+        hourStart * 60 * 24 * 60 +
+        dayOfWeek * 60 * 24 * 60 * 24;
+  }
+
+  static int strDayToInt(String dayOfWeek) {
     if (dayOfWeek.toLowerCase() == 'monday') {
       return 1;
     } else if (dayOfWeek.toLowerCase() == 'tuesday') {
@@ -21,9 +40,10 @@ class TimeSub {
     } else if (dayOfWeek.toLowerCase() == 'sunday') {
       return 7;
     }
+    return -1;
   }
 
-  static intDayToStr(int indWeek) {
+  static String intDayToStr(int indWeek) {
     List<String> dayOfWeek = [
       "????",
       "monday",
@@ -34,6 +54,7 @@ class TimeSub {
       "saturday",
       "sunday"
     ];
+    if (indWeek <= 0 || indWeek > 7) return "????";
     return dayOfWeek[indWeek];
   }
 

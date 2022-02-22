@@ -1,3 +1,5 @@
+import 'package:tuple/tuple.dart';
+
 import 'time_todo.dart';
 import 'subject.dart';
 import 'todo.dart';
@@ -5,18 +7,18 @@ import 'dart:convert';
 import 'time_sub.dart';
 
 import 'dart:io';
+import 'package:icalendar_parser/icalendar_parser.dart';
 // TODO : Don't forget about storage stuff
 //import 'storage.dart';
 
 class TimeTable {
   static List<Subject> listSubject = [];
   static List<Todo> listTodo = [];
-  // TODO : Don't forget to save idCounter
   static int idCounter = 0;
 
   //TimeTable
 
-  static void saveSubject() {
+  static void saveFile() {
     // String subjectJson = jsonEncode(listSubject);
     // Storage.writeFile("subject.json", subjectJson);
 
@@ -26,7 +28,7 @@ class TimeTable {
     // Storage.writeFile("todo.json", todoJson);
   }
 
-  static void loadSubject() async {
+  static void loadFile() async {
     // String subjectJson = await Storage.readFile("subject.json");
     // loadSubjectsFromJson(subjectJson);
 
@@ -68,7 +70,7 @@ class TimeTable {
     subject.id = idCounter;
     subject.doGenTimeId();
     listSubject.add(subject);
-    saveSubject();
+    saveFile();
     idCounter++;
   }
 
@@ -97,6 +99,7 @@ class TimeTable {
     }
     listSubject[ind].allTimeLearn.add(newTime);
     listSubject[ind].allTimeId.add(listSubject[ind].getHashTime(newTime));
+    saveFile();
   }
 
   static void removeSubject(String subjectName) {
@@ -106,6 +109,7 @@ class TimeTable {
       return;
     }
     listSubject.removeAt(ind);
+    saveFile();
   }
 
   static void removeSubjectTime(String subjectName, TimeSub tim) {
@@ -128,6 +132,13 @@ class TimeTable {
       return;
     }
     listSubject[ind].allTimeLearn.removeAt(timInd);
+    saveFile();
+  }
+
+  static void clearSubjects() {
+    listSubject = [];
+    idCounter = 0;
+    saveFile();
   }
 
   static void editSubject(String subjectOldName, Subject theNewSubject) {
@@ -154,6 +165,7 @@ class TimeTable {
     theNewSubject.allTimeLearn = oldSubj.allTimeLearn;
 
     listSubject.add(theNewSubject);
+    saveFile();
   }
 
   static void editSubjectTime(
@@ -165,6 +177,7 @@ class TimeTable {
       return;
     }
     addTimeToSubject(subjectName, newTime);
+    saveFile();
   }
 
   static bool isOverlapAnySubject(TimeSub tim) {
@@ -221,6 +234,7 @@ class TimeTable {
   //? TODO STUFF
   static void addTodo(String name, String info, TimeTodo tim) {
     listTodo.add(Todo(name, info, tim));
+    saveFile();
   }
 
   static int getTodoIndexFromName(String name) {
@@ -239,6 +253,12 @@ class TimeTable {
       return;
     }
     listTodo.removeAt(ind);
+    saveFile();
+  }
+
+  static void clearTodo() {
+    listTodo = [];
+    saveFile();
   }
 
   static void editTodo(String name, Todo newTodo) {
@@ -249,6 +269,7 @@ class TimeTable {
     }
     listTodo.add(newTodo);
     listTodo.removeAt(ind);
+    saveFile();
   }
 
   static String tToString() {
@@ -276,5 +297,73 @@ class TimeTable {
     }
 
     return result;
+  }
+
+  static void clearAll() {
+    clearSubjects();
+    clearTodo();
+  }
+
+  static void loadFromICSString(String content) {
+    ICalendar iCalendar = ICalendar.fromString(content);
+    Map<String, int> crtData = {};
+    Map<String, String> location = {};
+    Map<String, List<DateTime>> dateStSub = {};
+    Map<String, List<DateTime>> dateEdSub = {};
+
+    //? gather data;
+    for (var e in iCalendar.data) {
+      String nameSub = e["summary"];
+      DateTime startTime = e["dtstart"].toDateTime();
+      DateTime endTime = e["dtend"].toDateTime();
+      if (crtData.containsKey(nameSub)) {
+        crtData[nameSub] = (crtData[nameSub]! + 1);
+        dateStSub[nameSub]!.add(startTime);
+        dateEdSub[nameSub]!.add(endTime);
+      } else {
+        crtData[nameSub] = 1;
+        dateStSub[nameSub] = [startTime];
+        dateEdSub[nameSub] = [endTime];
+      }
+
+      location[nameSub] = e["location"];
+    }
+
+    //? if empty, STOP
+    if (crtData.isEmpty) {
+      return;
+    }
+    clearAll();
+
+    for (var name in crtData.keys) {
+      String? loca = location[name];
+      if (crtData[name]! < 5) {
+        //? If less than 5 time means Todo or Exam
+        for (var todoTime in dateStSub[name]!) {
+          todoTime = todoTime.add(const Duration(hours: 7)); //? GMT + 7;
+          addTodo(
+              name,
+              loca!,
+              TimeTodo(todoTime.hour, todoTime.minute, todoTime.day,
+                  todoTime.month, todoTime.year));
+        }
+      } else {
+        //? Normal Schedule
+        Set<TimeSub> timesData = {};
+
+        for (int i = 0; i < dateStSub[name]!.length; i++) {
+          var startTime =
+              dateStSub[name]![i].add(const Duration(hours: 7)); //? GMT + 7;
+          var endTime =
+              dateEdSub[name]![i].add(const Duration(hours: 7)); //? GMT + 7;
+          timesData.add(TimeSub(TimeSub.intDayToStr(startTime.weekday),
+              startTime.hour, startTime.minute, endTime.hour, endTime.minute));
+        }
+        addSubject(Subject(name, "", loca!, []));
+        for (var tim in timesData) {
+          addTimeToSubject(name, tim);
+        }
+      }
+    }
   }
 }
