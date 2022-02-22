@@ -1,8 +1,9 @@
-import 'TimeTodo.dart';
+import 'time_todo.dart';
 import 'subject.dart';
-import 'Todo.dart';
+import 'todo.dart';
 import 'dart:convert';
-import 'TimeSub.dart';
+import 'time_sub.dart';
+
 import 'dart:io';
 // TODO : Don't forget about storage stuff
 //import 'storage.dart';
