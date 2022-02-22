@@ -1,5 +1,6 @@
+import 'TimeTodo.dart';
 import 'subject.dart';
-import 'todo.dart';
+import 'Todo.dart';
 import 'dart:convert';
 import 'TimeSub.dart';
 import 'dart:io';
@@ -216,6 +217,39 @@ class TimeTable {
     return -1;
   }
 
+  //? TODO STUFF
+  static void addTodo(String name, String info, TimeTodo tim) {
+    listTodo.add(Todo(name, info, tim));
+  }
+
+  static int getTodoIndexFromName(String name) {
+    for (int i = 0; i < listTodo.length; i++) {
+      if (listTodo[i].name.toLowerCase() == name.toLowerCase()) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  static void removeTodo(String name) {
+    int ind = getTodoIndexFromName(name);
+    if (ind == -1) {
+      //! หาไม่เจอ
+      return;
+    }
+    listTodo.removeAt(ind);
+  }
+
+  static void editTodo(String name, Todo newTodo) {
+    int ind = getTodoIndexFromName(name);
+    if (ind == -1) {
+      //! หาไม่เจอ
+      return;
+    }
+    listTodo.add(newTodo);
+    listTodo.removeAt(ind);
+  }
+
   static String tToString() {
     String result = "";
     for (var e in listSubject) {
@@ -228,6 +262,15 @@ class TimeTable {
         result +=
             "[${TimeSub.intDayToStr(f.dayOfWeek)} at ${f.hourStart}:${f.minuteStart} to ${f.hourEnd}:${f.minuteEnd}] ";
       }
+      result += "\n\n";
+    }
+
+    for (var e in listTodo) {
+      result += "------------ TODO : ${e.name} ------------\n";
+      result += "ID   : ${e.id}\n";
+      result += "Info : ...\n${e.info}\n";
+      result +=
+          "when   : ${e.atTime.timeHour}:${e.atTime.timeMinute} <${e.atTime.dayOfMonth}/${e.atTime.monthOfYear}/${e.atTime.year}> \n";
       result += "\n\n";
     }
 

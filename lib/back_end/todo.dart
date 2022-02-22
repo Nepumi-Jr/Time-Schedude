@@ -1,11 +1,12 @@
+import 'dart:math';
+
+import 'TimeTodo.dart';
+
 class Todo {
   late String name;
-  late String link;
-  late String learnAt;
-  //late int date;
-  //late int timeStart;
-  //late List timeEnd;
-  late List allTimeLearn;
+  late String info;
+  late TimeTodo atTime;
+  late int id;
 
   /*Subject.deleteSubject(this.name, this.link, this.learnAt, this.date,
       this.timeStart, this.timeEnd);*/
@@ -16,33 +17,30 @@ class Todo {
   /*Subject.editSubject(this.name, this.link, this.learnAt, this.date,
       this.timeStart, this.timeEnd);*/
 
-  Todo.addSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
-  Todo.deleteSubject(this.name, this.link, this.learnAt, this.allTimeLearn);
-  //Subject.editSubjectt(this.name, this.link, this.learnAt, this.allTimeLearn);
+  void genRandomId() {
+    final thatRandom = Random();
+    id = thatRandom.nextInt(1 << 32);
+  }
+
+  Todo(this.name, this.info, this.atTime) {
+    genRandomId();
+  }
+  Todo.raw(this.name, this.info, int minute, int hour, int date, int month,
+      int year) {
+    atTime.dayOfMonth = date;
+    atTime.monthOfYear = month;
+    atTime.year = year;
+    genRandomId();
+  }
 
   Todo.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    link = json['link'];
-    learnAt = json['learnAt'];
-    /*date = json['date'];
-    timeStart = json['timeStart'];
-    timeEnd = json['timeEnd'];*/
-    allTimeLearn = json['allTimeLearn'];
+    info = json['info'];
+    id = json['id'];
+
+    atTime = TimeTodo.fromJson(json['atTime']);
   }
 
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'link': link,
-        'learnAt': learnAt,
-        /*'date': date,
-        'timeStart': timeStart,
-        'timeEnd': timeEnd,*/
-        'allTimeLearn': allTimeLearn
-      };
-  String get getname => name;
-  String get getlink => link;
-  String get getlearnAt => learnAt;
-  /*String get getdate => date;
-  String get gettimeStart => timeStart;
-  String get gettimeEnd => timeEnd;*/
+  Map<String, dynamic> toJson() =>
+      {'name': name, 'info': info, 'atTime': atTime, 'id': id};
 }
