@@ -59,6 +59,9 @@ void main(List<String> args) {
   print("THE NEW ONE");
   print(TimeTable.tToString());
 
+  print(TimeTable.getSubjectsDoneAtTime("Wednesday", 3, 32));
+  print(TimeTable.getSubjectsIncomingAtTime("Wednesday", 3, 32));
+
   //print(TimeTable.listSubject[0].allTimeLearn);
   //TimeTable.loadSubject();
   // TimeTable.addSubject(Subject.addSubject('math', 'www.youtube.com', 'online', [

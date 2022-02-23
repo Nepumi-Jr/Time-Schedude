@@ -191,19 +191,99 @@ class TimeTable {
     return false;
   }
 
-  static String callSubjectThisTime(TimeSub time) {
+  static Tuple2<String, TimeSub> getSubjectAtTime(
+      String dayOfWeek, int hour, int minute) {
     for (var e in listSubject) {
       for (var f in e.allTimeLearn) {
-        if (TimeSub.isInBetween(f, TimeSub.fromSubjectToTime(time), true)) {
-          return e.name;
+        if (TimeSub.isInBetween(
+            f, TimeSub(dayOfWeek, hour, minute, 0, 0), true)) {
+          return Tuple2(e.name, f);
         }
       }
     }
-    return "-";
+    return Tuple2("-", TimeSub("Monday", 0, 0, 0, 0));
   }
 
-  static void callInfoTable() {
-    //? Bruh
+  static List<Tuple2<String, TimeSub>> getSubjectsDoneAtTime(
+      String dayOfWeek, int hour, int minute) {
+    int iDayOfWeek = TimeSub.strDayToInt(dayOfWeek);
+    List<Tuple2<String, TimeSub>> result = [];
+    for (var e in listSubject) {
+      for (var f in e.allTimeLearn) {
+        if (f.dayOfWeek < iDayOfWeek ||
+            (f.dayOfWeek == iDayOfWeek && f.hourEnd < hour) ||
+            (f.dayOfWeek == iDayOfWeek &&
+                f.hourEnd == hour &&
+                f.minuteEnd < minute)) result.add(Tuple2(e.name, f));
+      }
+    }
+
+    result.sort((a, b) {
+      return a.item2.compareToStartTime(b.item2);
+    });
+
+    return result;
+  }
+
+  static List<Tuple2<String, TimeSub>> getSubjectsIncomingAtTime(
+      String dayOfWeek, int hour, int minute) {
+    int iDayOfWeek = TimeSub.strDayToInt(dayOfWeek);
+    List<Tuple2<String, TimeSub>> result = [];
+    for (var e in listSubject) {
+      for (var f in e.allTimeLearn) {
+        if (f.dayOfWeek > iDayOfWeek ||
+            (f.dayOfWeek == iDayOfWeek && f.hourStart > hour) ||
+            (f.dayOfWeek == iDayOfWeek &&
+                f.hourStart == hour &&
+                f.minuteStart > minute)) result.add(Tuple2(e.name, f));
+      }
+    }
+
+    result.sort((a, b) {
+      return a.item2.compareToStartTime(b.item2);
+    });
+
+    return result;
+  }
+
+  static List<Tuple2<String, TimeSub>> getSubjectsDoneAtTimeSameDay(
+      String dayOfWeek, int hour, int minute) {
+    int iDayOfWeek = TimeSub.strDayToInt(dayOfWeek);
+    List<Tuple2<String, TimeSub>> result = [];
+    for (var e in listSubject) {
+      for (var f in e.allTimeLearn) {
+        if ((f.dayOfWeek == iDayOfWeek && f.hourEnd < hour) ||
+            (f.dayOfWeek == iDayOfWeek &&
+                f.hourEnd == hour &&
+                f.minuteEnd < minute)) result.add(Tuple2(e.name, f));
+      }
+    }
+
+    result.sort((a, b) {
+      return a.item2.compareToStartTime(b.item2);
+    });
+
+    return result;
+  }
+
+  static List<Tuple2<String, TimeSub>> getSubjectsIncomingAtTimeSameDay(
+      String dayOfWeek, int hour, int minute) {
+    int iDayOfWeek = TimeSub.strDayToInt(dayOfWeek);
+    List<Tuple2<String, TimeSub>> result = [];
+    for (var e in listSubject) {
+      for (var f in e.allTimeLearn) {
+        if ((f.dayOfWeek == iDayOfWeek && f.hourStart > hour) ||
+            (f.dayOfWeek == iDayOfWeek &&
+                f.hourStart == hour &&
+                f.minuteStart > minute)) result.add(Tuple2(e.name, f));
+      }
+    }
+
+    result.sort((a, b) {
+      return a.item2.compareToStartTime(b.item2);
+    });
+
+    return result;
   }
 
   static Subject callInfoSubject(String nameSubject) {

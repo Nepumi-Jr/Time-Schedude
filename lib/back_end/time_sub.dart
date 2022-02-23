@@ -146,4 +146,34 @@ class TimeSub {
     }
     return false;
   }
+
+  int compareToStartTime(TimeSub other) {
+    if (this.dayOfWeek < other.dayOfWeek) {
+      return -1;
+    }
+    if (this.dayOfWeek > other.dayOfWeek) {
+      return 1;
+    }
+
+    if (this.hourStart < other.hourStart) {
+      return -1;
+    }
+    if (this.hourStart > other.hourStart) {
+      return 1;
+    }
+
+    if (this.minuteStart < other.minuteStart) {
+      return -1;
+    }
+    if (this.minuteStart > other.minuteStart) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  @override
+  String toString() {
+    return "${TimeSub.intDayToStr(dayOfWeek)} ${hourStart}:${minuteStart} to ${hourEnd}:${minuteEnd}";
+  }
 }
