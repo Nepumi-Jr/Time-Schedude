@@ -51,6 +51,14 @@ class _AddpageState extends State<Addpage> {
   bool dayCheckFriday = false;
   bool dayCheckSaturday = false;
 
+  bool allDayCheckSunday = false;
+  bool allDayCheckMonday = false;
+  bool allDayCheckTuesday = false;
+  bool allDayCheckWednesday = false;
+  bool allDayCheckThursday = false;
+  bool allDayCheckFriday = false;
+  bool allDayCheckSaturday = false;
+
   late TimeOfDay picked;
 
   late String subject;
@@ -63,6 +71,8 @@ class _AddpageState extends State<Addpage> {
   double _width = 100;
   double moveDown = 0.0;
   bool selected = false;
+
+  double extendDown = 60;
 
   /* final dayInWeek = {
     CheckBoxState(title: 'Monday'),
@@ -350,12 +360,12 @@ class _AddpageState extends State<Addpage> {
                                 AnimatedContainer(
                                   duration: const Duration(milliseconds: 500),
                                   curve: Curves.fastOutSlowIn,
-                                  height: selected ? 120 : 60,
+                                  height: extendDown,
                                   decoration: BoxDecoration(
-                                    color: Colors.red,
+                                    //color: Colors.red,
                                     borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(5),
-                                      bottomRight: Radius.circular(5),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10),
                                     ), //BorderRadius.Only
                                   ),
                                   child: Stack(
@@ -460,26 +470,186 @@ class _AddpageState extends State<Addpage> {
                                         ],
                                       ), */
                                       AnimatedPositioned(
-                                        height: 50.0,
+                                        //height: 60.0,
                                         child: Container(
-                                          color: Colors.blue,
+                                          //color: Colors.blue,
                                           child: Column(
                                             children: [
                                               Row(
                                                 children: [
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
                                                   Container(
-                                                    color: Colors.purple,
-                                                    height: 10,
-                                                    width: 10,
+                                                    //color: Colors.purple,
+                                                    //height: 10,
+                                                    //width: 10,
+                                                    child: Column(
+                                                      children: [
+                                                        Text("Start at:",
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                color: color
+                                                                    .AppColor
+                                                                    .Font_sub,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            selectTimeStart(
+                                                                context);
+                                                          }, // Handle your callback
+                                                          child: Ink(
+                                                            height: 35,
+                                                            width: 90,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: color
+                                                                  .AppColor
+                                                                  .Font_sub,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(
+                                                                '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        20,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     width: 10,
                                                   ),
                                                   Container(
-                                                    color: Colors.purple,
-                                                    height: 10,
+                                                    margin: EdgeInsets.fromLTRB(
+                                                        0, 17, 0, 0),
+                                                    child: Text("to",
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            color: color
+                                                                .AppColor
+                                                                .Font_sub,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                  ),
+                                                  SizedBox(
                                                     width: 10,
                                                   ),
+                                                  Container(
+                                                    //color: Colors.purple,
+                                                    //height: 10,
+                                                    //width: 10,
+                                                    child: Column(
+                                                      children: [
+                                                        Text("End at:",
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                color: color
+                                                                    .AppColor
+                                                                    .Font_sub,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            selectTimeStart(
+                                                                context);
+                                                          }, // Handle your callback
+                                                          child: Ink(
+                                                            height: 35,
+                                                            width: 90,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: color
+                                                                  .AppColor
+                                                                  .Font_sub,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(
+                                                                '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        20,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 25,
+                                                  ),
+                                                  Container(
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                            margin: EdgeInsets
+                                                                .fromLTRB(0, 5,
+                                                                    0, 0),
+                                                            child: Text(
+                                                                "All day",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    color: color
+                                                                        .AppColor
+                                                                        .Font_sub,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold))),
+                                                        SizedBox(
+                                                          width: 30,
+                                                          height: 35,
+                                                          child: Checkbox(
+                                                              value:
+                                                                  allDayCheckSunday,
+                                                              activeColor:
+                                                                  Colors.white,
+                                                              checkColor: color
+                                                                  .AppColor
+                                                                  .Gradient2,
+                                                              onChanged:
+                                                                  (value) =>
+                                                                      setState(
+                                                                          () {
+                                                                        this.allDayCheckSunday =
+                                                                            !(allDayCheckSunday);
+                                                                        if (allDayCheckSunday ==
+                                                                            false) {
+                                                                        } else {
+                                                                          _increaseWidth();
+                                                                          _increaseHeight();
+                                                                        }
+                                                                      })),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
                                                 ],
                                               )
                                             ],
@@ -495,12 +665,16 @@ class _AddpageState extends State<Addpage> {
                                             selected = !(selected);
                                           });
                                           if (value == false) {
-                                            _increaseWidth();
                                             setState(() {
                                               value = !(value);
+                                              moveDown = 60;
+                                              extendDown = 120;
                                             });
                                           } else {
-                                            _increaseWidth();
+                                            setState(() {
+                                              _increaseWidth();
+                                              _increaseHeight();
+                                            });
                                           }
                                         }, //
                                         child: Container(
@@ -515,9 +689,9 @@ class _AddpageState extends State<Addpage> {
                                                 colors: [
                                                   color.AppColor.Gradient1,
                                                   color.AppColor.Gradient1
-                                                      .withOpacity(0.5),
+                                                      .withOpacity(1),
                                                   color.AppColor.Gradient2
-                                                      .withOpacity(0.5),
+                                                      .withOpacity(1),
                                                   color.AppColor.Gradient2,
                                                   //add more colors for gradient
                                                 ],
@@ -551,9 +725,15 @@ class _AddpageState extends State<Addpage> {
                                                       setState(() {
                                                         this.value = value!;
                                                         if (value == false) {
-                                                          _height = 0.01;
+                                                          setState(() {
+                                                            moveDown = 0;
+                                                            extendDown = 60;
+                                                          });
                                                         } else {
-                                                          _increaseWidth();
+                                                          setState(() {
+                                                            moveDown = 60;
+                                                            extendDown = 120;
+                                                          });
                                                         }
                                                       })),
                                               Center(
@@ -618,6 +798,12 @@ class _AddpageState extends State<Addpage> {
   void _increaseWidth() {
     setState(() {
       moveDown = moveDown >= 60 ? moveDown -= 60 : moveDown += 60;
+    });
+  }
+
+  void _increaseHeight() {
+    setState(() {
+      extendDown = moveDown >= 60 ? 120 : 60;
     });
   }
 }
