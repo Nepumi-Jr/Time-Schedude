@@ -59,8 +59,10 @@ class _AddpageState extends State<Addpage> {
 
   List<CheckBoxState> dayInWeek = [];
 
-  double _height = 0;
+  double _height = 60;
   double _width = 100;
+  double moveDown = 0.0;
+  bool selected = false;
 
   /* final dayInWeek = {
     CheckBoxState(title: 'Monday'),
@@ -345,129 +347,177 @@ class _AddpageState extends State<Addpage> {
                           child: Container(
                             child: Column(
                               children: [
-                                Stack(
-                                  children: [
-                                    AnimatedContainer(
-                                        duration: Duration(milliseconds: 500),
-                                        margin:
-                                            EdgeInsets.fromLTRB(15, 60, 15, 0),
-                                        curve: Curves.easeInOutExpo,
-                                        height: _height,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: color.AppColor.box_class
-                                              .withOpacity(0.5),
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(5),
-                                            bottomRight: Radius.circular(5),
-                                          ), //BorderRadius.Only
+                                AnimatedContainer(
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.fastOutSlowIn,
+                                  height: selected ? 120 : 60,
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(5),
+                                      bottomRight: Radius.circular(5),
+                                    ), //BorderRadius.Only
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      /* Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          AnimatedContainer(
+                                              duration:
+                                                  Duration(milliseconds: 500),
+                                              margin: EdgeInsets.fromLTRB(
+                                                  15, 20, 15, 0),
+                                              curve: Curves.easeInOutExpo,
+                                              height: _height,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: color.AppColor.box_class
+                                                    .withOpacity(0.5),
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft: Radius.circular(5),
+                                                  bottomRight: Radius.circular(5),
+                                                ), //BorderRadius.Only
+                                              ),
+                                              child: Row(
+                                                children: [],
+                                              )),
+                                          /*  AnimatedPositioned(
+                                              child: Container(),
+                                              duration: Duration(seconds: 2)), */
+                                          SizedBox(
+                                            width: 25,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              selectTimeStart(context);
+                                            }, // Handle your callback
+                                            child: Ink(
+                                              height: 40,
+                                              width: 90,
+                                              decoration: BoxDecoration(
+                                                color: color.AppColor.Font_sub,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(child: Container()),
+                                          Text(" to",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: color.AppColor.Font_sub,
+                                                  fontWeight: FontWeight.bold)),
+                                          Expanded(child: Container()),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              selectTimeStart(context);
+                                            }, // Handle your callback
+                                            child: Ink(
+                                              height: 40,
+                                              width: 90,
+                                              decoration: BoxDecoration(
+                                                color: color.AppColor.Font_sub,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 25,
+                                          ),
+                                        ],
+                                      ), */
+                                      AnimatedPositioned(
+                                        height: 50.0,
+                                        child: Container(
+                                          color: Colors.blue,
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    color: Colors.purple,
+                                                    height: 10,
+                                                    width: 10,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Container(
+                                                    color: Colors.purple,
+                                                    height: 10,
+                                                    width: 10,
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 25,
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                selectTimeStart(context);
-                                              }, // Handle your callback
-                                              child: Ink(
-                                                height: 40,
-                                                width: 90,
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      color.AppColor.Font_sub,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(child: Container()),
-                                            Text(" to",
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    color:
-                                                        color.AppColor.Font_sub,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            Expanded(child: Container()),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                selectTimeStart(context);
-                                              }, // Handle your callback
-                                              child: Ink(
-                                                height: 40,
-                                                width: 90,
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      color.AppColor.Font_sub,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 25,
-                                            ),
-                                          ],
-                                        )),
-                                    InkWell(
-                                      onTap: () {
-                                        if (value == false) {
-                                          _increaseWidth();
+                                        duration: Duration(seconds: 1),
+                                        top: moveDown,
+                                        curve: Curves.fastOutSlowIn,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
                                           setState(() {
-                                            value = !(value);
+                                            selected = !(selected);
                                           });
-                                        } else {
-                                          _increaseWidth();
-                                        }
-                                      }, //
-                                      child: Container(
-                                        padding: const EdgeInsets.all(5),
-                                        height: 60,
-                                        width: double.maxFinite,
-                                        decoration: BoxDecoration(
-                                            color: color.AppColor.Gradient2,
+                                          if (value == false) {
+                                            _increaseWidth();
+                                            setState(() {
+                                              value = !(value);
+                                            });
+                                          } else {
+                                            _increaseWidth();
+                                          }
+                                        }, //
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5),
+                                          height: 60,
+                                          width: double.maxFinite,
+                                          decoration: BoxDecoration(
+                                            // color: color.AppColor.Gradient2.withOpacity(1),
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                             gradient: LinearGradient(
                                                 colors: [
                                                   color.AppColor.Gradient1,
                                                   color.AppColor.Gradient1
-                                                      .withOpacity(0.7),
+                                                      .withOpacity(0.5),
                                                   color.AppColor.Gradient2
-                                                      .withOpacity(0.7),
+                                                      .withOpacity(0.5),
                                                   color.AppColor.Gradient2,
                                                   //add more colors for gradient
                                                 ],
@@ -482,45 +532,47 @@ class _AddpageState extends State<Addpage> {
                                                   1
                                                 ] //st the stops number equal to numbers of color
                                                 ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                  offset: Offset(0, 5),
-                                                  blurRadius: 5,
-                                                  color: Colors.grey
-                                                      .withOpacity(1))
-                                            ]),
-                                        child: Row(
-                                          children: [
-                                            Checkbox(
-                                                value: value,
-                                                activeColor: Colors.white,
-                                                checkColor:
-                                                    color.AppColor.Gradient2,
-                                                onChanged: (value) =>
-                                                    setState(() {
-                                                      this.value = value!;
-                                                      if (value == false) {
-                                                        _height = 0.01;
-                                                      } else {
-                                                        _increaseWidth();
-                                                      }
-                                                    })),
-                                            Center(
-                                              child: Text(
-                                                "Monday",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                            /* boxShadow: [
+                                                BoxShadow(
+                                                    offset: Offset(0, 5),
+                                                    blurRadius: 5,
+                                                    color: Colors.grey
+                                                        .withOpacity(1))
+                                              ] */
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Checkbox(
+                                                  value: value,
+                                                  activeColor: Colors.white,
+                                                  checkColor:
+                                                      color.AppColor.Gradient2,
+                                                  onChanged: (value) =>
+                                                      setState(() {
+                                                        this.value = value!;
+                                                        if (value == false) {
+                                                          _height = 0.01;
+                                                        } else {
+                                                          _increaseWidth();
+                                                        }
+                                                      })),
+                                              Center(
+                                                child: Text(
+                                                  "Monday",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -565,7 +617,7 @@ class _AddpageState extends State<Addpage> {
 
   void _increaseWidth() {
     setState(() {
-      _height = _height >= 50 ? 0.01 : _height += 50;
+      moveDown = moveDown >= 60 ? moveDown -= 60 : moveDown += 60;
     });
   }
 }
