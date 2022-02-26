@@ -5,7 +5,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sendlink_application/back_end/Timetable.dart';
+import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/back_end/storage.dart';
 import 'package:sendlink_application/back_end/subject.dart';
 import 'package:sendlink_application/front_end/checkbox_state.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'Timetable.dart';
+import 'time_table.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 

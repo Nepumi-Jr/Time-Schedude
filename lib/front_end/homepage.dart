@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:sendlink_application/back_end/Timetable.dart';
+import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/back_end/storage.dart';
 import 'package:sendlink_application/back_end/subject.dart';
 import 'colors.dart' as color;

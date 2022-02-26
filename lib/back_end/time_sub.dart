@@ -5,11 +5,26 @@ class TimeSub {
   late int hourEnd;
   late int minuteEnd;
 
-  int date = 0;
-  int month = 0;
-  int year = 0;
+  @override
+  bool operator ==(other) {
+    return dayOfWeek == (other as TimeSub).dayOfWeek &&
+        hourStart == other.hourStart &&
+        minuteStart == other.minuteStart &&
+        hourEnd == other.hourEnd &&
+        minuteEnd == other.minuteEnd;
+  }
 
-  static strDayToInt(String dayOfWeek) {
+  @override
+  // TODO: implement hashCode
+  int get hashCode {
+    return minuteEnd +
+        hourEnd * 60 +
+        minuteStart * 60 * 24 +
+        hourStart * 60 * 24 * 60 +
+        dayOfWeek * 60 * 24 * 60 * 24;
+  }
+
+  static int strDayToInt(String dayOfWeek) {
     if (dayOfWeek.toLowerCase() == 'monday') {
       return 1;
     } else if (dayOfWeek.toLowerCase() == 'tuesday') {
@@ -25,9 +40,10 @@ class TimeSub {
     } else if (dayOfWeek.toLowerCase() == 'sunday') {
       return 7;
     }
+    return -1;
   }
 
-  static intDayToStr(int indWeek) {
+  static String intDayToStr(int indWeek) {
     List<String> dayOfWeek = [
       "????",
       "monday",
@@ -38,11 +54,12 @@ class TimeSub {
       "saturday",
       "sunday"
     ];
+    if (indWeek <= 0 || indWeek > 7) return "????";
     return dayOfWeek[indWeek];
   }
 
-  TimeSub.forSubject(String dayOfWeek, this.hourStart, this.minuteStart,
-      this.hourEnd, this.minuteEnd) {
+  TimeSub(String dayOfWeek, this.hourStart, this.minuteStart, this.hourEnd,
+      this.minuteEnd) {
     this.dayOfWeek = TimeSub.strDayToInt(dayOfWeek);
   }
 
@@ -51,8 +68,6 @@ class TimeSub {
     hourStart = pre.hourStart;
     minuteStart = pre.minuteStart;
   }
-
-  TimeSub.forTodo(this.date, this.month, this.year);
 
   int get getday => dayOfWeek;
   int get gethour => hourStart;
@@ -64,10 +79,6 @@ class TimeSub {
     minuteStart = json['minuteStart'];
     hourEnd = json['hourEnd'];
     minuteEnd = json['minuteEnd'];
-
-    date = json['date'];
-    month = json['month'];
-    year = json['year'];
   }
 
   Map<String, dynamic> toJson() {
@@ -77,9 +88,6 @@ class TimeSub {
       'minuteStart': minuteStart,
       'hourEnd': hourEnd,
       'minuteEnd': minuteEnd,
-      'date': date,
-      'month': month,
-      'year': year,
     };
   }
 
@@ -120,7 +128,7 @@ class TimeSub {
     return false;
   }
 
-  static bool isDuplicatedTime(TimeSub a, TimeSub b) {
+  static bool isOverlapTime(TimeSub a, TimeSub b) {
     if (a.dayOfWeek == b.dayOfWeek) {
       //? Case 1
       //? L1(+1)      R1(-1)        ( b )
@@ -137,5 +145,35 @@ class TimeSub {
       }
     }
     return false;
+  }
+
+  int compareToStartTime(TimeSub other) {
+    if (this.dayOfWeek < other.dayOfWeek) {
+      return -1;
+    }
+    if (this.dayOfWeek > other.dayOfWeek) {
+      return 1;
+    }
+
+    if (this.hourStart < other.hourStart) {
+      return -1;
+    }
+    if (this.hourStart > other.hourStart) {
+      return 1;
+    }
+
+    if (this.minuteStart < other.minuteStart) {
+      return -1;
+    }
+    if (this.minuteStart > other.minuteStart) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  @override
+  String toString() {
+    return "${TimeSub.intDayToStr(dayOfWeek)} ${hourStart}:${minuteStart} to ${hourEnd}:${minuteEnd}";
   }
 }
