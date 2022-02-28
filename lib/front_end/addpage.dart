@@ -26,6 +26,9 @@ class _AddpageState extends State<Addpage> {
   TextEditingController _time_end = TextEditingController();
   TextEditingController _date = TextEditingController();
 
+  late List<TimeOfDay> time_start;
+  late List<TimeOfDay> time_end;
+
   late TimeOfDay time_start_picker;
   late TimeOfDay time_end_picker;
   late TimeOfDay time_start_Sunday;
@@ -90,8 +93,28 @@ class _AddpageState extends State<Addpage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    time_start_picker = TimeOfDay.now();
-    time_end_picker = TimeOfDay.now();
+    time_start_picker = TimeOfDay(hour: 0, minute: 0);
+    time_end_picker = TimeOfDay(hour: 23, minute: 59);
+
+    time_start = [
+      TimeOfDay(hour: 0, minute: 0),
+      TimeOfDay(hour: 0, minute: 0),
+      TimeOfDay(hour: 0, minute: 0),
+      TimeOfDay(hour: 0, minute: 0),
+      TimeOfDay(hour: 0, minute: 0),
+      TimeOfDay(hour: 0, minute: 0),
+      TimeOfDay(hour: 0, minute: 0)
+    ];
+
+    time_end = [
+      TimeOfDay(hour: 23, minute: 59),
+      TimeOfDay(hour: 23, minute: 59),
+      TimeOfDay(hour: 23, minute: 59),
+      TimeOfDay(hour: 23, minute: 59),
+      TimeOfDay(hour: 23, minute: 59),
+      TimeOfDay(hour: 23, minute: 59),
+      TimeOfDay(hour: 23, minute: 59)
+    ];
   }
 
   /* Future<File> _incrementCounter() {
@@ -103,24 +126,67 @@ class _AddpageState extends State<Addpage> {
     return Storage.writeSubject(subject);
   } */
 
-  Future<Null> selectTimeStart(BuildContext context) async {
-    picked = (await showTimePicker(
-        context: context, initialTime: time_start_picker))!;
+  Future<Null> selectTimeStart(BuildContext context, int day) async {
+    picked =
+        (await showTimePicker(context: context, initialTime: time_start[day]))!;
 
     if (picked != null) {
       setState(() {
-        time_start_picker = picked;
+        time_start[day] = picked;
+        if (time_start[day].hour > time_end[day].hour ||
+            ((time_start[day].hour == time_end[day].hour) &&
+                time_start[day].minute > time_end[day].minute)) {
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Invalid time input'),
+              content:
+                  const Text('The start time should be before the end time.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+          time_start[day] = TimeOfDay(hour: 0, minute: 0);
+        }
       });
     }
   }
 
-  Future<Null> selectTimeEnd(BuildContext context) async {
+  Future<Null> selectTimeEnd(BuildContext context, int day) async {
     picked =
-        (await showTimePicker(context: context, initialTime: time_end_picker))!;
+        (await showTimePicker(context: context, initialTime: time_end[day]))!;
 
     if (picked != null) {
       setState(() {
-        time_end_picker = picked;
+        time_end[day] = picked;
+        if (time_start[day].hour > time_end[day].hour ||
+            ((time_start[day].hour == time_end[day].hour) &&
+                time_start[day].minute > time_end[day].minute)) {
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Invalid time input'),
+              content:
+                  const Text('The start time should be before the end time.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+          time_end[day] = TimeOfDay(hour: 23, minute: 59);
+        } else {
+          setState(() {
+            moveDown = 0;
+            extendDown = 60;
+          });
+        }
       });
     }
   }
@@ -175,7 +241,12 @@ class _AddpageState extends State<Addpage> {
                           begin:
                               Alignment.topRight, //begin of the gradient color
                           end: Alignment.bottomLeft, //end of the gradient color
-                          stops: [0, 0.1, 0.9, 1] //stops for individual color
+                          stops: const [
+                            0,
+                            0.1,
+                            0.9,
+                            1
+                          ] //stops for individual color
                           //set the stops number equal to numbers of color
                           ),
                       boxShadow: [
@@ -185,7 +256,7 @@ class _AddpageState extends State<Addpage> {
                             color: Colors.grey.withOpacity(1))
                       ]),
                   child: Row(
-                    children: [
+                    children: const [
                       SizedBox(
                         width: 13.5,
                       ),
@@ -498,7 +569,7 @@ class _AddpageState extends State<Addpage> {
                                                         InkWell(
                                                           onTap: () {
                                                             selectTimeStart(
-                                                                context);
+                                                                context, 0);
                                                           }, // Handle your callback
                                                           child: Ink(
                                                             height: 35,
@@ -515,7 +586,7 @@ class _AddpageState extends State<Addpage> {
                                                             ),
                                                             child: Center(
                                                               child: Text(
-                                                                '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
+                                                                '${zeroHourCheck(time_start[0])}:${zeroMinCheck(time_start[0])}',
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
@@ -567,8 +638,8 @@ class _AddpageState extends State<Addpage> {
                                                                         .bold)),
                                                         InkWell(
                                                           onTap: () {
-                                                            selectTimeStart(
-                                                                context);
+                                                            selectTimeEnd(
+                                                                context, 0);
                                                           }, // Handle your callback
                                                           child: Ink(
                                                             height: 35,
@@ -585,7 +656,7 @@ class _AddpageState extends State<Addpage> {
                                                             ),
                                                             child: Center(
                                                               child: Text(
-                                                                '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
+                                                                '${zeroHourCheck(time_end[0])}:${zeroMinCheck(time_end[0])}',
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
@@ -627,19 +698,21 @@ class _AddpageState extends State<Addpage> {
                                                           height: 35,
                                                           child: Checkbox(
                                                               value:
-                                                                  allDayCheckSunday,
-                                                              activeColor:
-                                                                  Colors.white,
-                                                              checkColor: color
+                                                                  allDayCheckMonday,
+                                                              activeColor: color
                                                                   .AppColor
-                                                                  .Gradient2,
+                                                                  .Font_sub
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                              checkColor: Colors
+                                                                  .white,
                                                               onChanged:
                                                                   (value) =>
                                                                       setState(
                                                                           () {
-                                                                        this.allDayCheckSunday =
-                                                                            !(allDayCheckSunday);
-                                                                        if (allDayCheckSunday ==
+                                                                        this.allDayCheckMonday =
+                                                                            !(allDayCheckMonday);
+                                                                        if (allDayCheckMonday ==
                                                                             false) {
                                                                         } else {
                                                                           _increaseWidth();
@@ -655,7 +728,7 @@ class _AddpageState extends State<Addpage> {
                                             ],
                                           ),
                                         ),
-                                        duration: Duration(seconds: 1),
+                                        duration: Duration(milliseconds: 500),
                                         top: moveDown,
                                         curve: Curves.fastOutSlowIn,
                                       ),
@@ -699,7 +772,7 @@ class _AddpageState extends State<Addpage> {
                                                     .topRight, //begin of the gradient color
                                                 end: Alignment
                                                     .bottomLeft, //end of the gradient color
-                                                stops: [
+                                                stops: const [
                                                   0,
                                                   0.1,
                                                   0.9,
@@ -728,6 +801,8 @@ class _AddpageState extends State<Addpage> {
                                                           setState(() {
                                                             moveDown = 0;
                                                             extendDown = 60;
+                                                            allDayCheckMonday =
+                                                                !(allDayCheckMonday);
                                                           });
                                                         } else {
                                                           setState(() {
@@ -757,6 +832,76 @@ class _AddpageState extends State<Addpage> {
                               ],
                             ),
                           )),
+                      Container(
+                        child: RaisedButton(
+                          padding: EdgeInsets.all(0),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30)),
+                          onPressed: () {},
+                          child: Ink(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: [
+                                      color.AppColor.Gradient1.withOpacity(0.9),
+                                      color.AppColor.Gradient2.withOpacity(0.9),
+                                    ],
+                                    begin: Alignment.topRight,
+                                    end: Alignment.bottomLeft),
+                                borderRadius: BorderRadius.circular(13)),
+                            child: Container(
+                                constraints:
+                                    BoxConstraints(maxHeight: 40, maxWidth: 86),
+                                alignment: Alignment.center,
+                                child: Text("Add",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700))),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        width: 70,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(13),
+                            gradient: LinearGradient(
+                                colors: [
+                                  color.AppColor.Gradient1,
+                                  color.AppColor.Gradient1.withOpacity(0.8),
+                                  color.AppColor.Gradient2.withOpacity(0.8),
+                                  color.AppColor.Gradient2,
+                                  //add more colors for gradient
+                                ],
+                                begin: Alignment
+                                    .topRight, //begin of the gradient color
+                                end: Alignment
+                                    .bottomLeft, //end of the gradient color
+                                stops: [
+                                  0,
+                                  0.1,
+                                  0.9,
+                                  1
+                                ] //stops for individual color
+                                //set the stops number equal to numbers of color
+                                ),
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(0, 5),
+                                  blurRadius: 5,
+                                  color: Colors.grey.withOpacity(1))
+                            ] //border corner radius
+                            ),
+                        child: Center(
+                          child: Text("Add",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700)),
+                        ),
+                      )
                     ],
                   )
                 ],
