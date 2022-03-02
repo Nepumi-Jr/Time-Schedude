@@ -9,6 +9,7 @@ import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/back_end/storage.dart';
 import 'package:sendlink_application/back_end/subject.dart';
 import 'package:sendlink_application/front_end/checkbox_state.dart';
+import 'package:sendlink_application/front_end/homepage.dart';
 import 'colors.dart' as color;
 
 class Addpage extends StatefulWidget {
@@ -32,6 +33,7 @@ class _AddpageState extends State<Addpage> {
   late TimeOfDay time_start_picker;
   late TimeOfDay time_end_picker;
 
+  List<bool> dayCheck = [false, false, false, false, false, false, false];
   bool dayCheckSunday = false;
   bool dayCheckMonday = false;
   bool dayCheckTuesday = false;
@@ -40,6 +42,7 @@ class _AddpageState extends State<Addpage> {
   bool dayCheckFriday = false;
   bool dayCheckSaturday = false;
 
+  List<bool> allDayCheck = [false, false, false, false, false, false, false];
   bool allDayCheckSunday = false;
   bool allDayCheckMonday = false;
   bool allDayCheckTuesday = false;
@@ -52,13 +55,21 @@ class _AddpageState extends State<Addpage> {
 
   late String subject;
 
-  bool value = false;
+  List<bool> value = [false, false, false, false, false, false, false];
 
-  List<CheckBoxState> dayInWeek = [];
+  List<String> dayInWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
 
   double _height = 60;
   double _width = 100;
-  bool selected = false;
+  List<bool> selected = [false, false, false, false, false, false, false];
 
   List<double> moveDown = [0, 0, 0, 0, 0, 0, 0];
   List<double> extendDown = [60, 60, 60, 60, 60, 60, 60];
@@ -197,6 +208,10 @@ class _AddpageState extends State<Addpage> {
     }
   }
 
+  back() {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,7 +220,7 @@ class _AddpageState extends State<Addpage> {
           padding: const EdgeInsets.only(top: 35),
           child: Column(children: [
             // Go back Icon.
-            Row(
+            /*  Row(
               children: [
                 SizedBox(
                   width: 30,
@@ -255,6 +270,67 @@ class _AddpageState extends State<Addpage> {
                   ),
                 ),
               ],
+            ), */
+            Container(
+              //color: Colors.red,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 30,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 53,
+                      height: 31,
+                      decoration: BoxDecoration(
+                          color: color.AppColor.Gradient2,
+                          borderRadius: BorderRadius.circular(8),
+                          gradient: LinearGradient(
+                              colors: [
+                                color.AppColor.Gradient1,
+                                color.AppColor.Gradient1.withOpacity(0.8),
+                                color.AppColor.Gradient2.withOpacity(0.8),
+                                color.AppColor.Gradient2,
+                                //add more colors for gradient
+                              ],
+                              begin: Alignment
+                                  .topRight, //begin of the gradient color
+                              end: Alignment
+                                  .bottomLeft, //end of the gradient color
+                              stops: [
+                                0,
+                                0.1,
+                                0.9,
+                                1
+                              ] //stops for individual color
+                              //set the stops number equal to numbers of color
+                              ),
+                          boxShadow: [
+                            BoxShadow(
+                                offset: Offset(0, 5),
+                                blurRadius: 5,
+                                color: Colors.grey.withOpacity(1))
+                          ]),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 13.5,
+                          ),
+                          Icon(
+                            IconData(0xf570, fontFamily: 'MaterialIcons'),
+                            size: 25,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
 
             // invis box.
@@ -269,7 +345,7 @@ class _AddpageState extends State<Addpage> {
                   width: 45,
                 ),
                 Text(
-                  "Class Addpage",
+                  "Add your class.",
                   style: TextStyle(
                       fontSize: 20,
                       color: color.AppColor.NamePage,
@@ -413,3027 +489,57 @@ class _AddpageState extends State<Addpage> {
                           ), */
                           child: Container(
                             child: Column(
-                              children: [
-                                AnimatedContainer(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 7),
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.fastOutSlowIn,
-                                  height: extendDown[0],
-                                  decoration: BoxDecoration(
-                                    //color: Colors.red,
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                    ), //BorderRadius.Only
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      /* Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          AnimatedContainer(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              margin: EdgeInsets.fromLTRB(
-                                                  15, 20, 15, 0),
-                                              curve: Curves.easeInOutExpo,
-                                              height: _height,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.box_class
-                                                    .withOpacity(0.5),
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(5),
-                                                  bottomRight: Radius.circular(5),
-                                                ), //BorderRadius.Only
-                                              ),
-                                              child: Row(
-                                                children: [],
-                                              )),
-                                          /*  AnimatedPositioned(
-                                              child: Container(),
-                                              duration: Duration(seconds: 2)), */
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(child: Container()),
-                                          Text(" to",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: color.AppColor.Font_sub,
-                                                  fontWeight: FontWeight.bold)),
-                                          Expanded(child: Container()),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                        ],
-                                      ), */
-                                      AnimatedPositioned(
-                                        //height: 60.0,
-                                        child: Container(
-                                          //color: Colors.blue,
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("Start at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeStart(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_start[0])}:${zeroMinCheck(time_start[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        0, 17, 0, 0),
-                                                    child: Text("to",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: color
-                                                                .AppColor
-                                                                .Font_sub,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("End at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeEnd(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_end[0])}:${zeroMinCheck(time_end[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 25,
-                                                  ),
-                                                  Container(
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                            margin: EdgeInsets
-                                                                .fromLTRB(0, 5,
-                                                                    0, 0),
-                                                            child: Text(
-                                                                "All day",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: color
-                                                                        .AppColor
-                                                                        .Font_sub,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))),
-                                                        SizedBox(
-                                                          width: 30,
-                                                          height: 35,
-                                                          child: Checkbox(
-                                                              value:
-                                                                  allDayCheckMonday,
-                                                              activeColor: color
-                                                                  .AppColor
-                                                                  .Font_sub
-                                                                  .withOpacity(
-                                                                      0.5),
-                                                              checkColor:
-                                                                  Colors.white,
-                                                              onChanged:
-                                                                  (value) =>
-                                                                      setState(
-                                                                          () {
-                                                                        this.allDayCheckMonday =
-                                                                            !(allDayCheckMonday);
-                                                                        if (allDayCheckMonday ==
-                                                                            false) {
-                                                                        } else {
-                                                                          _increaseWidth(
-                                                                              0);
-                                                                          _increaseHeight(
-                                                                              0);
-                                                                          setState(
-                                                                              () {
-                                                                            time_start[0] =
-                                                                                TimeOfDay(hour: 0, minute: 0);
-                                                                            time_end[0] =
-                                                                                TimeOfDay(hour: 23, minute: 59);
-                                                                          });
-                                                                        }
-                                                                      })),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        duration: Duration(milliseconds: 500),
-                                        top: moveDown[0],
-                                        curve: Curves.fastOutSlowIn,
-                                      ),
-                                      Container(
-                                        //BackGround
-                                        padding: const EdgeInsets.all(5),
-                                        height: 60,
-                                        width: double.maxFinite,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selected = !(selected);
-                                          });
-                                          if (value == false) {
-                                            setState(() {
-                                              value = !(value);
-                                              moveDown[0] = 60;
-                                              extendDown[0] = 120;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _increaseWidth(0);
-                                              _increaseHeight(0);
-                                            });
-                                          }
-                                        }, //
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          height: 60,
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
-                                              // color: color.AppColor.Gradient2.withOpacity(1),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              gradient: LinearGradient(
-                                                  colors: [
-                                                    color.AppColor.Gradient1,
-                                                    color.AppColor.Gradient1
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2,
-                                                    //add more colors for gradient
-                                                  ],
-                                                  begin: Alignment
-                                                      .topRight, //begin of the gradient color
-                                                  end: Alignment
-                                                      .bottomLeft, //end of the gradient color
-                                                  stops: const [
-                                                    0,
-                                                    0.1,
-                                                    0.9,
-                                                    1
-                                                  ] //st the stops number equal to numbers of color
-                                                  ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    offset: Offset(0, 5),
-                                                    blurRadius: 5,
-                                                    color: Colors.grey
-                                                        .withOpacity(1))
-                                              ]),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                  value: value,
-                                                  activeColor: Colors.white,
-                                                  checkColor:
-                                                      color.AppColor.Gradient2,
-                                                  onChanged: (value) =>
-                                                      setState(() {
-                                                        this.value = value!;
-                                                        if (value == false) {
-                                                          setState(() {
-                                                            moveDown[0] = 0;
-                                                            extendDown[0] = 60;
-                                                            allDayCheckMonday =
-                                                                false;
-                                                          });
-                                                        } else {
-                                                          setState(() {
-                                                            moveDown[0] = 60;
-                                                            extendDown[0] = 120;
-                                                          });
-                                                        }
-                                                      })),
-                                              Center(
-                                                child: Text(
-                                                  "Monday",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 35,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                AnimatedContainer(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 7),
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.fastOutSlowIn,
-                                  height: extendDown[0],
-                                  decoration: BoxDecoration(
-                                    //color: Colors.red,
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                    ), //BorderRadius.Only
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      /* Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          AnimatedContainer(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              margin: EdgeInsets.fromLTRB(
-                                                  15, 20, 15, 0),
-                                              curve: Curves.easeInOutExpo,
-                                              height: _height,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.box_class
-                                                    .withOpacity(0.5),
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(5),
-                                                  bottomRight: Radius.circular(5),
-                                                ), //BorderRadius.Only
-                                              ),
-                                              child: Row(
-                                                children: [],
-                                              )),
-                                          /*  AnimatedPositioned(
-                                              child: Container(),
-                                              duration: Duration(seconds: 2)), */
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(child: Container()),
-                                          Text(" to",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: color.AppColor.Font_sub,
-                                                  fontWeight: FontWeight.bold)),
-                                          Expanded(child: Container()),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                        ],
-                                      ), */
-                                      AnimatedPositioned(
-                                        //height: 60.0,
-                                        child: Container(
-                                          //color: Colors.blue,
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("Start at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeStart(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_start[0])}:${zeroMinCheck(time_start[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        0, 17, 0, 0),
-                                                    child: Text("to",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: color
-                                                                .AppColor
-                                                                .Font_sub,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("End at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeEnd(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_end[0])}:${zeroMinCheck(time_end[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 25,
-                                                  ),
-                                                  Container(
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                            margin: EdgeInsets
-                                                                .fromLTRB(0, 5,
-                                                                    0, 0),
-                                                            child: Text(
-                                                                "All day",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: color
-                                                                        .AppColor
-                                                                        .Font_sub,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))),
-                                                        SizedBox(
-                                                          width: 30,
-                                                          height: 35,
-                                                          child: Checkbox(
-                                                              value:
-                                                                  allDayCheckMonday,
-                                                              activeColor: color
-                                                                  .AppColor
-                                                                  .Font_sub
-                                                                  .withOpacity(
-                                                                      0.5),
-                                                              checkColor:
-                                                                  Colors.white,
-                                                              onChanged:
-                                                                  (value) =>
-                                                                      setState(
-                                                                          () {
-                                                                        this.allDayCheckMonday =
-                                                                            !(allDayCheckMonday);
-                                                                        if (allDayCheckMonday ==
-                                                                            false) {
-                                                                        } else {
-                                                                          _increaseWidth(
-                                                                              0);
-                                                                          _increaseHeight(
-                                                                              0);
-                                                                          setState(
-                                                                              () {
-                                                                            time_start[0] =
-                                                                                TimeOfDay(hour: 0, minute: 0);
-                                                                            time_end[0] =
-                                                                                TimeOfDay(hour: 23, minute: 59);
-                                                                          });
-                                                                        }
-                                                                      })),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        duration: Duration(milliseconds: 500),
-                                        top: moveDown[0],
-                                        curve: Curves.fastOutSlowIn,
-                                      ),
-                                      Container(
-                                        //BackGround
-                                        padding: const EdgeInsets.all(5),
-                                        height: 60,
-                                        width: double.maxFinite,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selected = !(selected);
-                                          });
-                                          if (value == false) {
-                                            setState(() {
-                                              value = !(value);
-                                              moveDown[0] = 60;
-                                              extendDown[0] = 120;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _increaseWidth(0);
-                                              _increaseHeight(0);
-                                            });
-                                          }
-                                        }, //
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          height: 60,
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
-                                              // color: color.AppColor.Gradient2.withOpacity(1),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              gradient: LinearGradient(
-                                                  colors: [
-                                                    color.AppColor.Gradient1,
-                                                    color.AppColor.Gradient1
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2,
-                                                    //add more colors for gradient
-                                                  ],
-                                                  begin: Alignment
-                                                      .topRight, //begin of the gradient color
-                                                  end: Alignment
-                                                      .bottomLeft, //end of the gradient color
-                                                  stops: const [
-                                                    0,
-                                                    0.1,
-                                                    0.9,
-                                                    1
-                                                  ] //st the stops number equal to numbers of color
-                                                  ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    offset: Offset(0, 5),
-                                                    blurRadius: 5,
-                                                    color: Colors.grey
-                                                        .withOpacity(1))
-                                              ]),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                  value: value,
-                                                  activeColor: Colors.white,
-                                                  checkColor:
-                                                      color.AppColor.Gradient2,
-                                                  onChanged: (value) =>
-                                                      setState(() {
-                                                        this.value = value!;
-                                                        if (value == false) {
-                                                          setState(() {
-                                                            moveDown[0] = 0;
-                                                            extendDown[0] = 60;
-                                                            allDayCheckMonday =
-                                                                false;
-                                                          });
-                                                        } else {
-                                                          setState(() {
-                                                            moveDown[0] = 60;
-                                                            extendDown[0] = 120;
-                                                          });
-                                                        }
-                                                      })),
-                                              Center(
-                                                child: Text(
-                                                  "Monday",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 35,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                AnimatedContainer(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 7),
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.fastOutSlowIn,
-                                  height: extendDown[0],
-                                  decoration: BoxDecoration(
-                                    //color: Colors.red,
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                    ), //BorderRadius.Only
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      /* Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          AnimatedContainer(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              margin: EdgeInsets.fromLTRB(
-                                                  15, 20, 15, 0),
-                                              curve: Curves.easeInOutExpo,
-                                              height: _height,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.box_class
-                                                    .withOpacity(0.5),
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(5),
-                                                  bottomRight: Radius.circular(5),
-                                                ), //BorderRadius.Only
-                                              ),
-                                              child: Row(
-                                                children: [],
-                                              )),
-                                          /*  AnimatedPositioned(
-                                              child: Container(),
-                                              duration: Duration(seconds: 2)), */
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(child: Container()),
-                                          Text(" to",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: color.AppColor.Font_sub,
-                                                  fontWeight: FontWeight.bold)),
-                                          Expanded(child: Container()),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                        ],
-                                      ), */
-                                      AnimatedPositioned(
-                                        //height: 60.0,
-                                        child: Container(
-                                          //color: Colors.blue,
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("Start at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeStart(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_start[0])}:${zeroMinCheck(time_start[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        0, 17, 0, 0),
-                                                    child: Text("to",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: color
-                                                                .AppColor
-                                                                .Font_sub,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("End at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeEnd(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_end[0])}:${zeroMinCheck(time_end[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 25,
-                                                  ),
-                                                  Container(
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                            margin: EdgeInsets
-                                                                .fromLTRB(0, 5,
-                                                                    0, 0),
-                                                            child: Text(
-                                                                "All day",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: color
-                                                                        .AppColor
-                                                                        .Font_sub,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))),
-                                                        SizedBox(
-                                                          width: 30,
-                                                          height: 35,
-                                                          child: Checkbox(
-                                                              value:
-                                                                  allDayCheckMonday,
-                                                              activeColor: color
-                                                                  .AppColor
-                                                                  .Font_sub
-                                                                  .withOpacity(
-                                                                      0.5),
-                                                              checkColor:
-                                                                  Colors.white,
-                                                              onChanged:
-                                                                  (value) =>
-                                                                      setState(
-                                                                          () {
-                                                                        this.allDayCheckMonday =
-                                                                            !(allDayCheckMonday);
-                                                                        if (allDayCheckMonday ==
-                                                                            false) {
-                                                                        } else {
-                                                                          _increaseWidth(
-                                                                              0);
-                                                                          _increaseHeight(
-                                                                              0);
-                                                                          setState(
-                                                                              () {
-                                                                            time_start[0] =
-                                                                                TimeOfDay(hour: 0, minute: 0);
-                                                                            time_end[0] =
-                                                                                TimeOfDay(hour: 23, minute: 59);
-                                                                          });
-                                                                        }
-                                                                      })),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        duration: Duration(milliseconds: 500),
-                                        top: moveDown[0],
-                                        curve: Curves.fastOutSlowIn,
-                                      ),
-                                      Container(
-                                        //BackGround
-                                        padding: const EdgeInsets.all(5),
-                                        height: 60,
-                                        width: double.maxFinite,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selected = !(selected);
-                                          });
-                                          if (value == false) {
-                                            setState(() {
-                                              value = !(value);
-                                              moveDown[0] = 60;
-                                              extendDown[0] = 120;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _increaseWidth(0);
-                                              _increaseHeight(0);
-                                            });
-                                          }
-                                        }, //
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          height: 60,
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
-                                              // color: color.AppColor.Gradient2.withOpacity(1),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              gradient: LinearGradient(
-                                                  colors: [
-                                                    color.AppColor.Gradient1,
-                                                    color.AppColor.Gradient1
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2,
-                                                    //add more colors for gradient
-                                                  ],
-                                                  begin: Alignment
-                                                      .topRight, //begin of the gradient color
-                                                  end: Alignment
-                                                      .bottomLeft, //end of the gradient color
-                                                  stops: const [
-                                                    0,
-                                                    0.1,
-                                                    0.9,
-                                                    1
-                                                  ] //st the stops number equal to numbers of color
-                                                  ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    offset: Offset(0, 5),
-                                                    blurRadius: 5,
-                                                    color: Colors.grey
-                                                        .withOpacity(1))
-                                              ]),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                  value: value,
-                                                  activeColor: Colors.white,
-                                                  checkColor:
-                                                      color.AppColor.Gradient2,
-                                                  onChanged: (value) =>
-                                                      setState(() {
-                                                        this.value = value!;
-                                                        if (value == false) {
-                                                          setState(() {
-                                                            moveDown[0] = 0;
-                                                            extendDown[0] = 60;
-                                                            allDayCheckMonday =
-                                                                false;
-                                                          });
-                                                        } else {
-                                                          setState(() {
-                                                            moveDown[0] = 60;
-                                                            extendDown[0] = 120;
-                                                          });
-                                                        }
-                                                      })),
-                                              Center(
-                                                child: Text(
-                                                  "Monday",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 35,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                AnimatedContainer(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 7),
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.fastOutSlowIn,
-                                  height: extendDown[0],
-                                  decoration: BoxDecoration(
-                                    //color: Colors.red,
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                    ), //BorderRadius.Only
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      /* Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          AnimatedContainer(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              margin: EdgeInsets.fromLTRB(
-                                                  15, 20, 15, 0),
-                                              curve: Curves.easeInOutExpo,
-                                              height: _height,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.box_class
-                                                    .withOpacity(0.5),
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(5),
-                                                  bottomRight: Radius.circular(5),
-                                                ), //BorderRadius.Only
-                                              ),
-                                              child: Row(
-                                                children: [],
-                                              )),
-                                          /*  AnimatedPositioned(
-                                              child: Container(),
-                                              duration: Duration(seconds: 2)), */
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(child: Container()),
-                                          Text(" to",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: color.AppColor.Font_sub,
-                                                  fontWeight: FontWeight.bold)),
-                                          Expanded(child: Container()),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                        ],
-                                      ), */
-                                      AnimatedPositioned(
-                                        //height: 60.0,
-                                        child: Container(
-                                          //color: Colors.blue,
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("Start at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeStart(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_start[0])}:${zeroMinCheck(time_start[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        0, 17, 0, 0),
-                                                    child: Text("to",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: color
-                                                                .AppColor
-                                                                .Font_sub,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("End at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeEnd(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_end[0])}:${zeroMinCheck(time_end[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 25,
-                                                  ),
-                                                  Container(
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                            margin: EdgeInsets
-                                                                .fromLTRB(0, 5,
-                                                                    0, 0),
-                                                            child: Text(
-                                                                "All day",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: color
-                                                                        .AppColor
-                                                                        .Font_sub,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))),
-                                                        SizedBox(
-                                                          width: 30,
-                                                          height: 35,
-                                                          child: Checkbox(
-                                                              value:
-                                                                  allDayCheckMonday,
-                                                              activeColor: color
-                                                                  .AppColor
-                                                                  .Font_sub
-                                                                  .withOpacity(
-                                                                      0.5),
-                                                              checkColor:
-                                                                  Colors.white,
-                                                              onChanged:
-                                                                  (value) =>
-                                                                      setState(
-                                                                          () {
-                                                                        this.allDayCheckMonday =
-                                                                            !(allDayCheckMonday);
-                                                                        if (allDayCheckMonday ==
-                                                                            false) {
-                                                                        } else {
-                                                                          _increaseWidth(
-                                                                              0);
-                                                                          _increaseHeight(
-                                                                              0);
-                                                                          setState(
-                                                                              () {
-                                                                            time_start[0] =
-                                                                                TimeOfDay(hour: 0, minute: 0);
-                                                                            time_end[0] =
-                                                                                TimeOfDay(hour: 23, minute: 59);
-                                                                          });
-                                                                        }
-                                                                      })),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        duration: Duration(milliseconds: 500),
-                                        top: moveDown[0],
-                                        curve: Curves.fastOutSlowIn,
-                                      ),
-                                      Container(
-                                        //BackGround
-                                        padding: const EdgeInsets.all(5),
-                                        height: 60,
-                                        width: double.maxFinite,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selected = !(selected);
-                                          });
-                                          if (value == false) {
-                                            setState(() {
-                                              value = !(value);
-                                              moveDown[0] = 60;
-                                              extendDown[0] = 120;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _increaseWidth(0);
-                                              _increaseHeight(0);
-                                            });
-                                          }
-                                        }, //
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          height: 60,
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
-                                              // color: color.AppColor.Gradient2.withOpacity(1),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              gradient: LinearGradient(
-                                                  colors: [
-                                                    color.AppColor.Gradient1,
-                                                    color.AppColor.Gradient1
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2,
-                                                    //add more colors for gradient
-                                                  ],
-                                                  begin: Alignment
-                                                      .topRight, //begin of the gradient color
-                                                  end: Alignment
-                                                      .bottomLeft, //end of the gradient color
-                                                  stops: const [
-                                                    0,
-                                                    0.1,
-                                                    0.9,
-                                                    1
-                                                  ] //st the stops number equal to numbers of color
-                                                  ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    offset: Offset(0, 5),
-                                                    blurRadius: 5,
-                                                    color: Colors.grey
-                                                        .withOpacity(1))
-                                              ]),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                  value: value,
-                                                  activeColor: Colors.white,
-                                                  checkColor:
-                                                      color.AppColor.Gradient2,
-                                                  onChanged: (value) =>
-                                                      setState(() {
-                                                        this.value = value!;
-                                                        if (value == false) {
-                                                          setState(() {
-                                                            moveDown[0] = 0;
-                                                            extendDown[0] = 60;
-                                                            allDayCheckMonday =
-                                                                false;
-                                                          });
-                                                        } else {
-                                                          setState(() {
-                                                            moveDown[0] = 60;
-                                                            extendDown[0] = 120;
-                                                          });
-                                                        }
-                                                      })),
-                                              Center(
-                                                child: Text(
-                                                  "Monday",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 35,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                AnimatedContainer(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 7),
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.fastOutSlowIn,
-                                  height: extendDown[0],
-                                  decoration: BoxDecoration(
-                                    //color: Colors.red,
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                    ), //BorderRadius.Only
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      /* Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          AnimatedContainer(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              margin: EdgeInsets.fromLTRB(
-                                                  15, 20, 15, 0),
-                                              curve: Curves.easeInOutExpo,
-                                              height: _height,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.box_class
-                                                    .withOpacity(0.5),
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(5),
-                                                  bottomRight: Radius.circular(5),
-                                                ), //BorderRadius.Only
-                                              ),
-                                              child: Row(
-                                                children: [],
-                                              )),
-                                          /*  AnimatedPositioned(
-                                              child: Container(),
-                                              duration: Duration(seconds: 2)), */
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(child: Container()),
-                                          Text(" to",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: color.AppColor.Font_sub,
-                                                  fontWeight: FontWeight.bold)),
-                                          Expanded(child: Container()),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                        ],
-                                      ), */
-                                      AnimatedPositioned(
-                                        //height: 60.0,
-                                        child: Container(
-                                          //color: Colors.blue,
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("Start at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeStart(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_start[0])}:${zeroMinCheck(time_start[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        0, 17, 0, 0),
-                                                    child: Text("to",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: color
-                                                                .AppColor
-                                                                .Font_sub,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("End at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeEnd(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_end[0])}:${zeroMinCheck(time_end[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 25,
-                                                  ),
-                                                  Container(
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                            margin: EdgeInsets
-                                                                .fromLTRB(0, 5,
-                                                                    0, 0),
-                                                            child: Text(
-                                                                "All day",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: color
-                                                                        .AppColor
-                                                                        .Font_sub,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))),
-                                                        SizedBox(
-                                                          width: 30,
-                                                          height: 35,
-                                                          child: Checkbox(
-                                                              value:
-                                                                  allDayCheckMonday,
-                                                              activeColor: color
-                                                                  .AppColor
-                                                                  .Font_sub
-                                                                  .withOpacity(
-                                                                      0.5),
-                                                              checkColor:
-                                                                  Colors.white,
-                                                              onChanged:
-                                                                  (value) =>
-                                                                      setState(
-                                                                          () {
-                                                                        this.allDayCheckMonday =
-                                                                            !(allDayCheckMonday);
-                                                                        if (allDayCheckMonday ==
-                                                                            false) {
-                                                                        } else {
-                                                                          _increaseWidth(
-                                                                              0);
-                                                                          _increaseHeight(
-                                                                              0);
-                                                                          setState(
-                                                                              () {
-                                                                            time_start[0] =
-                                                                                TimeOfDay(hour: 0, minute: 0);
-                                                                            time_end[0] =
-                                                                                TimeOfDay(hour: 23, minute: 59);
-                                                                          });
-                                                                        }
-                                                                      })),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        duration: Duration(milliseconds: 500),
-                                        top: moveDown[0],
-                                        curve: Curves.fastOutSlowIn,
-                                      ),
-                                      Container(
-                                        //BackGround
-                                        padding: const EdgeInsets.all(5),
-                                        height: 60,
-                                        width: double.maxFinite,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selected = !(selected);
-                                          });
-                                          if (value == false) {
-                                            setState(() {
-                                              value = !(value);
-                                              moveDown[0] = 60;
-                                              extendDown[0] = 120;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _increaseWidth(0);
-                                              _increaseHeight(0);
-                                            });
-                                          }
-                                        }, //
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          height: 60,
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
-                                              // color: color.AppColor.Gradient2.withOpacity(1),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              gradient: LinearGradient(
-                                                  colors: [
-                                                    color.AppColor.Gradient1,
-                                                    color.AppColor.Gradient1
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2,
-                                                    //add more colors for gradient
-                                                  ],
-                                                  begin: Alignment
-                                                      .topRight, //begin of the gradient color
-                                                  end: Alignment
-                                                      .bottomLeft, //end of the gradient color
-                                                  stops: const [
-                                                    0,
-                                                    0.1,
-                                                    0.9,
-                                                    1
-                                                  ] //st the stops number equal to numbers of color
-                                                  ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    offset: Offset(0, 5),
-                                                    blurRadius: 5,
-                                                    color: Colors.grey
-                                                        .withOpacity(1))
-                                              ]),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                  value: value,
-                                                  activeColor: Colors.white,
-                                                  checkColor:
-                                                      color.AppColor.Gradient2,
-                                                  onChanged: (value) =>
-                                                      setState(() {
-                                                        this.value = value!;
-                                                        if (value == false) {
-                                                          setState(() {
-                                                            moveDown[0] = 0;
-                                                            extendDown[0] = 60;
-                                                            allDayCheckMonday =
-                                                                false;
-                                                          });
-                                                        } else {
-                                                          setState(() {
-                                                            moveDown[0] = 60;
-                                                            extendDown[0] = 120;
-                                                          });
-                                                        }
-                                                      })),
-                                              Center(
-                                                child: Text(
-                                                  "Monday",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 35,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                AnimatedContainer(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 7),
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.fastOutSlowIn,
-                                  height: extendDown[0],
-                                  decoration: BoxDecoration(
-                                    //color: Colors.red,
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                    ), //BorderRadius.Only
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      /* Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          AnimatedContainer(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              margin: EdgeInsets.fromLTRB(
-                                                  15, 20, 15, 0),
-                                              curve: Curves.easeInOutExpo,
-                                              height: _height,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.box_class
-                                                    .withOpacity(0.5),
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(5),
-                                                  bottomRight: Radius.circular(5),
-                                                ), //BorderRadius.Only
-                                              ),
-                                              child: Row(
-                                                children: [],
-                                              )),
-                                          /*  AnimatedPositioned(
-                                              child: Container(),
-                                              duration: Duration(seconds: 2)), */
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(child: Container()),
-                                          Text(" to",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: color.AppColor.Font_sub,
-                                                  fontWeight: FontWeight.bold)),
-                                          Expanded(child: Container()),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                        ],
-                                      ), */
-                                      AnimatedPositioned(
-                                        //height: 60.0,
-                                        child: Container(
-                                          //color: Colors.blue,
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("Start at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeStart(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_start[0])}:${zeroMinCheck(time_start[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        0, 17, 0, 0),
-                                                    child: Text("to",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: color
-                                                                .AppColor
-                                                                .Font_sub,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("End at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeEnd(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_end[0])}:${zeroMinCheck(time_end[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 25,
-                                                  ),
-                                                  Container(
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                            margin: EdgeInsets
-                                                                .fromLTRB(0, 5,
-                                                                    0, 0),
-                                                            child: Text(
-                                                                "All day",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: color
-                                                                        .AppColor
-                                                                        .Font_sub,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))),
-                                                        SizedBox(
-                                                          width: 30,
-                                                          height: 35,
-                                                          child: Checkbox(
-                                                              value:
-                                                                  allDayCheckMonday,
-                                                              activeColor: color
-                                                                  .AppColor
-                                                                  .Font_sub
-                                                                  .withOpacity(
-                                                                      0.5),
-                                                              checkColor:
-                                                                  Colors.white,
-                                                              onChanged:
-                                                                  (value) =>
-                                                                      setState(
-                                                                          () {
-                                                                        this.allDayCheckMonday =
-                                                                            !(allDayCheckMonday);
-                                                                        if (allDayCheckMonday ==
-                                                                            false) {
-                                                                        } else {
-                                                                          _increaseWidth(
-                                                                              0);
-                                                                          _increaseHeight(
-                                                                              0);
-                                                                          setState(
-                                                                              () {
-                                                                            time_start[0] =
-                                                                                TimeOfDay(hour: 0, minute: 0);
-                                                                            time_end[0] =
-                                                                                TimeOfDay(hour: 23, minute: 59);
-                                                                          });
-                                                                        }
-                                                                      })),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        duration: Duration(milliseconds: 500),
-                                        top: moveDown[0],
-                                        curve: Curves.fastOutSlowIn,
-                                      ),
-                                      Container(
-                                        //BackGround
-                                        padding: const EdgeInsets.all(5),
-                                        height: 60,
-                                        width: double.maxFinite,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selected = !(selected);
-                                          });
-                                          if (value == false) {
-                                            setState(() {
-                                              value = !(value);
-                                              moveDown[0] = 60;
-                                              extendDown[0] = 120;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _increaseWidth(0);
-                                              _increaseHeight(0);
-                                            });
-                                          }
-                                        }, //
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          height: 60,
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
-                                              // color: color.AppColor.Gradient2.withOpacity(1),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              gradient: LinearGradient(
-                                                  colors: [
-                                                    color.AppColor.Gradient1,
-                                                    color.AppColor.Gradient1
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2,
-                                                    //add more colors for gradient
-                                                  ],
-                                                  begin: Alignment
-                                                      .topRight, //begin of the gradient color
-                                                  end: Alignment
-                                                      .bottomLeft, //end of the gradient color
-                                                  stops: const [
-                                                    0,
-                                                    0.1,
-                                                    0.9,
-                                                    1
-                                                  ] //st the stops number equal to numbers of color
-                                                  ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    offset: Offset(0, 5),
-                                                    blurRadius: 5,
-                                                    color: Colors.grey
-                                                        .withOpacity(1))
-                                              ]),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                  value: value,
-                                                  activeColor: Colors.white,
-                                                  checkColor:
-                                                      color.AppColor.Gradient2,
-                                                  onChanged: (value) =>
-                                                      setState(() {
-                                                        this.value = value!;
-                                                        if (value == false) {
-                                                          setState(() {
-                                                            moveDown[0] = 0;
-                                                            extendDown[0] = 60;
-                                                            allDayCheckMonday =
-                                                                false;
-                                                          });
-                                                        } else {
-                                                          setState(() {
-                                                            moveDown[0] = 60;
-                                                            extendDown[0] = 120;
-                                                          });
-                                                        }
-                                                      })),
-                                              Center(
-                                                child: Text(
-                                                  "Monday",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 35,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                AnimatedContainer(
-                                  margin: EdgeInsets.fromLTRB(0, 0, 0, 7),
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.fastOutSlowIn,
-                                  height: extendDown[0],
-                                  decoration: BoxDecoration(
-                                    //color: Colors.red,
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10),
-                                    ), //BorderRadius.Only
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      /* Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          AnimatedContainer(
-                                              duration:
-                                                  Duration(milliseconds: 500),
-                                              margin: EdgeInsets.fromLTRB(
-                                                  15, 20, 15, 0),
-                                              curve: Curves.easeInOutExpo,
-                                              height: _height,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.box_class
-                                                    .withOpacity(0.5),
-                                                borderRadius: BorderRadius.only(
-                                                  bottomLeft: Radius.circular(5),
-                                                  bottomRight: Radius.circular(5),
-                                                ), //BorderRadius.Only
-                                              ),
-                                              child: Row(
-                                                children: [],
-                                              )),
-                                          /*  AnimatedPositioned(
-                                              child: Container(),
-                                              duration: Duration(seconds: 2)), */
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(child: Container()),
-                                          Text(" to",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: color.AppColor.Font_sub,
-                                                  fontWeight: FontWeight.bold)),
-                                          Expanded(child: Container()),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              selectTimeStart(context);
-                                            }, // Handle your callback
-                                            child: Ink(
-                                              height: 40,
-                                              width: 90,
-                                              decoration: BoxDecoration(
-                                                color: color.AppColor.Font_sub,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${zeroHourCheck(time_start_picker)}:${zeroMinCheck(time_start_picker)}',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 25,
-                                          ),
-                                        ],
-                                      ), */
-                                      AnimatedPositioned(
-                                        //height: 60.0,
-                                        child: Container(
-                                          //color: Colors.blue,
-                                          child: Column(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("Start at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeStart(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_start[0])}:${zeroMinCheck(time_start[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    margin: EdgeInsets.fromLTRB(
-                                                        0, 17, 0, 0),
-                                                    child: Text("to",
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            color: color
-                                                                .AppColor
-                                                                .Font_sub,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Container(
-                                                    //color: Colors.purple,
-                                                    //height: 10,
-                                                    //width: 10,
-                                                    child: Column(
-                                                      children: [
-                                                        Text("End at:",
-                                                            style: TextStyle(
-                                                                fontSize: 15,
-                                                                color: color
-                                                                    .AppColor
-                                                                    .Font_sub,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            selectTimeEnd(
-                                                                context, 0);
-                                                          }, // Handle your callback
-                                                          child: Ink(
-                                                            height: 35,
-                                                            width: 90,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color: color
-                                                                  .AppColor
-                                                                  .Font_sub,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          5),
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(
-                                                                '${zeroHourCheck(time_end[0])}:${zeroMinCheck(time_end[0])}',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        20,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 25,
-                                                  ),
-                                                  Container(
-                                                    child: Column(
-                                                      children: [
-                                                        Container(
-                                                            margin: EdgeInsets
-                                                                .fromLTRB(0, 5,
-                                                                    0, 0),
-                                                            child: Text(
-                                                                "All day",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    color: color
-                                                                        .AppColor
-                                                                        .Font_sub,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))),
-                                                        SizedBox(
-                                                          width: 30,
-                                                          height: 35,
-                                                          child: Checkbox(
-                                                              value:
-                                                                  allDayCheckMonday,
-                                                              activeColor: color
-                                                                  .AppColor
-                                                                  .Font_sub
-                                                                  .withOpacity(
-                                                                      0.5),
-                                                              checkColor:
-                                                                  Colors.white,
-                                                              onChanged:
-                                                                  (value) =>
-                                                                      setState(
-                                                                          () {
-                                                                        this.allDayCheckMonday =
-                                                                            !(allDayCheckMonday);
-                                                                        if (allDayCheckMonday ==
-                                                                            false) {
-                                                                        } else {
-                                                                          _increaseWidth(
-                                                                              0);
-                                                                          _increaseHeight(
-                                                                              0);
-                                                                          setState(
-                                                                              () {
-                                                                            time_start[0] =
-                                                                                TimeOfDay(hour: 0, minute: 0);
-                                                                            time_end[0] =
-                                                                                TimeOfDay(hour: 23, minute: 59);
-                                                                          });
-                                                                        }
-                                                                      })),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        duration: Duration(milliseconds: 500),
-                                        top: moveDown[0],
-                                        curve: Curves.fastOutSlowIn,
-                                      ),
-                                      Container(
-                                        //BackGround
-                                        padding: const EdgeInsets.all(5),
-                                        height: 60,
-                                        width: double.maxFinite,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            selected = !(selected);
-                                          });
-                                          if (value == false) {
-                                            setState(() {
-                                              value = !(value);
-                                              moveDown[0] = 60;
-                                              extendDown[0] = 120;
-                                            });
-                                          } else {
-                                            setState(() {
-                                              _increaseWidth(0);
-                                              _increaseHeight(0);
-                                            });
-                                          }
-                                        }, //
-                                        child: Container(
-                                          padding: const EdgeInsets.all(5),
-                                          height: 60,
-                                          width: double.maxFinite,
-                                          decoration: BoxDecoration(
-                                              // color: color.AppColor.Gradient2.withOpacity(1),
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              gradient: LinearGradient(
-                                                  colors: [
-                                                    color.AppColor.Gradient1,
-                                                    color.AppColor.Gradient1
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2
-                                                        .withOpacity(0.9),
-                                                    color.AppColor.Gradient2,
-                                                    //add more colors for gradient
-                                                  ],
-                                                  begin: Alignment
-                                                      .topRight, //begin of the gradient color
-                                                  end: Alignment
-                                                      .bottomLeft, //end of the gradient color
-                                                  stops: const [
-                                                    0,
-                                                    0.1,
-                                                    0.9,
-                                                    1
-                                                  ] //st the stops number equal to numbers of color
-                                                  ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    offset: Offset(0, 5),
-                                                    blurRadius: 5,
-                                                    color: Colors.grey
-                                                        .withOpacity(1))
-                                              ]),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Checkbox(
-                                                  value: value,
-                                                  activeColor: Colors.white,
-                                                  checkColor:
-                                                      color.AppColor.Gradient2,
-                                                  onChanged: (value) =>
-                                                      setState(() {
-                                                        this.value = value!;
-                                                        if (value == false) {
-                                                          setState(() {
-                                                            moveDown[0] = 0;
-                                                            extendDown[0] = 60;
-                                                            allDayCheckMonday =
-                                                                false;
-                                                          });
-                                                        } else {
-                                                          setState(() {
-                                                            moveDown[0] = 60;
-                                                            extendDown[0] = 120;
-                                                          });
-                                                        }
-                                                      })),
-                                              Center(
-                                                child: Text(
-                                                  "Monday",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 35,
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                              children: GetDayInWeek(),
                             ),
                           )),
                       Container(
-                        color: Colors.red,
+                        //color: Colors.red,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Container(
-                              margin: EdgeInsets.fromLTRB(5, 5, 5, 0),
-                              child: RaisedButton(
-                                padding: EdgeInsets.all(0),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30)),
-                                onPressed: () {},
-                                child: Ink(
-                                  decoration: BoxDecoration(
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
+                                width: 70,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: color.AppColor.Gradient2,
+                                    borderRadius: BorderRadius.circular(8),
                                     gradient: LinearGradient(
                                         colors: [
+                                          color.AppColor.Gradient1,
                                           color.AppColor.Gradient1
-                                              .withOpacity(0.9),
+                                              .withOpacity(0.8),
                                           color.AppColor.Gradient2
-                                              .withOpacity(0.9),
+                                              .withOpacity(0.8),
+                                          color.AppColor.Gradient2,
+                                          //add more colors for gradient
                                         ],
-                                        begin: Alignment.topRight,
-                                        end: Alignment.bottomLeft),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Container(
-                                      constraints: BoxConstraints(
-                                          maxHeight: 40, maxWidth: 86),
-                                      alignment: Alignment.center,
-                                      child: Text("Add",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700))),
-                                ),
+                                        begin: Alignment
+                                            .topRight, //begin of the gradient color
+                                        end: Alignment
+                                            .bottomLeft, //end of the gradient color
+                                        stops: [
+                                          0,
+                                          0.1,
+                                          0.9,
+                                          1
+                                        ] //stops for individual color
+                                        //set the stops number equal to numbers of color
+                                        ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          offset: Offset(0, 5),
+                                          blurRadius: 5,
+                                          color: Colors.grey.withOpacity(1))
+                                    ]),
+                                child: Center(
+                                    child: Text("Add",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700))),
                               ),
                             ),
                           ],
@@ -3511,6 +617,276 @@ class _AddpageState extends State<Addpage> {
             ) */
           ]),
         ));
+  }
+
+  List<Widget> GetDayInWeek() {
+    List<Widget> data = [];
+    for (var day = 0; day < 7; day++) {
+      data.add(
+        AnimatedContainer(
+          margin: EdgeInsets.fromLTRB(0, 0, 0, 7),
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastOutSlowIn,
+          height: extendDown[day],
+          decoration: BoxDecoration(
+            //color: Colors.red,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            ), //BorderRadius.Only
+          ),
+          child: Stack(
+            children: [
+              AnimatedPositioned(
+                //height: 60.0,
+                child: Container(
+                  //color: Colors.blue,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Container(
+                            //color: Colors.purple,
+                            //height: 10,
+                            //width: 10,
+                            child: Column(
+                              children: [
+                                Text("Start at:",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: color.AppColor.Font_sub,
+                                        fontWeight: FontWeight.bold)),
+                                InkWell(
+                                  onTap: () {
+                                    selectTimeStart(context, 0);
+                                  }, // Handle your callback
+                                  child: Ink(
+                                    height: 35,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                      color: color.AppColor.Font_sub,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '${zeroHourCheck(time_start[day])}:${zeroMinCheck(time_start[day])}',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 17, 0, 0),
+                            child: Text("to",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: color.AppColor.Font_sub,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            //color: Colors.purple,
+                            //height: 10,
+                            //width: 10,
+                            child: Column(
+                              children: [
+                                Text("End at:",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: color.AppColor.Font_sub,
+                                        fontWeight: FontWeight.bold)),
+                                InkWell(
+                                  onTap: () {
+                                    selectTimeEnd(context, 0);
+                                  }, // Handle your callback
+                                  child: Ink(
+                                    height: 35,
+                                    width: 90,
+                                    decoration: BoxDecoration(
+                                      color: color.AppColor.Font_sub,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        '${zeroHourCheck(time_end[day])}:${zeroMinCheck(time_end[day])}',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 25,
+                          ),
+                          Container(
+                            child: Column(
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                                    child: Text("All day",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: color.AppColor.Font_sub,
+                                            fontWeight: FontWeight.bold))),
+                                SizedBox(
+                                  width: 30,
+                                  height: 35,
+                                  child: Checkbox(
+                                      value: allDayCheck[day],
+                                      activeColor: color.AppColor.Font_sub
+                                          .withOpacity(0.5),
+                                      checkColor: Colors.white,
+                                      onChanged: (value) => setState(() {
+                                            this.allDayCheck[day] =
+                                                !(allDayCheck[day]);
+                                            if (allDayCheck[day] == false) {
+                                            } else {
+                                              _increaseWidth(day);
+                                              _increaseHeight(day);
+                                              setState(() {
+                                                time_start[day] = TimeOfDay(
+                                                    hour: 0, minute: 0);
+                                                time_end[day] = TimeOfDay(
+                                                    hour: 23, minute: 59);
+                                              });
+                                            }
+                                          })),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                duration: Duration(milliseconds: 500),
+                top: moveDown[day],
+                curve: Curves.fastOutSlowIn,
+              ),
+              Container(
+                //BackGround
+                padding: const EdgeInsets.all(5),
+                height: 60,
+                width: double.maxFinite,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    selected[day] = !(selected[day]);
+                  });
+                  if (value[day] == false) {
+                    setState(() {
+                      value[day] = !(value[day]);
+                      moveDown[day] = 60;
+                      extendDown[day] = 120;
+                    });
+                  } else {
+                    setState(() {
+                      _increaseWidth(day);
+                      _increaseHeight(day);
+                    });
+                  }
+                }, //
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  height: 60,
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                      // color: color.AppColor.Gradient2.withOpacity(1),
+                      borderRadius: BorderRadius.circular(15),
+                      gradient: LinearGradient(
+                          colors: [
+                            color.AppColor.Gradient1,
+                            color.AppColor.Gradient1.withOpacity(0.9),
+                            color.AppColor.Gradient2.withOpacity(0.9),
+                            color.AppColor.Gradient2,
+                            //add more colors for gradient
+                          ],
+                          begin:
+                              Alignment.topRight, //begin of the gradient color
+                          end: Alignment.bottomLeft, //end of the gradient color
+                          stops: const [
+                            0,
+                            0.1,
+                            0.9,
+                            1
+                          ] //st the stops number equal to numbers of color
+                          ),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0, 5),
+                            blurRadius: 5,
+                            color: Colors.grey.withOpacity(1))
+                      ]),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Checkbox(
+                          value: value[day],
+                          activeColor: Colors.transparent,
+                          checkColor: Colors.white,
+                          onChanged: (value) => setState(() {
+                                this.value[day] = value!;
+                                if (value == false) {
+                                  setState(() {
+                                    moveDown[day] = 0;
+                                    extendDown[day] = 60;
+                                    allDayCheck[day] = false;
+                                  });
+                                } else {
+                                  setState(() {
+                                    moveDown[day] = 60;
+                                    extendDown[day] = 120;
+                                  });
+                                }
+                              })),
+                      Center(
+                        child: Text(
+                          dayInWeek[day],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 35,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return data;
   }
 
   Widget buildSingleCheckbox(CheckBoxState checkbox) => CheckboxListTile(

@@ -7,6 +7,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/back_end/storage.dart';
 import 'package:sendlink_application/back_end/subject.dart';
+import 'package:sendlink_application/front_end/schedulepage.dart';
 import 'colors.dart' as color;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -36,13 +37,13 @@ class _HomePageState extends State<HomePage> {
   List<Subject> subject_upnext = [];
   List<Subject> subject_done = [];
 
-  /*  @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     runningClock();
   }
- */
+
   /* void testingAddTimeTable() {
     TimeTable.addSubject(Subject.addSubject(
         'Circuit Signal System', 'www.english.com', 'onsite', [
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
     ]));
   } */
 
-  /*  void runningClock() {
+  void runningClock() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         time_with_no_format = DateTime.now();
@@ -83,12 +84,9 @@ class _HomePageState extends State<HomePage> {
         hourCheckInt = int.parse(hourCheck);
         minuteCheckInt = int.parse(minuteCheck);
       });
-      //testingAddTimeTable();
-      openData();
-      print(subject_during[0]);
     });
   }
- */
+
   /* void openData() {
     subject = TimeTable.listSubject;
     addData();
@@ -277,8 +275,58 @@ class _HomePageState extends State<HomePage> {
     return data;
   }
 
+  goSchedule() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const schedule()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          child: Center(
+            child: Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: color.AppColor.Gradient2,
+                  borderRadius: BorderRadius.circular(15),
+                  gradient: LinearGradient(
+                      colors: [
+                        color.AppColor.Gradient1,
+                        color.AppColor.Gradient1.withOpacity(0.8),
+                        color.AppColor.Gradient2.withOpacity(0.8),
+                        color.AppColor.Gradient2,
+                        //add more colors for gradient
+                      ],
+                      begin: Alignment.topRight, //begin of the gradient color
+                      end: Alignment.bottomLeft, //end of the gradient color
+                      stops: [0, 0.1, 0.9, 1] //stops for individual color
+                      //set the stops number equal to numbers of color
+                      ),
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(0, 5),
+                        blurRadius: 5,
+                        color: Colors.grey.withOpacity(1))
+                  ]),
+              child: Center(
+                child: Icon(
+                  IconData(0xe385, fontFamily: 'MaterialIcons'),
+                  size: 35,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          onPressed: () => goSchedule(),
+        ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.only(top: 35, left: 20, right: 20),
           child: Column(children: [
@@ -426,9 +474,6 @@ class _HomePageState extends State<HomePage> {
              * TODO: case 2 have class during
              * TODO: case 2 have class up next
              *  
-             * 
-             * 
-             * 
             */
             Container(
                 margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
@@ -466,93 +511,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                      /* Container(
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              height: 50,
-                              width: double.maxFinite,
-                              decoration: BoxDecoration(
-                                  color: color.AppColor.box_class,
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        offset: Offset(0, 5),
-                                        blurRadius: 5,
-                                        color: Colors.grey.withOpacity(0.8))
-                                  ]),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            fileContent.toString() +
-                                                "teeeeeeeeeeee",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            "9:00 - 10:30 AM",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Expanded(child: Container()),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                    width: 50,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        color: color.AppColor.offline,
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              offset: Offset(0, 5),
-                                              blurRadius: 5,
-                                              color: Colors.grey.withOpacity(1))
-                                        ]),
-                                    child: Center(
-                                      child: Text(
-                                        "Join",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            )
-                          ],
-                        ),
-                      ), */
                       Column(
                         children: getDurringClass(),
                       )
