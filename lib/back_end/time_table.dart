@@ -204,6 +204,23 @@ class TimeTable {
     return Tuple2("-", TimeSub("Monday", 0, 0, 0, 0));
   }
 
+  static List<Tuple2<String, TimeSub>> getSubjectAtDay(String dayOfWeek) {
+    List<Tuple2<String, TimeSub>> result = [];
+    int iDayOfWeek = TimeSub.strDayToInt(dayOfWeek);
+    for (var e in listSubject) {
+      for (var f in e.allTimeLearn) {
+        if (f.dayOfWeek == iDayOfWeek) {
+          result.add(Tuple2(e.name, f));
+        }
+      }
+    }
+    result.sort((a, b) {
+      return a.item2.compareToStartTime(b.item2);
+    });
+
+    return result;
+  }
+
   static List<Tuple2<String, TimeSub>> getSubjectsDoneAtTime(
       String dayOfWeek, int hour, int minute) {
     int iDayOfWeek = TimeSub.strDayToInt(dayOfWeek);
