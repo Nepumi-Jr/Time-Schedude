@@ -42,6 +42,11 @@ dependencies:
   crypto: ^3.0.1
   icalendar_parser: any
   tuple: ^2.0.0
+  flutter_local_notifications: ^9.3.1
+  rxdart: ^0.27.3
+  timezone: ^0.8.0
+  timezone_to_country: ^0.5.0
+  timezone_utc_offset: ^1.1.0
 
 dev_dependencies:
   flutter_test:
