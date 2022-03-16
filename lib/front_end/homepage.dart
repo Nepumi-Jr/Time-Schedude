@@ -4,10 +4,13 @@ import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:sendlink_application/back_end/time_sub.dart';
 import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/back_end/storage.dart';
 import 'package:sendlink_application/back_end/subject.dart';
 import 'package:sendlink_application/front_end/schedulepage.dart';
+import 'package:tuple/tuple.dart';
+import 'class_schedule.dart';
 import 'colors.dart' as color;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
@@ -33,36 +36,60 @@ class _HomePageState extends State<HomePage> {
 
   // !Subject Variable
   List<Subject> subject = [];
-  List<Subject> subject_during = [];
-  List<Subject> subject_upnext = [];
-  List<Subject> subject_done = [];
+  late Tuple2<String, TimeSub> subject_during;
+  late List<Tuple2<String, TimeSub>> subject_upnext = [];
+  late List<Tuple2<String, TimeSub>> subject_done = [];
+
+  zeroCheck(int time) {
+    if (time == 0) {
+      return "00";
+    } else if (time < 10) {
+      return "0" + time.toString();
+    } else {
+      return time.toString();
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    TimeTable.addSubject(Subject("Valorant", "valorant.com", "Home",
+        [TimeSub("Wednesday", 19, 39, 19, 43)]));
+    TimeTable.addSubject(Subject("Minecraft", "valorant.com", "Home",
+        [TimeSub("Wednesday", 21, 00, 23, 59)]));
+    TimeTable.addSubject(Subject(
+        "LOL", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));
+    TimeTable.addSubject(Subject(
+        "LOL2", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));
+    TimeTable.addSubject(Subject(
+        "LOL3", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));
     runningClock();
+    openDuringSubject();
   }
 
-  /* void testingAddTimeTable() {
-    TimeTable.addSubject(Subject.addSubject(
-        'Circuit Signal System', 'www.english.com', 'onsite', [
-      [4, 7, 30, 19, 30],
-      [2, 13, 0, 16, 00]
-    ]));
-
-    TimeTable.addSubject(
-        Subject.addSubject('English', 'www.english.com', 'onsite', [
-      [3, 7, 30, 18, 30],
-      [1, 13, 0, 17, 30]
-    ]));
-
-    TimeTable.addSubject(Subject.addSubject(
-        'Digital Logic Design', 'www.english.com', 'onsite', [
-      [3, 7, 30, 19, 30],
-      [1, 13, 0, 16, 00]
-    ]));
-  } */
+  openDuringSubject() {
+    dayInWeek = DateFormat("EEEEEE").format(DateTime.now()) as String;
+    hourCheckInt = int.parse(DateFormat("HH").format(DateTime.now()));
+    minuteCheckInt = int.parse(DateFormat("mm").format(DateTime.now()));
+    print(dayInWeek);
+    print(hourCheckInt);
+    print(minuteCheckInt);
+    subject_during =
+        TimeTable.getSubjectAtTime(dayInWeek, hourCheckInt, minuteCheckInt);
+    subject_upnext = TimeTable.getSubjectsIncomingAtTime(
+        dayInWeek, hourCheckInt, minuteCheckInt);
+    subject_done = TimeTable.getSubjectsDoneAtTime(
+        dayInWeek, hourCheckInt, minuteCheckInt);
+    print(minuteCheckInt);
+    print("subject during");
+    print(subject_during);
+    print("subject upnext");
+    print(subject_upnext);
+    print("subject done");
+    print(subject_done);
+    //print(TimeTable.getSubjectAtTime(dayInWeek, hourCheckInt, minuteCheckInt));
+  }
 
   void runningClock() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -83,196 +110,9 @@ class _HomePageState extends State<HomePage> {
         minuteCheck = DateFormat("mm").format(time_with_no_format);
         hourCheckInt = int.parse(hourCheck);
         minuteCheckInt = int.parse(minuteCheck);
+        openDuringSubject();
       });
     });
-  }
-
-  /* void openData() {
-    subject = TimeTable.listSubject;
-    addData();
-    for (var i = 0; i < subject.length; i++) {
-      for (var i = 0; i < subject[i].allTimeLearn.length; i++) {}
-    }
-  } */
-
-  Future<int> dayStringToDayInt(String dayString) async {
-    if (dayString == 'Sunday') {
-      return 1;
-    } else if (dayString == 'Monday') {
-      return 2;
-    } else if (dayString == 'Tuesday') {
-      return 3;
-    } else if (dayString == 'Wednesday') {
-      return 4;
-    } else if (dayString == 'Thursday') {
-      return 5;
-    } else if (dayString == 'Friday') {
-      return 6;
-    } else if (dayString == 'Saturday') {
-      return 7;
-    } else {
-      return -1;
-    }
-  }
-
-  /*  void addData() {
-    for (var i = 0; i < TimeTable.listSubject.length; i++) {
-      for (var j = 0; j < TimeTable.listSubject[i].allTimeLearn.length; j++) {
-        //done
-        if (hourCheckInt > timeCheck(i, j, 3) &&
-            minuteCheckInt > timeCheck(i, j, 4) &&
-            dayStringToDayInt(dayInWeek) == timeCheck(i, j, 0)) {
-          subject_done.add(TimeTable.listSubject[i]);
-        } else if (hourCheckInt < timeCheck(i, j, 1) &&
-            minuteCheckInt < timeCheck(i, j, 2) &&
-            dayStringToDayInt(dayInWeek) == timeCheck(i, j, 0)) {
-          subject_upnext.add(TimeTable.listSubject[i]);
-        } else if (hourCheckInt < timeCheck(i, j, 1) &&
-            minuteCheckInt < timeCheck(i, j, 2) &&
-            dayStringToDayInt(dayInWeek) == timeCheck(i, j, 0)) {
-          subject_during.add(TimeTable.listSubject[i]);
-        }
-      }
-    }
-  } */
-/* 
-  int timeCheck(int i, int j, int positionTime) {
-    return TimeTable.listSubject[i].allTimeLearn[j][positionTime];
-  } */
-
-  /* Future<File> _incrementCounter() {
-    setState(() {
-      subject = TimeTable.timetable.toString();
-    });
-
-    // Write the variable as a string to the file.
-    return Storage.writeSubject(subject);
-  } */
-
-  //start 0
-  //end 1
-  /* String getTimeClass(int i, int j, int when) {
-    int hour = 1;
-    int minute = 2;
-    String tempHour;
-    String tempMinute;
-    if (when == 0) {
-      int hour = 1;
-      int minute = 2;
-    } else if (when == 1) {
-      int hour = 3;
-      int minute = 4;
-    }
-    if (subject_during[i].allTimeLearn[j][hour] < 10) {
-      tempHour = "0" + subject_during[i].allTimeLearn[j][hour].toString();
-    } else {
-      tempHour = subject_during[i].allTimeLearn[j][hour].toString();
-    }
-    if (subject_during[i].allTimeLearn[j][minute] < 10) {
-      tempMinute = "0" + subject_during[i].allTimeLearn[j][minute].toString();
-    } else {
-      tempMinute = subject_during[i].allTimeLearn[j][minute].toString();
-    }
-    if (subject_during[i].allTimeLearn[j][hour] >= 12 && when == 1) {
-      return tempHour + ":" + tempMinute + " PM ";
-    } else if (subject_during[i].allTimeLearn[j][hour] < 12 && when == 1) {
-      return tempHour + ":" + tempMinute + " AM ";
-    } else {
-      return tempHour + ":" + tempMinute;
-    }
-  } */
-
-  //widget for add subject in real time
-  List<Widget> getDurringClass() {
-    List<Widget> data = [];
-    for (var i = 0; i < subject_during.length; i++) {
-      data.add(Container(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(5),
-              height: 50,
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                  color: color.AppColor.box_class,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                        offset: Offset(0, 5),
-                        blurRadius: 5,
-                        color: Colors.grey.withOpacity(0.8))
-                  ]),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            subject_during[i].name,
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 15,
-                          ),
-                          /* Text(
-                            getTimeClass(i, 0, 0) +
-                                " - " +
-                                getTimeClass(i, 0, 1),
-                            style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.normal),
-                          ) */
-                        ],
-                      )
-                    ],
-                  ),
-                  Expanded(child: Container()),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    width: 50,
-                    height: 30,
-                    decoration: BoxDecoration(
-                        color: color.AppColor.offline,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              offset: Offset(0, 5),
-                              blurRadius: 5,
-                              color: Colors.grey.withOpacity(1))
-                        ]),
-                    child: Center(
-                      child: Text(
-                        "Join",
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 5,
-            )
-          ],
-        ),
-      ));
-    }
-    return data;
   }
 
   goSchedule() {
@@ -475,342 +315,7 @@ class _HomePageState extends State<HomePage> {
              * TODO: case 2 have class up next
              *  
             */
-            Container(
-                margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: color.AppColor.WidgetBackground.withOpacity(0.5),
-                  borderRadius:
-                      BorderRadius.circular(20), //border corner radius
-                ),
-                alignment: Alignment.center,
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "Finished",
-                            style: TextStyle(
-                              color: color.AppColor.NameWidget,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                              shadows: <Shadow>[
-                                Shadow(
-                                  offset: Offset(1.0, 3.0),
-                                  blurRadius: 10,
-                                  color: Colors.black.withOpacity(0.2),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: getDurringClass(),
-                      )
-                    ],
-                  ),
-                )),
-            Container(
-                margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: color.AppColor.WidgetBackground.withOpacity(0.5),
-                  borderRadius:
-                      BorderRadius.circular(20), //border corner radius
-                ),
-                alignment: Alignment.center,
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "During",
-                            style: TextStyle(
-                              color: color.AppColor.NameWidget,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                              shadows: <Shadow>[
-                                Shadow(
-                                  offset: Offset(1.0, 3.0),
-                                  blurRadius: 10,
-                                  color: Colors.black.withOpacity(0.2),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              height: 50,
-                              width: double.maxFinite,
-                              decoration: BoxDecoration(
-                                  color: color.AppColor.box_class,
-                                  borderRadius: BorderRadius.circular(15),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        offset: Offset(0, 5),
-                                        blurRadius: 5,
-                                        color: Colors.grey.withOpacity(0.8))
-                                  ]),
-                              child: Row(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            "Digital Logic Design",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 15,
-                                          ),
-                                          Text(
-                                            "9:00 - 10:30 AM",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Expanded(child: Container()),
-                                  Container(
-                                    margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                    width: 50,
-                                    height: 30,
-                                    decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                            colors: [
-                                              color.AppColor.Gradient3,
-                                              color.AppColor.Gradient3
-                                                  .withOpacity(0.8),
-                                              color.AppColor.Gradient4
-                                                  .withOpacity(0.8),
-                                              color.AppColor.Gradient4,
-                                              //add more colors for gradient
-                                            ],
-                                            begin: Alignment
-                                                .topRight, //begin of the gradient color
-                                            end: Alignment
-                                                .bottomLeft, //end of the gradient color
-                                            stops: [
-                                              0,
-                                              0.1,
-                                              0.9,
-                                              1
-                                            ] //stops for individual color
-                                            //set the stops number equal to numbers of color
-                                            ),
-                                        color: color.AppColor.offline,
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              offset: Offset(0, 5),
-                                              blurRadius: 5,
-                                              color:
-                                                  Colors.grey.withOpacity(1)),
-                                        ]),
-                                    child: Center(
-                                      child: Text(
-                                        "Join",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                )),
-            Container(
-              margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: color.AppColor.WidgetBackground.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(20), //border corner radius
-              ),
-              alignment: Alignment.center,
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          "Up Next",
-                          style: TextStyle(
-                            color: color.AppColor.NameWidget,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17,
-                            shadows: <Shadow>[
-                              Shadow(
-                                offset: Offset(1.0, 3.0),
-                                blurRadius: 10,
-                                color: Colors.black.withOpacity(0.2),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(5),
-                            height: 50,
-                            width: double.maxFinite,
-                            decoration: BoxDecoration(
-                                color: color.AppColor.box_class,
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: Offset(0, 5),
-                                      blurRadius: 5,
-                                      color: Colors.grey.withOpacity(0.8))
-                                ]),
-                            child: Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                          "Digital Logic Design",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 15,
-                                        ),
-                                        Text(
-                                          "9:00 - 10:30 AM",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.normal),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                Expanded(child: Container()),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                  width: 50,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          colors: [
-                                            color.AppColor.Gradient1,
-                                            color.AppColor.Gradient1
-                                                .withOpacity(0.8),
-                                            color.AppColor.Gradient2
-                                                .withOpacity(0.8),
-                                            color.AppColor.Gradient2,
-                                            //add more colors for gradient
-                                          ],
-                                          begin: Alignment
-                                              .topRight, //begin of the gradient color
-                                          end: Alignment
-                                              .bottomLeft, //end of the gradient color
-                                          stops: [
-                                            0,
-                                            0.1,
-                                            0.9,
-                                            1
-                                          ] //stops for individual color
-                                          //set the stops number equal to numbers of color
-                                          ),
-                                      color: color.AppColor.offline,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            offset: Offset(0, 5),
-                                            blurRadius: 5,
-                                            color: Colors.grey.withOpacity(1)),
-                                      ]),
-                                  child: Center(
-                                    child: Text(
-                                      "Join",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            ListClassSchedule(subject_during, subject_upnext, subject_done),
             Container(
               margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
               width: double.infinity,

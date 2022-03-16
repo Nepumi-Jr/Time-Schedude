@@ -7,6 +7,8 @@ class AppColor {
   static Color Gradient2 = const Color(0XFFD842DB);
   static Color Gradient3 = const Color(0XFFe43a15);
   static Color Gradient4 = const Color(0XFFe65245);
+  static Color Gradient5 = const Color(0XFF757F9A);
+  static Color Gradient6 = const Color(0XFFD7DDE8);
   static Color WidgetBackground = const Color(0XFFE9EBFF);
   static Color Font_sub = const Color(0XFF737272);
   static Color box_class = const Color(0XFFE7E7E7);
