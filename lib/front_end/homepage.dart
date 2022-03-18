@@ -72,22 +72,22 @@ class _HomePageState extends State<HomePage> {
     dayInWeek = DateFormat("EEEEEE").format(DateTime.now()) as String;
     hourCheckInt = int.parse(DateFormat("HH").format(DateTime.now()));
     minuteCheckInt = int.parse(DateFormat("mm").format(DateTime.now()));
-    print(dayInWeek);
+    /* print(dayInWeek);
     print(hourCheckInt);
-    print(minuteCheckInt);
+    print(minuteCheckInt); */
     subject_during =
         TimeTable.getSubjectAtTime(dayInWeek, hourCheckInt, minuteCheckInt);
     subject_upnext = TimeTable.getSubjectsIncomingAtTime(
         dayInWeek, hourCheckInt, minuteCheckInt);
     subject_done = TimeTable.getSubjectsDoneAtTime(
         dayInWeek, hourCheckInt, minuteCheckInt);
-    print(minuteCheckInt);
+    /* print(minuteCheckInt);
     print("subject during");
     print(subject_during);
     print("subject upnext");
     print(subject_upnext);
     print("subject done");
-    print(subject_done);
+    print(subject_done); */
     //print(TimeTable.getSubjectAtTime(dayInWeek, hourCheckInt, minuteCheckInt));
   }
 

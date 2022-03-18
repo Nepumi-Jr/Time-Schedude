@@ -83,7 +83,7 @@ class ListClassSchedule extends StatelessWidget {
     }
 
     for (var i = 0; i < numberOfLoop; i++) {
-      print("number of loop is:" + numberOfLoop.toString());
+      //print("number of loop is:" + numberOfLoop.toString());
       data.add(Container(
         child: Column(
           children: [

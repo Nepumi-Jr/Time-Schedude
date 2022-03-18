@@ -5,11 +5,13 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sendlink_application/back_end/time_sub.dart';
 import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/back_end/storage.dart';
 import 'package:sendlink_application/back_end/subject.dart';
 import 'package:sendlink_application/front_end/checkbox_state.dart';
 import 'package:sendlink_application/front_end/homepage.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'colors.dart' as color;
 
 class Addpage extends StatefulWidget {
@@ -34,22 +36,8 @@ class _AddpageState extends State<Addpage> {
   late TimeOfDay time_end_picker;
 
   List<bool> dayCheck = [false, false, false, false, false, false, false];
-  bool dayCheckSunday = false;
-  bool dayCheckMonday = false;
-  bool dayCheckTuesday = false;
-  bool dayCheckWednesday = false;
-  bool dayCheckThursday = false;
-  bool dayCheckFriday = false;
-  bool dayCheckSaturday = false;
 
   List<bool> allDayCheck = [false, false, false, false, false, false, false];
-  bool allDayCheckSunday = false;
-  bool allDayCheckMonday = false;
-  bool allDayCheckTuesday = false;
-  bool allDayCheckWednesday = false;
-  bool allDayCheckThursday = false;
-  bool allDayCheckFriday = false;
-  bool allDayCheckSaturday = false;
 
   late TimeOfDay picked;
 
@@ -122,6 +110,67 @@ class _AddpageState extends State<Addpage> {
     // Write the variable as a string to the file.
     return Storage.writeSubject(subject);
   } */
+
+  getInformationToClassTimeTable() {
+    Subject ter;
+    List<TimeSub> allTimeLearn = [];
+
+    for (var i = 0; i < dayCheck.length; i++) {
+      if (dayCheck[i]) {
+        allTimeLearn.add(TimeSub(i.toString(), time_start[i].hour,
+            time_start[i].minute, time_end[i].hour, time_end[i].minute));
+      }
+    }
+    ter = Subject(_subject_name.text.toString(), _link.text.toString(),
+        _place_name.text.toString(), allTimeLearn);
+    TimeTable.addSubject(ter);
+    print(TimeTable.listSubject.toList());
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you sure?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Is the information complete or not?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Add'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                getInformationToClassTimeTable();
+                /* AwesomeDialog(
+                  context: context,
+                  animType: AnimType.LEFTSLIDE,
+                  headerAnimationLoop: false,
+                  dialogType: DialogType.SUCCES,
+                  showCloseIcon: true,
+                  title: 'Succes',
+                  desc:
+                      'Dialog description here..................................................',
+                )..show(); */
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   Future<Null> selectTimeStart(BuildContext context, int day) async {
     picked =
@@ -219,58 +268,6 @@ class _AddpageState extends State<Addpage> {
         body: SingleChildScrollView(
           padding: const EdgeInsets.only(top: 35),
           child: Column(children: [
-            // Go back Icon.
-            /*  Row(
-              children: [
-                SizedBox(
-                  width: 30,
-                ),
-                Container(
-                  width: 53,
-                  height: 31,
-                  decoration: BoxDecoration(
-                      color: color.AppColor.Gradient2,
-                      borderRadius: BorderRadius.circular(8),
-                      gradient: LinearGradient(
-                          colors: [
-                            color.AppColor.Gradient1,
-                            color.AppColor.Gradient1.withOpacity(0.8),
-                            color.AppColor.Gradient2.withOpacity(0.8),
-                            color.AppColor.Gradient2,
-                            //add more colors for gradient
-                          ],
-                          begin:
-                              Alignment.topRight, //begin of the gradient color
-                          end: Alignment.bottomLeft, //end of the gradient color
-                          stops: const [
-                            0,
-                            0.1,
-                            0.9,
-                            1
-                          ] //stops for individual color
-                          //set the stops number equal to numbers of color
-                          ),
-                      boxShadow: [
-                        BoxShadow(
-                            offset: Offset(0, 5),
-                            blurRadius: 5,
-                            color: Colors.grey.withOpacity(1))
-                      ]),
-                  child: Row(
-                    children: const [
-                      SizedBox(
-                        width: 13.5,
-                      ),
-                      Icon(
-                        IconData(0xf570, fontFamily: 'MaterialIcons'),
-                        size: 25,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ), */
             Container(
               //color: Colors.red,
               child: Row(
@@ -422,6 +419,7 @@ class _AddpageState extends State<Addpage> {
                     child: Container(
                       margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
                       child: TextField(
+                        controller: _link,
                         style: TextStyle(
                             fontSize: 18,
                             height: 1.5,
@@ -498,7 +496,9 @@ class _AddpageState extends State<Addpage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                _showMyDialog();
+                              },
                               child: Container(
                                 margin: EdgeInsets.fromLTRB(0, 0, 15, 0),
                                 width: 70,
@@ -545,76 +545,11 @@ class _AddpageState extends State<Addpage> {
                           ],
                         ),
                       ),
-                      /* Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                            width: 70,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(13),
-                                gradient: LinearGradient(
-                                    colors: [
-                                      color.AppColor.Gradient1,
-                                      color.AppColor.Gradient1.withOpacity(0.8),
-                                      color.AppColor.Gradient2.withOpacity(0.8),
-                                      color.AppColor.Gradient2,
-                                      //add more colors for gradient
-                                    ],
-                                    begin: Alignment
-                                        .topRight, //begin of the gradient color
-                                    end: Alignment
-                                        .bottomLeft, //end of the gradient color
-                                    stops: [
-                                      0,
-                                      0.1,
-                                      0.9,
-                                      1
-                                    ] //stops for individual color
-                                    //set the stops number equal to numbers of color
-                                    ),
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: Offset(0, 5),
-                                      blurRadius: 5,
-                                      color: Colors.grey.withOpacity(1))
-                                ] //border corner radius
-                                ),
-                            child: Center(
-                              child: Text("Add",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700)),
-                            ),
-                          ),
-                        ],
-                      ) */
                     ],
                   )
                 ],
               ),
             ),
-            /* Center(
-              child: Column(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.alarm),
-                    iconSize: 40,
-                    onPressed: () {
-                      selectTime(context);
-                      print(time);
-                    },
-                  ),
-                  Text(
-                    'time ${zeroHourCheck(time)}:${zeroMinCheck(time).toString()}',
-                    style: TextStyle(fontSize: 25),
-                  )
-                ],
-              ),
-            ) */
           ]),
         ));
   }
@@ -661,7 +596,7 @@ class _AddpageState extends State<Addpage> {
                                         fontWeight: FontWeight.bold)),
                                 InkWell(
                                   onTap: () {
-                                    selectTimeStart(context, 0);
+                                    selectTimeStart(context, day);
                                   }, // Handle your callback
                                   child: Ink(
                                     height: 35,
@@ -711,7 +646,7 @@ class _AddpageState extends State<Addpage> {
                                         fontWeight: FontWeight.bold)),
                                 InkWell(
                                   onTap: () {
-                                    selectTimeEnd(context, 0);
+                                    selectTimeEnd(context, day);
                                   }, // Handle your callback
                                   child: Ink(
                                     height: 35,
