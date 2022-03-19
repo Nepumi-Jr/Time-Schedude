@@ -117,7 +117,7 @@ class _AddpageState extends State<Addpage> {
 
     for (var i = 0; i < dayCheck.length; i++) {
       if (dayCheck[i]) {
-        allTimeLearn.add(TimeSub(i.toString(), time_start[i].hour,
+        allTimeLearn.add(TimeSub(IntDaytoString(i), time_start[i].hour,
             time_start[i].minute, time_end[i].hour, time_end[i].minute));
       }
     }
@@ -125,6 +125,24 @@ class _AddpageState extends State<Addpage> {
         _place_name.text.toString(), allTimeLearn);
     TimeTable.addSubject(ter);
     print(TimeTable.listSubject.toList());
+  }
+
+  IntDaytoString(int dayOfWeek) {
+    if (dayOfWeek == 0) {
+      return 'Monday';
+    } else if (dayOfWeek == 1) {
+      return 'Tuesday';
+    } else if (dayOfWeek == 2) {
+      return 'Wednesday';
+    } else if (dayOfWeek == 3) {
+      return 'ThursDay';
+    } else if (dayOfWeek == 4) {
+      return 'Friday';
+    } else if (dayOfWeek == 5) {
+      return 'Saturday';
+    } else if (dayOfWeek == 6) {
+      return 'Sunday';
+    }
   }
 
   Future<void> _showMyDialog() async {

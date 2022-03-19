@@ -1,3 +1,4 @@
+import 'package:sendlink_application/back_end/storage.dart';
 import 'package:tuple/tuple.dart';
 
 import 'time_todo.dart';
@@ -19,23 +20,23 @@ class TimeTable {
   //TimeTable
 
   static void saveFile() {
-    // String subjectJson = jsonEncode(listSubject);
-    // Storage.writeFile("subject.json", subjectJson);
+    String subjectJson = jsonEncode(listSubject);
+    Storage.writeFile("subject.json", subjectJson);
 
-    // Storage.writeFile("id.dat", "$idCounter");
+    Storage.writeFile("id.dat", "$idCounter");
 
-    // String todoJson = jsonEncode(listTodo);
-    // Storage.writeFile("todo.json", todoJson);
+    String todoJson = jsonEncode(listTodo);
+    Storage.writeFile("todo.json", todoJson);
   }
 
   static void loadFile() async {
-    // String subjectJson = await Storage.readFile("subject.json");
-    // loadSubjectsFromJson(subjectJson);
+    String subjectJson = await Storage.readFile("subject.json");
+    loadSubjectsFromJson(subjectJson);
 
-    // idCounter = int.parse(await Storage.readFile("id.dat"));
+    idCounter = int.parse(await Storage.readFile("id.dat"));
 
-    // String todoJson = await Storage.readFile("todo.json");
-    // loadTodoFromJson(todoJson);
+    String todoJson = await Storage.readFile("todo.json");
+    loadTodoFromJson(todoJson);
   }
 
   static void loadSubjectsFromJson(String sJSON) {
