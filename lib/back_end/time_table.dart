@@ -6,11 +6,19 @@ import 'subject.dart';
 import 'todo.dart';
 import 'dart:convert';
 import 'time_sub.dart';
+import 'link_check.dart';
 
 import 'dart:io';
 import 'package:icalendar_parser/icalendar_parser.dart';
-// TODO : Don't forget about storage stuff
 //import 'storage.dart';
+
+enum TimeTableStatus {
+  done,
+  duplicatedName,
+  overlapTime,
+  nameNotExist,
+  timeNotExist
+}
 
 class TimeTable {
   static List<Subject> listSubject = [];
@@ -55,17 +63,16 @@ class TimeTable {
     }
   }
 
-  static void addSubject(Subject subject) {
+  static TimeTableStatus addSubject(Subject subject) {
     //? Check name
     if (isExistName(subject.name)) {
-      //! Duplicated name
-      return;
+      return TimeTableStatus.duplicatedName;
     }
     //? Check Times
     for (var e in subject.allTimeLearn) {
       if (isOverlapAnySubject(e)) {
         //! Overlap Time
-        return;
+        return TimeTableStatus.overlapTime;
       }
     }
     subject.id = idCounter;
@@ -73,6 +80,7 @@ class TimeTable {
     listSubject.add(subject);
     saveFile();
     idCounter++;
+    return TimeTableStatus.done;
   }
 
   static int getSubjectIndexFromName(String subjectName) {
@@ -88,36 +96,38 @@ class TimeTable {
     return getSubjectIndexFromName(subjectName) != -1;
   }
 
-  static void addTimeToSubject(String subjectName, TimeSub newTime) {
+  static TimeTableStatus addTimeToSubject(String subjectName, TimeSub newTime) {
     int ind = getSubjectIndexFromName(subjectName);
     if (ind == -1) {
       //! หาวิชาไม่เจอ ควย!!!
-      return;
+      return TimeTableStatus.nameNotExist;
     }
     if (isOverlapAnySubject(newTime)) {
       //! Overlap Time
-      return;
+      return TimeTableStatus.overlapTime;
     }
     listSubject[ind].allTimeLearn.add(newTime);
     listSubject[ind].allTimeId.add(listSubject[ind].getHashTime(newTime));
     saveFile();
+    return TimeTableStatus.done;
   }
 
-  static void removeSubject(String subjectName) {
+  static TimeTableStatus removeSubject(String subjectName) {
     int ind = getSubjectIndexFromName(subjectName);
     if (ind == -1) {
       //! หาวิชาไม่เจอ!!!
-      return;
+      return TimeTableStatus.nameNotExist;
     }
     listSubject.removeAt(ind);
     saveFile();
+    return TimeTableStatus.done;
   }
 
-  static void removeSubjectTime(String subjectName, TimeSub tim) {
+  static TimeTableStatus removeSubjectTime(String subjectName, TimeSub tim) {
     int ind = getSubjectIndexFromName(subjectName);
     if (ind == -1) {
       //! หาวิชาไม่เจอ!!!
-      return;
+      return TimeTableStatus.nameNotExist;
     }
     int timInd = -1;
     for (int i = 0; i < listSubject[ind].allTimeLearn.length; i++) {
@@ -130,10 +140,11 @@ class TimeTable {
     }
     if (timInd == -1) {
       //! อย่าหลอน
-      return;
+      return TimeTableStatus.timeNotExist;
     }
     listSubject[ind].allTimeLearn.removeAt(timInd);
     saveFile();
+    return TimeTableStatus.done;
   }
 
   static void clearSubjects() {
@@ -142,7 +153,8 @@ class TimeTable {
     saveFile();
   }
 
-  static void editSubject(String subjectOldName, Subject theNewSubject) {
+  static TimeTableStatus editSubject(
+      String subjectOldName, Subject theNewSubject) {
     int ind = getSubjectIndexFromName(subjectOldName);
     Subject oldSubj = listSubject[ind];
     listSubject.removeAt(ind);
@@ -150,14 +162,14 @@ class TimeTable {
     if (isExistName(theNewSubject.name)) {
       //! Duplicated name
       listSubject.add(oldSubj);
-      return;
+      return TimeTableStatus.duplicatedName;
     }
     //? Check Times
     for (var e in theNewSubject.allTimeLearn) {
       if (isOverlapAnySubject(e)) {
         //! Overlap Time
         listSubject.add(oldSubj);
-        return;
+        return TimeTableStatus.overlapTime;
       }
     }
 
@@ -167,18 +179,20 @@ class TimeTable {
 
     listSubject.add(theNewSubject);
     saveFile();
+    return TimeTableStatus.done;
   }
 
-  static void editSubjectTime(
+  static TimeTableStatus editSubjectTime(
       String subjectName, TimeSub oldTime, TimeSub newTime) {
     removeSubjectTime(subjectName, oldTime);
     if (isOverlapAnySubject(newTime)) {
       //! Overlap Time
       addTimeToSubject(subjectName, oldTime);
-      return;
+      return TimeTableStatus.overlapTime;
     }
     addTimeToSubject(subjectName, newTime);
     saveFile();
+    return TimeTableStatus.done;
   }
 
   static bool isOverlapAnySubject(TimeSub tim) {
@@ -329,6 +343,41 @@ class TimeTable {
     return -1;
   }
 
+  static bool isAnyLinkFromSubName(String subjectName) {
+    int ind = getSubjectIndexFromName(subjectName);
+    if (ind == -1) {
+      //! หาวิชาไม่เจอ!!!
+      return false;
+    }
+    List<String> links = getLinks(listSubject[ind].link);
+    return links.isNotEmpty;
+  }
+
+  static String getLinkFromSubName(String subjectName) {
+    int ind = getSubjectIndexFromName(subjectName);
+    if (ind == -1) {
+      //! หาวิชาไม่เจอ!!!
+      return "";
+    }
+    if (isAnyLinkFromSubName(subjectName)) {
+      List<String> links = getLinks(listSubject[ind].link);
+      return links[0];
+    }
+    return "";
+  }
+
+  static List<String> getLinksFromSubName(String subjectName) {
+    int ind = getSubjectIndexFromName(subjectName);
+    if (ind == -1) {
+      //! หาวิชาไม่เจอ!!!
+      return [];
+    }
+    if (isAnyLinkFromSubName(subjectName)) {
+      return getLinks(listSubject[ind].link);
+    }
+    return [];
+  }
+
   //? TODO STUFF
   static void addTodo(String name, String info, TimeTodo tim) {
     listTodo.add(Todo(name, info, tim));
@@ -344,14 +393,15 @@ class TimeTable {
     return -1;
   }
 
-  static void removeTodo(String name) {
+  static TimeTableStatus removeTodo(String name) {
     int ind = getTodoIndexFromName(name);
     if (ind == -1) {
       //! หาไม่เจอ
-      return;
+      return TimeTableStatus.nameNotExist;
     }
     listTodo.removeAt(ind);
     saveFile();
+    return TimeTableStatus.done;
   }
 
   static void clearTodo() {
@@ -359,15 +409,16 @@ class TimeTable {
     saveFile();
   }
 
-  static void editTodo(String name, Todo newTodo) {
+  static TimeTableStatus editTodo(String name, Todo newTodo) {
     int ind = getTodoIndexFromName(name);
     if (ind == -1) {
       //! หาไม่เจอ
-      return;
+      return TimeTableStatus.nameNotExist;
     }
     listTodo.add(newTodo);
     listTodo.removeAt(ind);
     saveFile();
+    return TimeTableStatus.done;
   }
 
   static String tToString() {
