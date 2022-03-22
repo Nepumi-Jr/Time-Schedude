@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'colors.dart' as color;
 import 'package:flutter/cupertino.dart';
@@ -50,7 +51,7 @@ class ListClassSchedule extends StatelessWidget {
     ];
   }
 
-  List<Widget> getClassInDayInTime(int order) {
+  List<Widget> getClassInDayInTime(int order, BuildContext context) {
     List<Widget> data = [];
     List<Tuple2<String, TimeSub>> listOfClass = [];
     List<Color> colorOfJoinButton;
@@ -90,7 +91,7 @@ class ListClassSchedule extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(5),
               height: 50,
-              width: double.infinity,
+              width: MediaQuery.of(context).size.width * 5.45 / 6.8,
               decoration: BoxDecoration(
                   color: color.AppColor.box_class,
                   borderRadius: BorderRadius.circular(10),
@@ -140,8 +141,8 @@ class ListClassSchedule extends StatelessWidget {
                   ),
                   Expanded(child: Container()),
                   Link(
-                    target: LinkTarget.self,
-                    uri: Uri.parse('https://flutter.dev'),
+                    target: LinkTarget.blank,
+                    uri: Uri.parse('https://google.com'),
                     builder: (content, followLink) => InkWell(
                       onTap: followLink,
                       child: Container(
@@ -183,6 +184,46 @@ class ListClassSchedule extends StatelessWidget {
                       ),
                     ),
                   ),
+                  /* InkWell(
+                    onTap: _launchURL,
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(10, 4, 10, 4),
+                      width: 50,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          color: color.AppColor.offline,
+                          borderRadius: BorderRadius.circular(5),
+                          gradient: LinearGradient(
+                              colors: colorOfJoinButton,
+                              begin: Alignment
+                                  .topRight, //begin of the gradient color
+                              end: Alignment
+                                  .bottomLeft, //end of the gradient color
+                              stops: [
+                                0,
+                                0.1,
+                                0.9,
+                                1
+                              ] //stops for individual color
+                              //set the stops number equal to numbers of color
+                              ),
+                          boxShadow: [
+                            BoxShadow(
+                                offset: Offset(0, 5),
+                                blurRadius: 5,
+                                color: Colors.grey.withOpacity(1))
+                          ]),
+                      child: Center(
+                        child: Text(
+                          "Join",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ), */
                   SizedBox(
                     height: 5,
                   ),
@@ -199,7 +240,7 @@ class ListClassSchedule extends StatelessWidget {
     return data;
   }
 
-  List<Widget> getAllClassSchedule(int order) {
+  List<Widget> getAllClassSchedule(int order, BuildContext context) {
     String class_name;
     if (order == 0) {
       if (subject_during.item2.hourStart == 0 &&
@@ -223,7 +264,7 @@ class ListClassSchedule extends StatelessWidget {
     }
     List<Widget> bigBox = [];
     bigBox.add(Container(
-        width: 350,
+        //width: MediaQuery.of(context).size.width * 5 / 6.5,
         margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
         decoration: BoxDecoration(
           color: color.AppColor.WidgetBackground.withOpacity(0.7),
@@ -258,7 +299,7 @@ class ListClassSchedule extends StatelessWidget {
                 ],
               ),
               Column(
-                children: getClassInDayInTime(order),
+                children: getClassInDayInTime(order, context),
               )
             ],
           ),
@@ -267,15 +308,24 @@ class ListClassSchedule extends StatelessWidget {
     return bigBox;
   }
 
+  _launchURL() async {
+    const url = 'https://google.com';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
       child: Column(
         children: [
-          Row(children: getAllClassSchedule(0)),
-          Row(children: getAllClassSchedule(1)),
-          Row(children: getAllClassSchedule(2)),
+          Row(children: getAllClassSchedule(0, context)),
+          Row(children: getAllClassSchedule(1, context)),
+          Row(children: getAllClassSchedule(2, context)),
         ],
       ),
     );

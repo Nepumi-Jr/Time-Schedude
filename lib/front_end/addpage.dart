@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sendlink_application/back_end/time_sub.dart';
 import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/back_end/storage.dart';
@@ -25,8 +26,6 @@ class _AddpageState extends State<Addpage> {
   TextEditingController _subject_name = TextEditingController();
   TextEditingController _link = TextEditingController();
   TextEditingController _place_name = TextEditingController();
-  TextEditingController _time_start = TextEditingController();
-  TextEditingController _time_end = TextEditingController();
   TextEditingController _date = TextEditingController();
 
   late List<TimeOfDay> time_start;
@@ -115,34 +114,20 @@ class _AddpageState extends State<Addpage> {
     Subject ter;
     List<TimeSub> allTimeLearn = [];
 
-    for (var i = 0; i < dayCheck.length; i++) {
-      if (dayCheck[i]) {
-        allTimeLearn.add(TimeSub(IntDaytoString(i), time_start[i].hour,
+    for (var i = 0; i < value.length; i++) {
+      print("dayCheck : $value");
+      if (value[i]) {
+        print("value : $i");
+        allTimeLearn.add(TimeSub(dayInWeek[i], time_start[i].hour,
             time_start[i].minute, time_end[i].hour, time_end[i].minute));
       }
     }
-    ter = Subject(_subject_name.text.toString(), _link.text.toString(),
-        _place_name.text.toString(), allTimeLearn);
+    ter =
+        Subject(_subject_name.text, _link.text, _place_name.text, allTimeLearn);
     TimeTable.addSubject(ter);
-    print(TimeTable.listSubject.toList());
-  }
-
-  IntDaytoString(int dayOfWeek) {
-    if (dayOfWeek == 0) {
-      return 'Monday';
-    } else if (dayOfWeek == 1) {
-      return 'Tuesday';
-    } else if (dayOfWeek == 2) {
-      return 'Wednesday';
-    } else if (dayOfWeek == 3) {
-      return 'ThursDay';
-    } else if (dayOfWeek == 4) {
-      return 'Friday';
-    } else if (dayOfWeek == 5) {
-      return 'Saturday';
-    } else if (dayOfWeek == 6) {
-      return 'Sunday';
-    }
+    print(ter);
+    print(ter.allTimeLearn);
+    print(TimeTable.tToString());
   }
 
   Future<void> _showMyDialog() async {
@@ -169,6 +154,7 @@ class _AddpageState extends State<Addpage> {
             TextButton(
               child: const Text('Add'),
               onPressed: () {
+                Navigator.of(context).pop();
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
                 getInformationToClassTimeTable();

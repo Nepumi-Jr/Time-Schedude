@@ -54,24 +54,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    TimeTable.loadFile();
-
-    /*TimeTable.addSubject(Subject("Valorant", "valorant.com", "Home",
-        [TimeSub("Wednesday", 19, 39, 19, 43)]));
-    TimeTable.addSubject(Subject("Minecraft", "valorant.com", "Home",
-        [TimeSub("Wednesday", 21, 00, 23, 59)]));
-    TimeTable.addSubject(Subject(
-        "LOL", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));
-    TimeTable.addSubject(Subject(
-        "LOL2", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));
-    TimeTable.addSubject(Subject(
-        "LOL3", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));*/
+    openSubject();
     runningClock();
-    openDuringSubject();
   }
 
-  openDuringSubject() {
+  openSubject() {
+    TimeTable.loadFile();
     dayInWeek = DateFormat("EEEEEE").format(DateTime.now()) as String;
     hourCheckInt = int.parse(DateFormat("HH").format(DateTime.now()));
     minuteCheckInt = int.parse(DateFormat("mm").format(DateTime.now()));
@@ -113,7 +101,7 @@ class _HomePageState extends State<HomePage> {
         minuteCheck = DateFormat("mm").format(time_with_no_format);
         hourCheckInt = int.parse(hourCheck);
         minuteCheckInt = int.parse(minuteCheck);
-        openDuringSubject();
+        openSubject();
       });
     });
   }
