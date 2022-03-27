@@ -68,9 +68,9 @@ class _HomePageState extends State<HomePage> {
     print(minuteCheckInt); */
     subject_during =
         TimeTable.getSubjectAtTime(dayInWeek, hourCheckInt, minuteCheckInt);
-    subject_upnext = TimeTable.getSubjectsIncomingAtTime(
+    subject_upnext = TimeTable.getSubjectsIncomingAtTimeSameDay(
         dayInWeek, hourCheckInt, minuteCheckInt);
-    subject_done = TimeTable.getSubjectsDoneAtTime(
+    subject_done = TimeTable.getSubjectsDoneAtTimeSameDay(
         dayInWeek, hourCheckInt, minuteCheckInt);
     /* print(minuteCheckInt);
     print("subject during");
@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () => goSchedule(),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 35, left: 20, right: 20),
+          padding: const EdgeInsets.only(top: 35, left: 15, right: 15),
           child: Column(children: [
             Container(
                 margin: EdgeInsets.fromLTRB(10, 0, 10, 5),
@@ -229,14 +229,15 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       SizedBox(
-                        width: 65,
+                        width: 65 * MediaQuery.of(context).size.width / 400,
                       ),
                       Text(
                         timenow,
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 80,
+                          fontSize:
+                              80 * MediaQuery.of(context).size.width / 400,
                           shadows: <Shadow>[
                             Shadow(
                               offset: Offset(1.0, 6.0),
@@ -254,7 +255,8 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize:
+                                  16 * MediaQuery.of(context).size.width / 400,
                               shadows: <Shadow>[
                                 Shadow(
                                   offset: Offset(1.0, 6.0),
@@ -274,13 +276,14 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       SizedBox(
-                        width: 70,
+                        width: 70 * MediaQuery.of(context).size.width / 400,
                       ),
                       Text(day_month,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize:
+                                16 * MediaQuery.of(context).size.width / 400,
                             shadows: <Shadow>[
                               Shadow(
                                 offset: Offset(1.0, 6.0),

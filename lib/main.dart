@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sendlink_application/front_end/editpage.dart';
 
 import 'front_end/addpage.dart';
 import 'front_end/homepage.dart';
@@ -32,8 +33,12 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      //home: const HomePage(),
       home: const HomePage(),
+      /* home: const EditPage(
+          subject_name: "3456",
+          link: "https://www.facebook.com/",
+          place: "My home."),
+      //home: HomePage(), */
     );
   }
 }

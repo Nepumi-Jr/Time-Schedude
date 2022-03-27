@@ -331,6 +331,18 @@ class TimeTable {
         subject.allTimeLearn[0].dayOfWeek.toString();
   }
 
+  static List<TimeSub> callTimeByName(String nameSubject) {
+    Subject subject = listSubject[getSubjectIndexFromName(nameSubject)];
+    List<TimeSub> timelearn = [];
+    timelearn.addAll(subject.allTimeLearn);
+    return timelearn;
+  }
+
+  static String calllearnAtSubjectStr(String nameSubject) {
+    Subject subject = listSubject[getSubjectIndexFromName(nameSubject)];
+    return subject.learnAt;
+  }
+
   static int getTimeSubjectIdAtTime(TimeSub time) {
     for (var e in listSubject) {
       for (int i = 0; i < e.allTimeLearn.length; i++) {
