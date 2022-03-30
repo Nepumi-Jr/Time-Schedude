@@ -50,9 +50,7 @@ class TimeTable {
     loadTodoFromJson(todoJson);
 
     //? Reload Notification
-    for (var e in listSubject) {
-      pushNotiSub(e);
-    }
+    pushNotiAll();
   }
 
   static void loadSubjectsFromJson(String sJSON) {
@@ -68,6 +66,27 @@ class TimeTable {
     listTodo = [];
     for (var e in ll) {
       listTodo.add(Todo.fromJson(e));
+    }
+  }
+
+  static void popNotiAll() {
+    NotificationAPI.removeAll();
+  }
+
+  static void pushNotiAll() {
+    pushNotiAllSub();
+    pushNotiAllTodo();
+  }
+
+  static void pushNotiAllSub() {
+    for (var e in listSubject) {
+      pushNotiSub(e);
+    }
+  }
+
+  static void pushNotiAllTodo() {
+    for (var e in listTodo) {
+      pushNotiTodo(e);
     }
   }
 

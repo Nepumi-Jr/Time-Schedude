@@ -38,6 +38,10 @@ class NotificationAPI {
     _fltLocalNotificationsPlugin.cancel(getID);
   }
 
+  static Future removeAll() async {
+    _fltLocalNotificationsPlugin.cancelAll();
+  }
+
   static Future showWeeklyNotification({
     int? getID,
     String? getTitle,
