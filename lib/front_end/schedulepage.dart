@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sendlink_application/back_end/time_sub.dart';
 import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/front_end/addpage.dart';
+import 'package:sendlink_application/front_end/editpage.dart';
 import 'package:tuple/tuple.dart';
 import 'colors.dart' as color;
 
@@ -14,6 +17,30 @@ class schedule extends StatefulWidget {
 }
 
 class _scheduleState extends State<schedule> {
+  late Timer _timer;
+  var presentInfo, currentInfo;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    updateList();
+    runningClock();
+  }
+
+  updateList() {
+    presentInfo = TimeTable.listSubject.length;
+  }
+
+  runningClock() {
+    _timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+      currentInfo = TimeTable.listSubject.length;
+      if (presentInfo != currentInfo) {
+        // setState(() {});
+      }
+    });
+  }
+
   List<String> dayInWeek = [
     "Monday",
     "Tuesday",
@@ -93,6 +120,11 @@ class _scheduleState extends State<schedule> {
                 InkWell(
                   onTap: () {
                     print("edit tap!!");
+                    String name = dayClass[i].item1;
+                    String link = TimeTable.getLinkFromSubName(name);
+                    String place = TimeTable.calllearnAtSubjectStr(name);
+                    List<TimeSub> time = TimeTable.callTimeByName(name);
+                    goEditPage(name, link, place, time, context);
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(10, 4, 10, 4),
@@ -147,7 +179,7 @@ class _scheduleState extends State<schedule> {
   List<Widget> getClassForOneDay() {
     List<Widget> data = [];
     for (var i = 0; i < 7; i++) {
-      print(TimeTable.getSubjectAtDay(dayInWeek[i]));
+      //print(TimeTable.getSubjectAtDay(dayInWeek[i]));
       if (classOfDay(i).length != 0) {
         data.add(Container(
           child: Column(
@@ -187,6 +219,20 @@ class _scheduleState extends State<schedule> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const Addpage()),
+    );
+  }
+
+  goEditPage(String name, String link, String place, List<TimeSub> time,
+      dynamic context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => EditPage(
+                link: link,
+                place: place,
+                subject_name: name,
+                time: time,
+              )),
     );
   }
 
@@ -333,8 +379,8 @@ class _scheduleState extends State<schedule> {
             // * * Container for other information
 
             Container(
-              padding: EdgeInsets.fromLTRB(0, 6, 0, 5),
-              margin: EdgeInsets.fromLTRB(25, 0, 25, 5),
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              margin: EdgeInsets.fromLTRB(25, 0, 25, 0),
               width: double.infinity,
               decoration: BoxDecoration(
                 color: color.AppColor.WidgetBackground.withOpacity(0.5),

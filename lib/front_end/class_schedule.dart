@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:sendlink_application/back_end/time_table.dart';
+import 'package:sendlink_application/front_end/editpage.dart';
+import 'package:sendlink_application/front_end/settingpage.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -49,6 +54,17 @@ class ListClassSchedule extends StatelessWidget {
       color.AppColor.Gradient6.withOpacity(0.8),
       color.AppColor.Gradient5,
     ];
+  }
+
+  Widget durringLateTime(int order) {
+    if (order != 0) {
+      return Container();
+    }
+    return Container(
+      child: Text(
+        "late for 5 minutes.}",
+      ),
+    );
   }
 
   List<Widget> getClassInDayInTime(int order, BuildContext context) {
@@ -116,6 +132,7 @@ class ListClassSchedule extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
+                          //! Durring late alert!! >> put fuction time late here
                         ],
                       ),
                       Row(
@@ -140,9 +157,10 @@ class ListClassSchedule extends StatelessWidget {
                     ],
                   ),
                   Expanded(child: Container()),
-                  Link(
+                  /*  Link(
                     target: LinkTarget.blank,
-                    uri: Uri.parse('https://google.com'),
+                    uri: Uri.parse(
+                        TimeTable.getLinkFromSubName(listOfClass[i].item1)),
                     builder: (content, followLink) => InkWell(
                       onTap: followLink,
                       child: Container(
@@ -183,9 +201,11 @@ class ListClassSchedule extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
-                  /* InkWell(
-                    onTap: _launchURL,
+                  ), */
+                  InkWell(
+                    onTap: () {
+                      _launchURL(listOfClass[i].item1, context);
+                    },
                     child: Container(
                       margin: EdgeInsets.fromLTRB(10, 4, 10, 4),
                       width: 50,
@@ -223,7 +243,7 @@ class ListClassSchedule extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ), */
+                  ),
                   SizedBox(
                     height: 5,
                   ),
@@ -265,10 +285,10 @@ class ListClassSchedule extends StatelessWidget {
     List<Widget> bigBox = [];
     bigBox.add(Container(
         //width: MediaQuery.of(context).size.width * 5 / 6.5,
-        margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+        margin: EdgeInsets.fromLTRB(5, 0, 5, 7),
         decoration: BoxDecoration(
           color: color.AppColor.WidgetBackground.withOpacity(0.7),
-          borderRadius: BorderRadius.circular(20), //border corner radius
+          borderRadius: BorderRadius.circular(15), //border corner radius
         ),
         alignment: Alignment.center,
         child: Container(
@@ -308,13 +328,47 @@ class ListClassSchedule extends StatelessWidget {
     return bigBox;
   }
 
-  _launchURL() async {
-    const url = 'https://google.com';
+  _launchURL(String name, dynamic context) async {
+    String url = TimeTable.getLinkFromSubName(name);
+    if (!TimeTable.isAnyLinkFromSubName(name)) {
+      showErrorDialog(context);
+      print(url);
+      return;
+    }
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  showErrorDialog(context) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('AlertDialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('There are no link in your subject information.'),
+                Text(
+                    'you can add subject link at schedule and edit your subject.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
