@@ -54,7 +54,17 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    openSubject();
+
+    /*TimeTable.addSubject(Subject("Valorant", "valorant.com", "Home",
+        [TimeSub("Wednesday", 19, 39, 19, 43)]));
+    TimeTable.addSubject(Subject("Minecraft", "valorant.com", "Home",
+        [TimeSub("Wednesday", 21, 00, 23, 59)]));
+    TimeTable.addSubject(Subject(
+        "LOL", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));
+    TimeTable.addSubject(Subject(
+        "LOL2", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));
+    TimeTable.addSubject(Subject(
+        "LOL3", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));*/
     runningClock();
   }
 
