@@ -33,10 +33,10 @@ class _scheduleState extends State<schedule> {
   }
 
   runningClock() {
-    _timer = Timer.periodic(Duration(milliseconds: 50), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 500), (timer) {
       currentInfo = TimeTable.listSubject.length;
       if (presentInfo != currentInfo) {
-        // setState(() {});
+        setState(() {});
       }
     });
   }

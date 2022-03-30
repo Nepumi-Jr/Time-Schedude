@@ -16,6 +16,8 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 
+import 'listtodo.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -40,6 +42,10 @@ class _HomePageState extends State<HomePage> {
   late List<Tuple2<String, TimeSub>> subject_upnext = [];
   late List<Tuple2<String, TimeSub>> subject_done = [];
 
+  // !To Do Variable
+  List<dynamic> allToDoList = [];
+  List<bool> checkedTodo = [];
+
   zeroCheck(int time) {
     if (time == 0) {
       return "00";
@@ -63,23 +69,12 @@ class _HomePageState extends State<HomePage> {
     dayInWeek = DateFormat("EEEEEE").format(DateTime.now()) as String;
     hourCheckInt = int.parse(DateFormat("HH").format(DateTime.now()));
     minuteCheckInt = int.parse(DateFormat("mm").format(DateTime.now()));
-    /* print(dayInWeek);
-    print(hourCheckInt);
-    print(minuteCheckInt); */
     subject_during =
         TimeTable.getSubjectAtTime(dayInWeek, hourCheckInt, minuteCheckInt);
     subject_upnext = TimeTable.getSubjectsIncomingAtTimeSameDay(
         dayInWeek, hourCheckInt, minuteCheckInt);
     subject_done = TimeTable.getSubjectsDoneAtTimeSameDay(
         dayInWeek, hourCheckInt, minuteCheckInt);
-    /* print(minuteCheckInt);
-    print("subject during");
-    print(subject_during);
-    print("subject upnext");
-    print(subject_upnext);
-    print("subject done");
-    print(subject_done); */
-    //print(TimeTable.getSubjectAtTime(dayInWeek, hourCheckInt, minuteCheckInt));
   }
 
   void runningClock() {
@@ -111,6 +106,67 @@ class _HomePageState extends State<HomePage> {
       context,
       MaterialPageRoute(builder: (context) => const schedule()),
     );
+  }
+
+  List<Widget> allToDo() {
+    List<Widget> data = [];
+    for (var i = 0; i < 5; i++) {
+      data.add(
+        Container(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 2,
+                  ),
+                  Checkbox(
+                    value: checkedTodo[i],
+                    activeColor: color.AppColor.Font_sub.withOpacity(0.5),
+                    checkColor: Colors.white,
+                    onChanged: (value) {
+                      setState(() {
+                        checkedTodo[i] = !checkedTodo[i];
+                      });
+                    },
+                  ),
+                  Icon(
+                    IconData(0xe158, fontFamily: 'MaterialIcons'),
+                    color: color.AppColor.Gradient1,
+                    size: 20,
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Differential Equation",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "work",
+                          style: TextStyle(fontSize: 10, height: 0.7),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              Divider(
+                  //height: 20,
+                  thickness: 1,
+                  color: color.AppColor.NameWidget),
+            ],
+          ),
+        ),
+      );
+    }
+    return data;
   }
 
   @override
@@ -375,18 +431,21 @@ class _HomePageState extends State<HomePage> {
                                     SizedBox(
                                       width: 15,
                                     ),
-                                    Container(
-                                      padding:
-                                          EdgeInsets.fromLTRB(0, 10, 5, 10),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "Add work",
-                                            style: TextStyle(
-                                                color:
-                                                    color.AppColor.NameWidget),
-                                          )
-                                        ],
+                                    InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 10, 5, 10),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Add work",
+                                              style: TextStyle(
+                                                  color: color
+                                                      .AppColor.NameWidget),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     )
                                   ],
@@ -395,46 +454,52 @@ class _HomePageState extends State<HomePage> {
                                     //height: 20,
                                     thickness: 1,
                                     color: color.AppColor.NameWidget),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 2,
-                                    ),
-                                    Icon(
-                                      IconData(0xe158,
-                                          fontFamily: 'MaterialIcons'),
-                                      color: color.AppColor.Gradient1,
-                                      size: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 15,
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Differential Equation",
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            "work",
-                                            style: TextStyle(
-                                                fontSize: 10, height: 0.7),
-                                          ),
-                                        ],
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 2,
                                       ),
-                                    ),
-                                  ],
+                                      Icon(
+                                        IconData(0xe158,
+                                            fontFamily: 'MaterialIcons'),
+                                        color: color.AppColor.Gradient1,
+                                        size: 20,
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Differential Equation",
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              "work",
+                                              style: TextStyle(
+                                                  fontSize: 10, height: 0.7),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
+
                                 Divider(
                                     //height: 20,
                                     thickness: 1,
                                     color: color.AppColor.NameWidget),
+
+                                Column(children: allToDo()),
                                 Row(
                                   children: [
                                     SizedBox(
@@ -469,10 +534,63 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   width: 15,
                                 ),
+
                                 Divider(
                                     //height: 20,
                                     thickness: 1,
                                     color: color.AppColor.NameWidget),
+
+                                //? This is add to do button
+                                /* ListTile(
+                          onTap: () {
+                            print("to do pressed!");
+                          },
+                          leading: Icon(
+                            IconData(
+                              0xe047,
+                              fontFamily: 'MaterialIcons',
+                            ),
+                          ),
+                          title: Text("Add to do"),
+                        ),
+                        Divider(
+                            //height: 20,
+                            thickness: 1,
+                            color: color.AppColor.NameWidget),
+                         */ //? Under this line is all to do that in saved file.
+                                //Row(children: allToDo(context)),
+                                /* ListView.builder(
+                          itemCount: dummyList.length,
+                          itemBuilder: (context, index) => Card(
+                            elevation: 6,
+                            margin: EdgeInsets.all(10),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                child: Text(dummyList[index]["id"].toString()),
+                                backgroundColor: Colors.purple,
+                              ),
+                              title: Text(dummyList[index]["title"]),
+                              subtitle: Text(dummyList[index]["subtitle"]),
+                              trailing: Icon(Icons.add_a_photo),
+                            ),
+                          ),
+                        ), */
+                                //? done title.
+                                /*  ListTile(
+                          onTap: () {
+                            print("to do pressed!");
+                          },
+                          leading: Icon(
+                            IconData(0xe098, fontFamily: 'MaterialIcons'),
+                          ),
+                          title: Text("Done"),
+                        ),
+                        Divider(
+                            //height: 20,
+                            thickness: 1,
+                            color: color.AppColor.NameWidget),
+ */
+                                //? Under here is all done work.
                               ],
                             ),
                           ),
@@ -485,7 +603,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-            ),
+            )
           ]),
         ),
       );
