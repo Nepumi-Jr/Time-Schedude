@@ -1,3 +1,4 @@
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sendlink_application/back_end/storage.dart';
 import 'package:tuple/tuple.dart';
 
@@ -7,6 +8,8 @@ import 'todo.dart';
 import 'dart:convert';
 import 'time_sub.dart';
 import 'link_check.dart';
+import 'Reminder.dart';
+import 'notification_api.dart';
 
 import 'dart:io';
 import 'package:icalendar_parser/icalendar_parser.dart';
@@ -45,6 +48,11 @@ class TimeTable {
 
     String todoJson = await Storage.readFile("todo.json");
     loadTodoFromJson(todoJson);
+
+    //? Reload Notification
+    for (var e in listSubject) {
+      pushNotiSub(e);
+    }
   }
 
   static void loadSubjectsFromJson(String sJSON) {
@@ -63,6 +71,35 @@ class TimeTable {
     }
   }
 
+  static void pushNotiSub(Subject sub) {
+    for (int i = 0; i < sub.allTimeLearn.length; i++) {
+      pushNotiSubjectAtTime(sub, sub.allTimeLearn[i], sub.allTimeId[i]);
+    }
+  }
+
+  static void pushNotiSubjectAtTime(Subject sub, TimeSub tim, int id) {
+    Reminder remObj = Reminder();
+    remObj.init();
+
+    TimeSub realTime = TimeSub.addMinuteStart(tim, remObj.getReminder * -1);
+    NotificationAPI.showWeeklyNotification(
+        getID: id,
+        getTitle: sub.name,
+        getBody: sub.link,
+        getDay: TimeSub.intDayToStrFirstCapital(tim.dayOfWeek),
+        getTime: Time(realTime.hourStart, realTime.minuteStart, 0));
+  }
+
+  static void popNotiSub(Subject sub) {
+    for (var e in sub.allTimeId) {
+      popNotiSubjectAtTime(e);
+    }
+  }
+
+  static void popNotiSubjectAtTime(int id) {
+    NotificationAPI.removeId(id);
+  }
+
   static TimeTableStatus addSubject(Subject subject) {
     //? Check name
     if (isExistName(subject.name)) {
@@ -79,6 +116,7 @@ class TimeTable {
     subject.doGenTimeId();
     listSubject.add(subject);
     saveFile();
+    pushNotiSub(subject);
     idCounter++;
     return TimeTableStatus.done;
   }
@@ -99,15 +137,17 @@ class TimeTable {
   static TimeTableStatus addTimeToSubject(String subjectName, TimeSub newTime) {
     int ind = getSubjectIndexFromName(subjectName);
     if (ind == -1) {
-      //! หาวิชาไม่เจอ ควย!!!
+      //! หาวิชาไม่เจอ
       return TimeTableStatus.nameNotExist;
     }
     if (isOverlapAnySubject(newTime)) {
       //! Overlap Time
       return TimeTableStatus.overlapTime;
     }
+    int timeId = listSubject[ind].getHashTime(newTime);
     listSubject[ind].allTimeLearn.add(newTime);
-    listSubject[ind].allTimeId.add(listSubject[ind].getHashTime(newTime));
+    listSubject[ind].allTimeId.add(timeId);
+    pushNotiSubjectAtTime(listSubject[ind], newTime, timeId);
     saveFile();
     return TimeTableStatus.done;
   }
@@ -118,6 +158,7 @@ class TimeTable {
       //! หาวิชาไม่เจอ!!!
       return TimeTableStatus.nameNotExist;
     }
+    popNotiSub(listSubject[ind]);
     listSubject.removeAt(ind);
     saveFile();
     return TimeTableStatus.done;
@@ -129,25 +170,21 @@ class TimeTable {
       //! หาวิชาไม่เจอ!!!
       return TimeTableStatus.nameNotExist;
     }
-    int timInd = -1;
-    for (int i = 0; i < listSubject[ind].allTimeLearn.length; i++) {
-      if (listSubject[ind].allTimeLearn[i].dayOfWeek == tim.dayOfWeek &&
-          listSubject[ind].allTimeLearn[i].hourStart == tim.hourStart &&
-          listSubject[ind].allTimeLearn[i].minuteStart == tim.minuteStart) {
-        timInd = i;
-        break;
-      }
-    }
+    int timInd = listSubject[ind].getIndOfTime(tim);
     if (timInd == -1) {
       //! อย่าหลอน
       return TimeTableStatus.timeNotExist;
     }
+    popNotiSubjectAtTime(listSubject[ind].allTimeId[timInd]);
     listSubject[ind].allTimeLearn.removeAt(timInd);
     saveFile();
     return TimeTableStatus.done;
   }
 
   static void clearSubjects() {
+    for (var e in listSubject) {
+      popNotiSub(e);
+    }
     listSubject = [];
     idCounter = 0;
     saveFile();
@@ -172,10 +209,11 @@ class TimeTable {
         return TimeTableStatus.overlapTime;
       }
     }
-
+    popNotiSub(oldSubj);
     theNewSubject.id = oldSubj.id;
     theNewSubject.allTimeId = oldSubj.allTimeId;
     theNewSubject.allTimeLearn = oldSubj.allTimeLearn;
+    pushNotiSub(theNewSubject);
 
     listSubject.add(theNewSubject);
     saveFile();
@@ -184,12 +222,15 @@ class TimeTable {
 
   static TimeTableStatus editSubjectTime(
       String subjectName, TimeSub oldTime, TimeSub newTime) {
+    int timId =
+        listSubject[getSubjectIndexFromName(subjectName)].getIndOfTime(oldTime);
     removeSubjectTime(subjectName, oldTime);
     if (isOverlapAnySubject(newTime)) {
       //! Overlap Time
       addTimeToSubject(subjectName, oldTime);
       return TimeTableStatus.overlapTime;
     }
+    popNotiSubjectAtTime(timId);
     addTimeToSubject(subjectName, newTime);
     saveFile();
     return TimeTableStatus.done;
@@ -212,6 +253,11 @@ class TimeTable {
       for (var f in e.allTimeLearn) {
         if (TimeSub.isInBetween(
             f, TimeSub(dayOfWeek, hour, minute, 0, 0), true)) {
+          Reminder remObj = Reminder();
+          remObj.init();
+          if (remObj.isNoClass != 0) {
+            return Tuple2("-", TimeSub("Monday", 0, 0, 0, 0));
+          }
           return Tuple2(e.name, f);
         }
       }
@@ -225,6 +271,11 @@ class TimeTable {
     for (var e in listSubject) {
       for (var f in e.allTimeLearn) {
         if (f.dayOfWeek == iDayOfWeek) {
+          Reminder remObj = Reminder();
+          remObj.init();
+          if (remObj.isNoClass != 0) {
+            return [];
+          }
           result.add(Tuple2(e.name, f));
         }
       }
@@ -246,7 +297,9 @@ class TimeTable {
             (f.dayOfWeek == iDayOfWeek && f.hourEnd < hour) ||
             (f.dayOfWeek == iDayOfWeek &&
                 f.hourEnd == hour &&
-                f.minuteEnd < minute)) result.add(Tuple2(e.name, f));
+                f.minuteEnd < minute)) {
+          result.add(Tuple2(e.name, f));
+        }
       }
     }
 
@@ -267,7 +320,14 @@ class TimeTable {
             (f.dayOfWeek == iDayOfWeek && f.hourStart > hour) ||
             (f.dayOfWeek == iDayOfWeek &&
                 f.hourStart == hour &&
-                f.minuteStart > minute)) result.add(Tuple2(e.name, f));
+                f.minuteStart > minute)) {
+          Reminder remObj = Reminder();
+          remObj.init();
+          if (TimeSub.distanceDay(dayOfWeek, TimeSub.intDayToStr(f.dayOfWeek)) >
+              remObj.isNoClass) {
+            result.add(Tuple2(e.name, f));
+          }
+        }
       }
     }
 
@@ -287,7 +347,9 @@ class TimeTable {
         if ((f.dayOfWeek == iDayOfWeek && f.hourEnd < hour) ||
             (f.dayOfWeek == iDayOfWeek &&
                 f.hourEnd == hour &&
-                f.minuteEnd < minute)) result.add(Tuple2(e.name, f));
+                f.minuteEnd < minute)) {
+          result.add(Tuple2(e.name, f));
+        }
       }
     }
 
@@ -307,7 +369,14 @@ class TimeTable {
         if ((f.dayOfWeek == iDayOfWeek && f.hourStart > hour) ||
             (f.dayOfWeek == iDayOfWeek &&
                 f.hourStart == hour &&
-                f.minuteStart > minute)) result.add(Tuple2(e.name, f));
+                f.minuteStart > minute)) {
+          Reminder remObj = Reminder();
+          remObj.init();
+          if (remObj.isNoClass != 0) {
+            return [];
+          }
+          result.add(Tuple2(e.name, f));
+        }
       }
     }
 
@@ -391,8 +460,28 @@ class TimeTable {
   }
 
   //? TODO STUFF
+
+  static void pushNotiTodo(Todo todo) {
+    Reminder remObj = Reminder();
+    remObj.init();
+    NotificationAPI.showScheduledNotification(
+        getID: todo.id,
+        getTitle: todo.name,
+        getBody: todo.info,
+        scheduledDate: DateTime(
+                todo.atTime.year,
+                todo.atTime.monthOfYear,
+                todo.atTime.dayOfMonth,
+                todo.atTime.timeHour,
+                todo.atTime.timeMinute,
+                0)
+            .add(Duration(minutes: (remObj.getReminder * -1))));
+  }
+
   static void addTodo(String name, String info, TimeTodo tim) {
-    listTodo.add(Todo(name, info, tim));
+    Todo thatTodo = Todo(name, info, tim);
+    listTodo.add(thatTodo);
+    pushNotiTodo(thatTodo);
     saveFile();
   }
 
@@ -411,12 +500,16 @@ class TimeTable {
       //! หาไม่เจอ
       return TimeTableStatus.nameNotExist;
     }
+    popNotiSubjectAtTime(listTodo[ind].id);
     listTodo.removeAt(ind);
     saveFile();
     return TimeTableStatus.done;
   }
 
   static void clearTodo() {
+    for (var e in listTodo) {
+      popNotiSubjectAtTime(e.id);
+    }
     listTodo = [];
     saveFile();
   }
@@ -427,7 +520,9 @@ class TimeTable {
       //! หาไม่เจอ
       return TimeTableStatus.nameNotExist;
     }
+    pushNotiTodo(newTodo);
     listTodo.add(newTodo);
+    popNotiSubjectAtTime(listTodo[ind].id);
     listTodo.removeAt(ind);
     saveFile();
     return TimeTableStatus.done;

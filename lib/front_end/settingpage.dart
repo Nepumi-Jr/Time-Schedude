@@ -12,7 +12,7 @@ class settingpage extends StatefulWidget {
 
 //dropdown STRING.
 String dropdownValue = 'English';
-bool toggleValue = true;
+bool toggleNotificationValue = true;
 int Min = 30;
 
 class _settingpageState extends State<settingpage> {
@@ -142,7 +142,7 @@ class _settingpageState extends State<settingpage> {
                               //set the stops number equal to numbers of color
                               ),
                           borderRadius: BorderRadius.circular(20),
-                          color: toggleValue
+                          color: toggleNotificationValue
                               ? Colors.greenAccent
                               : color.AppColor.background_textfield
                                   .withOpacity(0.1),
@@ -153,8 +153,8 @@ class _settingpageState extends State<settingpage> {
                               duration: Duration(milliseconds: 300),
                               curve: Curves.easeIn,
                               top: 1.5,
-                              left: toggleValue ? 25 : 0,
-                              right: toggleValue ? 0 : 25,
+                              left: toggleNotificationValue ? 25 : 0,
+                              right: toggleNotificationValue ? 0 : 25,
                               child: InkWell(
                                 onTap: toggleButtons,
                                 child: AnimatedSwitcher(
@@ -164,7 +164,7 @@ class _settingpageState extends State<settingpage> {
                                       return RotationTransition(
                                           child: child, turns: animation);
                                     },
-                                    child: toggleValue
+                                    child: toggleNotificationValue
                                         ? Icon(Icons.circle,
                                             color: Colors.white,
                                             size: 33,
@@ -257,13 +257,19 @@ class _settingpageState extends State<settingpage> {
                                 SizedBox(
                                   width: 13,
                                 ),
-                                Text(
-                                  "$Min",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600),
-                                )
+                                Container(
+                                  padding: EdgeInsets.only(top: 3),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 3,
+                                      ),
+                                      Column(
+                                        children: [Text("$Min")],
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ],
                             )
                           ],
@@ -319,7 +325,7 @@ class _settingpageState extends State<settingpage> {
                           dropdownValue = newValue!;
                         });
                       },
-                      items: <String>['English', 'Thai']
+                      items: <String>['English', 'ไทย']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -340,18 +346,20 @@ class _settingpageState extends State<settingpage> {
                         width: 10,
                       ),
                       Container(
-                          width: 110,
-                          height: 31,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                    offset: Offset(0, 5),
-                                    blurRadius: 5,
-                                    color: Colors.grey.withOpacity(1))
-                              ]),
-                          padding: EdgeInsets.only(top: 3),
+                        width: 110,
+                        height: 31,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(0, 5),
+                                  blurRadius: 5,
+                                  color: Colors.grey.withOpacity(1))
+                            ]),
+                        padding: EdgeInsets.only(top: 3),
+                        child: InkWell(
+                          onTap: (resetButton),
                           child: Column(
                             children: [
                               Row(
@@ -367,7 +375,9 @@ class _settingpageState extends State<settingpage> {
                                 ],
                               ),
                             ],
-                          )),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -512,8 +522,16 @@ class _settingpageState extends State<settingpage> {
     Reminder remObj = Reminder();
     remObj.init();
     setState(() {
-      toggleValue = !toggleValue;
-      remObj.setNotification = toggleValue;
+      toggleNotificationValue = !toggleNotificationValue;
+      remObj.setNotification = toggleNotificationValue;
+    });
+  }
+
+  resetButton() {
+    setState(() {
+      toggleNotificationValue = true;
+      dropdownValue = 'English';
+      Min = 30;
     });
   }
 }
