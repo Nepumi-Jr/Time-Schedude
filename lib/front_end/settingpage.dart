@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:sendlink_application/back_end/Reminder.dart';
 import 'colors.dart' as color;
 
 class settingpage extends StatefulWidget {
@@ -508,8 +509,11 @@ class _settingpageState extends State<settingpage> {
   }
 
   toggleButtons() {
+    Reminder remObj = Reminder();
+    remObj.init();
     setState(() {
       toggleValue = !toggleValue;
+      remObj.setNotification = toggleValue;
     });
   }
 }
