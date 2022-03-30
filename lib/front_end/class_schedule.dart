@@ -335,11 +335,15 @@ class ListClassSchedule extends StatelessWidget {
       print(url);
       return;
     }
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
+
+    if (await canLaunch("https://" + url)) {
+      url = "https://" + url;
+    } else if (await canLaunch("http://" + url)) {
+      url = "http://" + url;
+    } else if (!(await canLaunch(url))) {
       throw 'Could not launch $url';
     }
+    await launch(url);
   }
 
   showErrorDialog(context) {
