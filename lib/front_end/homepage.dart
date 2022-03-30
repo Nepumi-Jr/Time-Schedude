@@ -8,7 +8,9 @@ import 'package:sendlink_application/back_end/time_sub.dart';
 import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/back_end/storage.dart';
 import 'package:sendlink_application/back_end/subject.dart';
+import 'package:sendlink_application/back_end/notification_api.dart';
 import 'package:sendlink_application/front_end/schedulepage.dart';
+import 'package:sendlink_application/back_end/Reminder.dart';
 import 'package:tuple/tuple.dart';
 import 'class_schedule.dart';
 import 'colors.dart' as color;
@@ -36,7 +38,8 @@ class _HomePageState extends State<HomePage> {
 
   // !Subject Variable
   List<Subject> subject = [];
-  late Tuple2<String, TimeSub> subject_during;
+  late Tuple2<String, TimeSub> subject_during =
+      Tuple2("", TimeSub("a", 0, 0, 0, 0));
   late List<Tuple2<String, TimeSub>> subject_upnext = [];
   late List<Tuple2<String, TimeSub>> subject_done = [];
 
@@ -53,6 +56,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
+    NotificationAPI.init(initScheduled: true);
+    Reminder remOb = Reminder();
+    remOb.init();
     super.initState();
 
     /*TimeTable.addSubject(Subject("Valorant", "valorant.com", "Home",

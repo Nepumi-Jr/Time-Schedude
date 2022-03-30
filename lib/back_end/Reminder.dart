@@ -12,7 +12,7 @@ class Reminder {
   Future<void> init() async {
     await storage.ready.then((value) {
       _reminder = storage.getItem('reminder') ?? 30;
-      _noClass = storage.getItem('noClass') ?? 1;
+      _noClass = storage.getItem('noClass') ?? 0;
       _notification = storage.getItem('notification') ?? true;
     });
   }
@@ -26,7 +26,7 @@ class Reminder {
         },
       );
 
-  int _noClass = 1;
+  int _noClass = 0;
   int get isNoClass => _noClass;
   set setNoClass(int i) => storage.ready.then(
         (value) {
@@ -34,6 +34,14 @@ class Reminder {
           _noClass = i;
         },
       );
+
+  Future<void> dayPast() async {
+    await storage.ready.then((value) {
+      _reminder = storage.getItem('reminder') ?? 30;
+      _noClass = storage.getItem('noClass') ?? 0;
+      _notification = storage.getItem('notification') ?? true;
+    });
+  }
 
   bool _notification = true;
   bool get getNotification => _notification;
@@ -44,4 +52,3 @@ class Reminder {
         },
       );
 }
-

@@ -43,6 +43,12 @@ class TimeSub {
     return -1;
   }
 
+  static int distanceDay(String fromDay, String toDay) {
+    int indFromDay = strDayToInt(fromDay);
+    int indToDay = strDayToInt(toDay);
+    return ((indToDay + 7 - indFromDay) % 7) + 1;
+  }
+
   static String intDayToStr(int indWeek) {
     List<String> dayOfWeek = [
       "????",
@@ -53,6 +59,21 @@ class TimeSub {
       "friday",
       "saturday",
       "sunday"
+    ];
+    if (indWeek <= 0 || indWeek > 7) return "????";
+    return dayOfWeek[indWeek];
+  }
+
+  static String intDayToStrFirstCapital(int indWeek) {
+    List<String> dayOfWeek = [
+      "????",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
     ];
     if (indWeek <= 0 || indWeek > 7) return "????";
     return dayOfWeek[indWeek];
@@ -97,6 +118,17 @@ class TimeSub {
     result += tim.hourStart * 100;
     result += tim.minuteStart;
     return result;
+  }
+
+  static TimeSub addMinuteStart(TimeSub tim, int nMinutes) {
+    TimeSub newTim = tim;
+    newTim.minuteStart += nMinutes;
+    newTim.hourStart += newTim.minuteStart ~/ 60;
+    newTim.minuteStart %= 60;
+    newTim.dayOfWeek += newTim.hourStart ~/ 24;
+    newTim.hourStart %= 24;
+    newTim.dayOfWeek = ((newTim.dayOfWeek - 1) % 7) + 1;
+    return newTim;
   }
 
   static bool isInBetween(TimeSub lr, TimeSub timToCal, bool isInclusive) {

@@ -26,6 +26,17 @@ class Subject {
     return result;
   }
 
+  int getIndOfTime(TimeSub tim) {
+    for (int i = 0; i < allTimeLearn.length; i++) {
+      if (allTimeLearn[i].dayOfWeek == tim.dayOfWeek &&
+          allTimeLearn[i].hourStart == tim.hourStart &&
+          allTimeLearn[i].minuteStart == tim.minuteStart) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   Subject.fromJson(Map<String, dynamic> json) {
     allTimeLearn = [];
     for (var tim in json['allTimeLearn']) {

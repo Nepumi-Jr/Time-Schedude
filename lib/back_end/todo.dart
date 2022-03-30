@@ -8,15 +8,6 @@ class Todo {
   late TimeTodo atTime;
   late int id;
 
-  /*Subject.deleteSubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd);*/
-
-  /*Subject.addSubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd);*/
-
-  /*Subject.editSubject(this.name, this.link, this.learnAt, this.date,
-      this.timeStart, this.timeEnd);*/
-
   void genRandomId() {
     final thatRandom = Random();
     id = thatRandom.nextInt(1 << 32);

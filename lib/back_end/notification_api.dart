@@ -34,6 +34,10 @@ class NotificationAPI {
     });
   }
 
+  static Future removeId(int getID) async {
+    _fltLocalNotificationsPlugin.cancel(getID);
+  }
+
   static Future showWeeklyNotification({
     int? getID,
     String? getTitle,
