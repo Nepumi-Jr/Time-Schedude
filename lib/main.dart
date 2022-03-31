@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      //home: const HomePage(),
-      home: const settingpage(),
+      home: const HomePage(),
+      //home: const settingpage(),
       /* home: const EditPage(
           subject_name: "3456",
           link: "https://www.facebook.com/",

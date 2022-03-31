@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import 'package:sendlink_application/back_end/time_table.dart';
 import 'package:sendlink_application/back_end/storage.dart';
 import 'package:sendlink_application/back_end/subject.dart';
 import 'package:sendlink_application/back_end/notification_api.dart';
+import 'package:sendlink_application/back_end/time_todo.dart';
+import 'package:sendlink_application/back_end/todo.dart';
 import 'package:sendlink_application/front_end/schedulepage.dart';
 import 'package:sendlink_application/back_end/Reminder.dart';
 import 'package:tuple/tuple.dart';
@@ -17,6 +20,7 @@ import 'colors.dart' as color;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'listtodo.dart';
 
@@ -30,6 +34,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // !Time Variable
   late DateTime time_with_no_format, ampm, day_month_no_format;
+  late DateTime todoTimePicked;
   String timenow = "", ampm_now = "", day_month = "";
   late Timer _timer;
   late int hourCheckInt;
@@ -37,6 +42,13 @@ class _HomePageState extends State<HomePage> {
   late String hourCheck;
   late String minuteCheck;
   String dayInWeek = "";
+  late String dayCheck;
+  late String monthCheck;
+  late String yearsCheck;
+  late int dayCheckInt;
+  late int monthCheckInt;
+  late int yearsCheckInt;
+  String selectTimeAddToDo = "select date and time.";
 
   // !Subject Variable
   List<Subject> subject = [];
@@ -46,8 +58,16 @@ class _HomePageState extends State<HomePage> {
   late List<Tuple2<String, TimeSub>> subject_done = [];
 
   // !To Do Variable
-  List<dynamic> allToDoList = [];
+  List<Todo> allToDoList = [];
   List<bool> checkedTodo = [];
+  TextEditingController titleToDo = TextEditingController();
+  TextEditingController infoToDo = TextEditingController();
+  late int hourToDo;
+  late int minutesToDo;
+  late int dayToDo;
+  late int monthToDo;
+  late int yearToDo;
+  late TimeTodo timetodoObj;
 
   zeroCheck(int time) {
     if (time == 0) {
@@ -78,6 +98,94 @@ class _HomePageState extends State<HomePage> {
     TimeTable.addSubject(Subject(
         "LOL3", "valorant.com", "Home", [TimeSub("Sunday", 21, 00, 23, 59)]));*/
     runningClock();
+    addTempTodo();
+    setTodo();
+  }
+
+  addTodo(TimeTodo time, String title, String info) {
+    TimeTable.addTodo(title, info, time);
+  }
+
+  Future<void> doneYet(int numList, String name) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Are you done this event sure?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text(''),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                setState(() {
+                  TimeTable.removeTodo(name);
+                  setTodo();
+                  checkedTodo.remove(numList);
+                });
+                Navigator.of(context).pop();
+
+                /* AwesomeDialog(
+                  context: context,
+                  animType: AnimType.LEFTSLIDE,
+                  headerAnimationLoop: false,
+                  dialogType: DialogType.SUCCES,
+                  showCloseIcon: true,
+                  title: 'Succes',
+                  desc:
+                      'Dialog description here..................................................',
+                )..show(); */
+
+                /* AwesomeDialog(
+                  context: context,
+                  animType: AnimType.SCALE,
+                  dialogType: DialogType.INFO,
+                  body: Center(
+                    child: Text(
+                      'If the body is specified, then title and description will be ignored, this allows to further customize the dialogue.',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                  title: 'This is Ignored',
+                  desc: 'This is also Ignored',
+                )..show(); */
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  addTempTodo() {
+    TimeTable.addTodo("Signal HW", "Chapter 4", TimeTodo(12, 0, 3, 3, 2565));
+    TimeTable.addTodo("Differential", "Chapter 4", TimeTodo(12, 0, 3, 3, 2565));
+    TimeTable.addTodo("Digital", "Chapter 4", TimeTodo(12, 0, 3, 3, 2565));
+  }
+
+  setTodo() {
+    allToDoList = TimeTable.listTodo;
+  }
+
+  setDateToDo() {
+    /*   var selectedHourToDo = DateFormat("HH").format(time);
+    var selectedMinuteCheck = DateFormat("mm").format(time);
+    var selectedDayCheck = DateFormat("d").format(time);
+    var selectedMonthCheck = DateFormat("M").format(time);
+    var selectedYearsCheck = DateFormat("y").format(time);
+    var selectedHourCheckInt = int.parse(hourCheck); */
   }
 
   openSubject() {
@@ -110,8 +218,15 @@ class _HomePageState extends State<HomePage> {
         dayInWeek = "${datetime4}";
         hourCheck = DateFormat("HH").format(time_with_no_format);
         minuteCheck = DateFormat("mm").format(time_with_no_format);
+        dayCheck = DateFormat("d").format(time_with_no_format);
+        monthCheck = DateFormat("M").format(time_with_no_format);
+        yearsCheck = DateFormat("y").format(time_with_no_format);
         hourCheckInt = int.parse(hourCheck);
         minuteCheckInt = int.parse(minuteCheck);
+        dayCheckInt = int.parse(dayCheck);
+        monthCheckInt = int.parse(monthCheck);
+        yearsCheckInt = int.parse(yearsCheck);
+
         openSubject();
       });
     });
@@ -126,7 +241,8 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> allToDo() {
     List<Widget> data = [];
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < allToDoList.length; i++) {
+      checkedTodo.add(false);
       data.add(
         Container(
           child: Column(
@@ -141,16 +257,14 @@ class _HomePageState extends State<HomePage> {
                     activeColor: color.AppColor.Font_sub.withOpacity(0.5),
                     checkColor: Colors.white,
                     onChanged: (value) {
-                      setState(() {
-                        checkedTodo[i] = !checkedTodo[i];
-                      });
+                      doneYet(i, allToDoList[i].name.toString());
                     },
                   ),
-                  Icon(
+                  /* Icon(
                     IconData(0xe158, fontFamily: 'MaterialIcons'),
                     color: color.AppColor.Gradient1,
                     size: 20,
-                  ),
+                  ), */
                   SizedBox(
                     width: 15,
                   ),
@@ -160,12 +274,15 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Differential Equation",
+                          allToDoList[i].name.toString(),
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
+                        SizedBox(
+                          height: 2,
+                        ),
                         Text(
-                          "work",
+                          "Due ${allToDoList[i].timeTodo}",
                           style: TextStyle(fontSize: 10, height: 0.7),
                         ),
                       ],
@@ -448,7 +565,159 @@ class _HomePageState extends State<HomePage> {
                                       width: 15,
                                     ),
                                     InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        AwesomeDialog dialog;
+                                        dialog = AwesomeDialog(
+                                          context: context,
+                                          animType: AnimType.SCALE,
+                                          dialogType: DialogType.INFO,
+                                          keyboardAware: true,
+                                          body: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              children: <Widget>[
+                                                Text(
+                                                  'Add To do.',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline6,
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Material(
+                                                  elevation: 0,
+                                                  color: Colors.blueGrey
+                                                      .withAlpha(40),
+                                                  child: TextFormField(
+                                                    controller: titleToDo,
+                                                    autofocus: true,
+                                                    minLines: 1,
+                                                    decoration: InputDecoration(
+                                                      border: InputBorder.none,
+                                                      labelText: 'Title',
+                                                      prefixIcon: Icon(
+                                                          Icons.text_fields),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Material(
+                                                  elevation: 0,
+                                                  color: Colors.blueGrey
+                                                      .withAlpha(40),
+                                                  child: TextFormField(
+                                                    controller: infoToDo,
+                                                    autofocus: true,
+                                                    keyboardType:
+                                                        TextInputType.multiline,
+                                                    maxLengthEnforced: true,
+                                                    minLines: 2,
+                                                    maxLines: null,
+                                                    decoration: InputDecoration(
+                                                      border: InputBorder.none,
+                                                      labelText: 'Description',
+                                                      prefixIcon: Icon(
+                                                          Icons.text_fields),
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Material(
+                                                  elevation: 0,
+                                                  child: TextButton(
+                                                      onPressed: () {
+                                                        DatePicker.showDateTimePicker(
+                                                            context,
+                                                            showTitleActions:
+                                                                true,
+                                                            onChanged: (date) {
+                                                          print('change $date in time zone ' +
+                                                              date.timeZoneOffset
+                                                                  .inHours
+                                                                  .toString());
+                                                        }, onConfirm: (date) {
+                                                          print(
+                                                              'confirm $date');
+                                                          todoTimePicked = date;
+                                                          var selectedHourToDo =
+                                                              DateFormat("HH")
+                                                                  .format(date);
+                                                          var selectedMinuteCheck =
+                                                              DateFormat("mm")
+                                                                  .format(date);
+                                                          var selectedDayCheck =
+                                                              DateFormat("d")
+                                                                  .format(date);
+                                                          var selectedMonthCheck =
+                                                              DateFormat("M")
+                                                                  .format(date);
+                                                          var selectedYearsCheck =
+                                                              DateFormat("y")
+                                                                  .format(date);
+                                                          var selectedHourCheckInt =
+                                                              int.parse(
+                                                                  hourCheck);
+                                                          var selectedMinuteCheckInt =
+                                                              int.parse(
+                                                                  minuteCheck);
+                                                          var selectedDayCheckInt =
+                                                              int.parse(
+                                                                  dayCheck);
+                                                          var selectedMonthCheckInt =
+                                                              int.parse(
+                                                                  monthCheck);
+                                                          var selectedYearsCheckInt =
+                                                              int.parse(
+                                                                  yearsCheck);
+
+                                                          timetodoObj = TimeTodo(
+                                                              selectedHourCheckInt,
+                                                              selectedMinuteCheckInt,
+                                                              selectedDayCheckInt,
+                                                              selectedMonthCheckInt,
+                                                              selectedYearsCheckInt);
+                                                        },
+                                                            currentTime: DateTime(
+                                                                yearsCheckInt,
+                                                                monthCheckInt,
+                                                                dayCheckInt,
+                                                                hourCheckInt,
+                                                                minuteCheckInt,
+                                                                34));
+                                                      },
+                                                      child: Text(
+                                                        selectTimeAddToDo,
+                                                        style: TextStyle(
+                                                            color: Colors.blue),
+                                                      )),
+                                                ),
+                                                AnimatedButton(
+                                                    text: 'Add',
+                                                    pressEvent: () {
+                                                      addTodo(
+                                                          timetodoObj,
+                                                          titleToDo.text,
+                                                          infoToDo.text);
+                                                      /*  print(titleToDo.text);
+                                                      print(infoToDo.text);
+                                                      print(todoTimePicked); */
+                                                      /*  setState(() {
+                                                        allToDoList =
+                                                            TimeTable.listTodo;
+                                                      }); */
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    })
+                                              ],
+                                            ),
+                                          ),
+                                        )..show();
+                                      },
                                       child: Container(
                                         padding:
                                             EdgeInsets.fromLTRB(0, 10, 5, 10),
@@ -470,53 +739,9 @@ class _HomePageState extends State<HomePage> {
                                     //height: 20,
                                     thickness: 1,
                                     color: color.AppColor.NameWidget),
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: 2,
-                                      ),
-                                      Icon(
-                                        IconData(0xe158,
-                                            fontFamily: 'MaterialIcons'),
-                                        color: color.AppColor.Gradient1,
-                                        size: 20,
-                                      ),
-                                      SizedBox(
-                                        width: 15,
-                                      ),
-                                      Container(
-                                        padding:
-                                            EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Differential Equation",
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              "work",
-                                              style: TextStyle(
-                                                  fontSize: 10, height: 0.7),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                Divider(
-                                    //height: 20,
-                                    thickness: 1,
-                                    color: color.AppColor.NameWidget),
 
                                 Column(children: allToDo()),
-                                Row(
+                                /*  Row(
                                   children: [
                                     SizedBox(
                                       width: 2,
@@ -555,7 +780,7 @@ class _HomePageState extends State<HomePage> {
                                     //height: 20,
                                     thickness: 1,
                                     color: color.AppColor.NameWidget),
-
+ */
                                 //? This is add to do button
                                 /* ListTile(
                           onTap: () {

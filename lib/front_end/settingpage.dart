@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:sendlink_application/back_end/Reminder.dart';
+import 'package:sendlink_application/back_end/time_table.dart';
 import 'colors.dart' as color;
 
 class settingpage extends StatefulWidget {
@@ -525,6 +526,11 @@ class _settingpageState extends State<settingpage> {
       toggleNotificationValue = !toggleNotificationValue;
       remObj.setNotification = toggleNotificationValue;
     });
+    if (toggleNotificationValue) {
+      TimeTable.pushNotiAll();
+    } else {
+      TimeTable.popNotiAll();
+    }
   }
 
   resetButton() {
