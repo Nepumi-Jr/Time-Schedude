@@ -51,7 +51,7 @@ class Todo {
 
   void genRandomId() {
     final thatRandom = Random();
-    id = thatRandom.nextInt(100);
+    id = thatRandom.nextInt(1 << 29);
   }
 
   String get timeTodo {
