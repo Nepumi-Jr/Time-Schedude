@@ -170,9 +170,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   addTempTodo() {
-    TimeTable.addTodo("Signal HW", "Chapter 4", TimeTodo(12, 0, 3, 3, 2565));
+    /*    TimeTable.addTodo("Signal HW", "Chapter 4", TimeTodo(12, 0, 3, 3, 2565));
     TimeTable.addTodo("Differential", "Chapter 4", TimeTodo(12, 0, 3, 3, 2565));
-    TimeTable.addTodo("Digital", "Chapter 4", TimeTodo(12, 0, 3, 3, 2565));
+    TimeTable.addTodo("Digital", "Chapter 4", TimeTodo(12, 0, 3, 4, 2022)); */
   }
 
   setTodo() {
@@ -661,19 +661,29 @@ class _HomePageState extends State<HomePage> {
                                                                   .format(date);
                                                           var selectedHourCheckInt =
                                                               int.parse(
-                                                                  hourCheck);
+                                                                  selectedHourToDo);
                                                           var selectedMinuteCheckInt =
                                                               int.parse(
-                                                                  minuteCheck);
+                                                                  selectedMinuteCheck);
                                                           var selectedDayCheckInt =
                                                               int.parse(
-                                                                  dayCheck);
+                                                                  selectedDayCheck);
                                                           var selectedMonthCheckInt =
                                                               int.parse(
-                                                                  monthCheck);
+                                                                  selectedMonthCheck);
                                                           var selectedYearsCheckInt =
                                                               int.parse(
-                                                                  yearsCheck);
+                                                                  selectedYearsCheck);
+                                                          print(
+                                                              selectedHourCheckInt);
+                                                          print(
+                                                              selectedMinuteCheckInt);
+                                                          print(
+                                                              selectedDayCheckInt);
+                                                          print(
+                                                              selectedMonthCheckInt);
+                                                          print(
+                                                              selectedYearsCheckInt);
 
                                                           timetodoObj = TimeTodo(
                                                               selectedHourCheckInt,
@@ -706,10 +716,10 @@ class _HomePageState extends State<HomePage> {
                                                       /*  print(titleToDo.text);
                                                       print(infoToDo.text);
                                                       print(todoTimePicked); */
-                                                      /*  setState(() {
+                                                      setState(() {
                                                         allToDoList =
                                                             TimeTable.listTodo;
-                                                      }); */
+                                                      });
                                                       Navigator.of(context)
                                                           .pop();
                                                     })
