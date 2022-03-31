@@ -57,7 +57,7 @@ class Todo {
   String get timeTodo {
     TimeTodo time = atTime;
     var ter =
-        "${shortMonths[time.moy]} ${time.dom}, ${time.yrs} ${zeroCheck(time.timeHr)}:${zeroCheck(time.timeMn)}";
+        "${shortMonths[time.moy - 1]} ${time.dom}, ${time.yrs} ${zeroCheck(time.timeHr)}:${zeroCheck(time.timeMn)}";
     return ter;
   }
 
