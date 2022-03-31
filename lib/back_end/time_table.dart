@@ -483,18 +483,24 @@ class TimeTable {
   static void pushNotiTodo(Todo todo) {
     Reminder remObj = Reminder();
     remObj.init();
-    NotificationAPI.showScheduledNotification(
-        getID: todo.id,
-        getTitle: todo.name,
-        getBody: todo.info,
-        scheduledDate: DateTime(
-                todo.atTime.year,
-                todo.atTime.monthOfYear,
-                todo.atTime.dayOfMonth,
-                todo.atTime.timeHour,
-                todo.atTime.timeMinute,
-                0)
-            .add(Duration(minutes: (remObj.getReminder * -1))));
+
+    DateTime destTime = DateTime(
+            todo.atTime.year,
+            todo.atTime.monthOfYear,
+            todo.atTime.dayOfMonth,
+            todo.atTime.timeHour,
+            todo.atTime.timeMinute,
+            0)
+        .add(const Duration(days: -1));
+
+    DateTime nowTime = DateTime.now();
+    if (destTime.millisecondsSinceEpoch > nowTime.millisecondsSinceEpoch) {
+      NotificationAPI.showScheduledNotification(
+          getID: todo.id,
+          getTitle: todo.name,
+          getBody: todo.info,
+          scheduledDate: destTime);
+    }
   }
 
   static void addTodo(String name, String info, TimeTodo tim) {
